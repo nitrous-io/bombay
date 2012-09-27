@@ -1,0 +1,17 @@
+---
+- name: update repo
+  action: apt update-cache=yes
+  tags:
+   - install
+  ignore_errors: True
+
+- name: install packages
+  action: apt pkg=$item state=present 
+  with_items:
+   - lxc
+   - vlan
+   - bridge-utils
+   - python-software-properties
+   - screen
+  tags:
+   - install

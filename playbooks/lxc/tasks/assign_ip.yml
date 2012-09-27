@@ -1,0 +1,5 @@
+---
+- name: clone a container
+  action: shell lxc-clone -o ${clone_from} -n ${clone_to} creates=/var/lib/lxc/{$clone_to}-${dnow}
+  async: 900
+  poll: 10

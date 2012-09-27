@@ -1,0 +1,7 @@
+---
+- name: create vanilla container
+  action: shell lxc-create -t ubuntu -n vanilla creates=/var/lib/lxc/vanilla_container
+  async: 900
+  poll: 10
+  tags: 
+   - vanilla_create

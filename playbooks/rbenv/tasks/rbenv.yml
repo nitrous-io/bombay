@@ -1,0 +1,2 @@
+- name: clone rbenv
+  action: git url=git://github.com/sstephenson/rbenv.git dest=/home/action/.rbenv   

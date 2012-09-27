@@ -1,0 +1,3 @@
+---
+- name: gem install ${gem}
+  action: shell gem install ${gem} --no-ri --no-rdoc

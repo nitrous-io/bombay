@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+  user: ubuntu
+  sudo: True
+  gather_facts: False
+  tasks: 
+   - include: ../tasks/install.yml 
+   - include: ../tasks/vanilla_container.yml
