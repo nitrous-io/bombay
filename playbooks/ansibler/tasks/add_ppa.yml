@@ -1,4 +1,4 @@
 - name: add ppa 
-  action: shell add-apt-repository ppa:rquillo/ansible
+  action: apt_repository repo=ppa:rquillo/ansible state=present
 - name: update apt
   action apt update-cache=yes

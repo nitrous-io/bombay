@@ -1,2 +1,9 @@
+---
 - name: install ansible
-  action apt pkg=ansible state=present
+  action: apt pkg=ansible state=present
+  tags:
+   - installation
+- name: configure ansible
+  action: copy src=../files/ansible.cfg dest=/etc/ansible/ansible.cfg mode=0644 owner=root group=root
+  tags:
+  - configuration
