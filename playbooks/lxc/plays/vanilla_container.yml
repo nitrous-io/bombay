@@ -9,5 +9,7 @@
     dest_container: "'$is_destroy' == 'y'"
     container: vanilla
   tasks:
+   - include: ../tasks/stop.yml
    - include: ../tasks/destroy.yml
    - include: ../tasks/vanilla_container.yml
+   - include: ../tasks/initial_ssh_key.yml
