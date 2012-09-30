@@ -1,0 +1,14 @@
+- name: clone rbenv
+  action: git repo=git://github.com/sstephenson/rbenv.git dest=/home/action/.rbenv
+
+- name: ensure plugins dir is present
+  action: file dest=/home/action/.rbenv/plugins state=directory mode=0755 owner=action group=action
+  
+- name: clone ruby-build
+  action: git repo=git://github.com/sstephenson/ruby-build.git dest=/home/action/.rbenv/plugins/ruby-build
+
+- name: rbenv cli tools in PATH
+  action: shell echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> /home/action/.bash_profile
+
+- name: ensure action user owns action dir
+  action: file dest=/home/action state=directory owner=action group=action

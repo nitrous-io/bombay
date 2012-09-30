@@ -1,0 +1,4 @@
+---
+- include: ./template_init.yml
+- include: ./rubify.yml
+- include: ./action_rbenv_ruby.yml

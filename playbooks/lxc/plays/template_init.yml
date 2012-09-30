@@ -7,11 +7,12 @@
   vars: 
     is_destroy: ${destroy}
     dest_container: "'$is_destroy' == 'y'"
-    container: ruby_template
+    container: ${cont}
     clone_from: vanilla
   tasks:
    - include: ../tasks/stop.yml
    - include: ../tasks/destroy.yml
    - include: ../tasks/clone.yml
    - include: ../tasks/set_template_ip.yml
+   - include: ../tasks/sudoers_ubuntu.yml
    - include: ../tasks/start.yml

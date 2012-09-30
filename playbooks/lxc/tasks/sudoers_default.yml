@@ -1,0 +1,3 @@
+---
+- name: sudoers default
+  action: copy src=../files/sudoers_default dest=/var/lib/lxc/${container}/rootfs/etc/sudoers state=file mode=0440 owner=root group=root
