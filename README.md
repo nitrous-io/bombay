@@ -11,7 +11,7 @@ You need to log into rj-dev's machine to issue ansible commands.
 
 ## Commands tested working
 
-### Vanilla template creation
+### Vanilla container creation
 
 Syntax: 
 
@@ -25,6 +25,10 @@ Vanilla container creation:
 To destroy an existing vanilla container before creating a new one:
 
     ansible-playbook lxc/plays/vanilla_container.yml -e "destroy=y"
+
+A vanilla container is used for setting up a base container to where to clone customized containers from.
+
+### Ruby container creation for templating
 
 Creating a ruby container for templating
 
