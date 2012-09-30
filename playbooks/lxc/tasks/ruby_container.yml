@@ -1,7 +1,0 @@
----
-- name: clone vanilla
-  action: lxc clone -o vanilla -n ruby_container
-
-- name: start new client
-  action: lxc start -n ruby_container
-
