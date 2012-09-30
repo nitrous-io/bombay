@@ -14,5 +14,5 @@
    - include: ../tasks/destroy.yml
    - include: ../tasks/clone.yml
    - include: ../tasks/set_template_ip.yml
-   - include: ../tasks/sudoers_ubuntu.yml
    - include: ../tasks/start.yml
+   - include: ../tasks/sleep.yml

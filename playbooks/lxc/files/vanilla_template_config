@@ -6,4 +6,3 @@ lxc.cgroup.memory.limit_in_bytes = 1024M
 lxc.devttydir = lxc
 lxc.tty = 4
 lxc.pts = 1024
-lxc.network.ipv4 = 192.168.254.10/24

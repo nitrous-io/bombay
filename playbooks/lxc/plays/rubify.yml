@@ -9,4 +9,3 @@
    - include: ../../users/tasks/action.yml
    - include: ../../global_tasks/apt_update.yml
    - include: ../../dev_setup/tasks/rubify.yml
-   - include: ../../rbenv/tasks/install.yml
