@@ -1,0 +1,5 @@
+---
+- name: apt-update via shell
+  action: shell apt-get update 
+- name: install python-apt via shell
+  action: shell apt-get install python-apt -y

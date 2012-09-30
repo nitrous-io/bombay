@@ -1,0 +1,4 @@
+---
+- include: ./vanilla_init.yml
+- include: ./vanilla_prep.yml
+- include: ./stop_vanilla.yml

@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: True
+  vars: 
+   container: vanilla
+  tasks:
+   - include: ../tasks/stop.yml

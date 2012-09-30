@@ -1,0 +1,8 @@
+---
+- hosts: vanilla
+  user: ubuntu
+  sudo: True
+  gather_facts: False
+  vars: 
+  tasks:
+   - include: ../tasks/python_apt.yml

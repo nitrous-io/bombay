@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  connection: local
+  user: ubuntu
+  sudo: True
+  gather_facts: False
+  vars: 
+    is_destroy: ${destroy}
+    dest_container: "'$is_destroy' == 'y'"
+    container: vanilla
+  tasks:
+   - include: ../tasks/stop.yml
+   - include: ../tasks/destroy.yml
+   - include: ../tasks/vanilla_container.yml
+   - include: ../tasks/set_template_ip.yml
+   - include: ../tasks/initial_ssh_key.yml
+   - include: ../tasks/sudoers_ubuntu.yml
+   - include: ../tasks/start.yml
+   - include: ../tasks/sleep.yml

@@ -1,0 +1,27 @@
+---
+- hosts: ruby_template
+  user: action
+  sudo: False
+  vars: 
+   - node_ver: v0.8.11
+  tasks: 
+   - name: install nvm
+     action: git repo=git://github.com/creationix/nvm.git dest=/home/action/nvm
+   
+   - name: download nodjs 64bit
+     action: get_url url=http://nodejs.org/dist/${nod_ver}/node-${node_ver}-linux-x64.tar.gz dest=/home/action/nvm/
+
+   - name: unpack node
+     action: shell tar -C /home/action/nvm/ -xzf node-${node_ver}-linux-x64.tar.gz creates=/home/action/nvm/node-${node_ver}-linux-x64
+
+   - name: add sourcer in profile
+     action: shell echo "source ~/nvm/nvm.sh" >> ~/.bashrc
+
+   - name: exec nvm.sh
+     action: shell /bin/bash /home/action/nvm/nvm.sh
+   
+   - name: nvm use ${node_ver}
+     action: shell nvm use ${node_ver}
+
+   - name: set default node.js version
+     action: shell nvm alias default ${node_ver}
