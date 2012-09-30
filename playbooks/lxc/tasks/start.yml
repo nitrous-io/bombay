@@ -1,0 +1,3 @@
+---
+- name: stop ${container} container
+  action: shell lxc-start -n ${container} -d

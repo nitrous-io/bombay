@@ -1,0 +1,3 @@
+---
+- name: create action user
+  action: user name=action createhome=yes state=present

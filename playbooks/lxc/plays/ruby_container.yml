@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  connection: local
+  user: ubuntu
+  sudo: True
+  gather_facts: False
+  vars: 
+    is_destroy: ${destroy}
+    dest_container: "'$is_destroy' == 'y'"
+    container: ruby_template
+    clone_from: vanilla
+  tasks:
+   - include: ../tasks/stop.yml
+   - include: ../tasks/destroy.yml
+   - include: ../tasks/clone.yml
+   - include: ../tasks/set_template_ip.yml
+   - include: ../tasks/start.yml
