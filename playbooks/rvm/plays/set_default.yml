@@ -8,7 +8,7 @@
   tasks:
 
    - name: use ruby-${ruby_ver}
-     action: shell /home/action/.rvm/bin/rvm use $ruby_ver
+     action: shell /usr/bin/env bash /home/action/.rvm/bin/rvm use $ruby_ver
 
    - name: set as default
-     action: shell /home/action/.rvm/bin/rvm default $ruby_ver
+     action: shell /usr/bin/env bash /home/action/.rvm/bin/rvm default $ruby_ver

@@ -20,11 +20,11 @@ Syntax:
 Vanilla container creation:
 
     cd ~/bombay/playbooks
-    ansible-playbook lxc/plays/vanilla_container.yml
+    ansible-playbook lxc/plays/vanilla_container_template.yml
 
 To destroy an existing vanilla container before creating a new one:
 
-    ansible-playbook lxc/plays/vanilla_container.yml -e "destroy=y"
+    ansible-playbook lxc/plays/vanilla_container_template.yml -e "destroy=y"
 
 A vanilla container is used for setting up a base container to where to clone customized containers from.
 
