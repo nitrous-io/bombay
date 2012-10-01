@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: True
+  gather_facts: False
+  vars:
+    container_template: ruby_container_template
+  tasks:
+    - include: ../tasks/install_deps.yml
