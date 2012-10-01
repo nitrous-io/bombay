@@ -7,7 +7,9 @@ setup:
 	cd /tmp/ansible-$(ansible_version) && sudo python setup.py install
 	sudo mkdir -p /etc/ansible
 	sudo cp setup/ansible.cfg /etc/ansible/ansible.cfg
+	sudo cp setup/hosts /etc/ansible/hosts
 	sudo chown root:root /etc/ansible/ansible.cfg
+	sudo chown root:root /etc/ansible/hosts
 	echo "Done"
 
 .PHONY: setup
