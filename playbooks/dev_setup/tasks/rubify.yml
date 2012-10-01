@@ -6,7 +6,7 @@
     - libpq-dev
     - man-db
     - ssh
-    - git-core 
+    - git-core
     - nano
     - emacs23-nox
     - tmux

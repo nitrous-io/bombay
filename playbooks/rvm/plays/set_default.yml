@@ -6,9 +6,9 @@
   vars:
    ruby_ver: 1.9.3-p194
   tasks:
-  
+
    - name: use ruby-${ruby_ver}
      action: shell /home/action/.rvm/bin/rvm use $ruby_ver
-  
+
    - name: set as default
      action: shell /home/action/.rvm/bin/rvm default $ruby_ver

@@ -2,12 +2,12 @@
 - hosts: ruby_template
   user: action
   sudo: False
-  vars: 
+  vars:
    - node_ver: v0.8.11
-  tasks: 
+  tasks:
    - name: install nvm
      action: git repo=git://github.com/creationix/nvm.git dest=/home/action/nvm
-   
+
    - name: download nodjs 64bit
      action: get_url url=http://nodejs.org/dist/${nod_ver}/node-${node_ver}-linux-x64.tar.gz dest=/home/action/nvm/
 
@@ -19,7 +19,7 @@
 
    - name: exec nvm.sh
      action: shell /bin/bash /home/action/nvm/nvm.sh
-   
+
    - name: nvm use ${node_ver}
      action: shell nvm use ${node_ver}
 

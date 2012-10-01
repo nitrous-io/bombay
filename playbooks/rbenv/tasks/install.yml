@@ -3,7 +3,7 @@
 
 - name: ensure plugins dir is present
   action: file dest=/home/action/.rbenv/plugins state=directory mode=0755 owner=action group=action
-  
+
 - name: clone ruby-build
   action: git repo=git://github.com/sstephenson/ruby-build.git dest=/home/action/.rbenv/plugins/ruby-build
 
