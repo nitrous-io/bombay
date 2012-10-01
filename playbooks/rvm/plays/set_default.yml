@@ -3,12 +3,17 @@
   user: action
   sudo: False
   gather_facts: False
+
   vars:
    ruby_ver: 1.9.3-p194
+
   tasks:
 
-   - name: use ruby-${ruby_ver}
-     action: shell /usr/bin/env bash /home/action/.rvm/bin/rvm use $ruby_ver
+   - name: copy set-rvm-default.sh
+     action: copy src=../files/set-rvm-default.sh dest=/home/action/set-rvm-default.sh owner=action group=action mode=0755
+ 
+   - name: run set-rvm-default.sh
+     action: shell /bin/bash /home/action/set-rvm-default.sh
 
-   - name: set as default
-     action: shell /usr/bin/env bash /home/action/.rvm/bin/rvm default $ruby_ver
+   - name: remove set-rvm-default.sh
+     action: file dest=/home/action/set-rvm-default.sh state=absent
