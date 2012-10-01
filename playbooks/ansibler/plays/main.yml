@@ -1,7 +1,0 @@
----
-- hosts: ${hosts}
-  user: rj
-  sudo: True
-  tasks:
-   - include: ../tasks/add_ppa.yml
-   - include: ../tasks/install.yml
