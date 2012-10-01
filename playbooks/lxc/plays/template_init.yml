@@ -4,7 +4,7 @@
   user: ubuntu
   sudo: True
   gather_facts: False
-  vars: 
+  vars:
     is_destroy: ${destroy}
     dest_container: "'$is_destroy' == 'y'"
     container: ${cont}
