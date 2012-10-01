@@ -10,9 +10,8 @@ setup:
 	cd /tmp/ansible-$(ansible_version) && sudo python setup.py install
 	@echo 'Copying .cfg and hosts to /etc/ansible'
 	sudo mkdir -p /etc/ansible
-	sudo cp setup/ansible.cfg /etc/ansible/ansible.cfg
+	cp setup/ansible.cfg $(HOME)/.ansible.cfg
 	sudo cp setup/hosts /etc/ansible/hosts
-	sudo chown root:root /etc/ansible/ansible.cfg
 	sudo chown root:root /etc/ansible/hosts
 	@echo "** Done **:"
 
