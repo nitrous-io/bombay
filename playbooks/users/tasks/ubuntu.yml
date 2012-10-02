@@ -1,3 +1,0 @@
----
-- name: add ubuntu to action user
-  action: authorized_key user=action key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0F+1jSzaoXj1LK4X3ydblJZya1DGE/qR/N5SC7LNvpis0Q7hzz32zJnGFCzIbnIYFsAkG55O9vx35/ZCiZegKRS5vstws5rgivO1h0wS/13FIlsZEj8XyQHNBfvpfir51P/whtlM+X0iBEN7A4lbiv5pwFHHNAK3CbHvNSFnpxrIT629wUhOaZ0b+zDTcPy5k85SNJuDeR1oS9JUHlGD1ITIrIWHKkSSNWF31zYlH+wsZLRmyiOf2nzAH5+wgstML9U7NiVauKoj0WsXTnD5lSUbTgWlxi1XMw3IVEIepfviiGW7af5QEgbQEPZuSIt/gLj8YGNewBGM2W9FdxgR3 ubuntu@rj-dev.action.io"
