@@ -53,7 +53,7 @@
     # Install all the necessary packages for this container
     - include: ../../../global/tasks/container/install_packages.yml
     # Install locales
-    - include: ../../../global/tasks/container/install_locales.yml
+    - include: ../../../global/tasks/container/install_locales.yml user=action
 
 # Install stuff which needs to be done not as root
 - hosts: BOMBAY_CONTAINER_TEMPLATE
