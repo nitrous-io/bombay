@@ -11,4 +11,4 @@
    - include: ../../users/tasks/action.yml
    - include: ../../syslinux/tasks/dash2bash.yml
    - include: ../../global_tasks/apt_update.yml
-   - include: ../../dev_setup/tasks/rubify.yml
+   - include: ../tasks/install_ruby_packages.yml
