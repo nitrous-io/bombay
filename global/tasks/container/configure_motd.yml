@@ -1,0 +1,11 @@
+---
+- name: Update MOTD Header
+  action: copy dest=/etc/update-motd.d/00-header src=../../../global/files/container/motd_header mode=0755
+
+- name: Update MOTD Help
+  action: copy dest=/etc/update-motd.d/10-help-text src=../../../global/files/container/motd_help mode=0755
+
+- name: Make sure the footer file is missing
+  action: file dest=/etc/update-motd.d/99-footer state=absent
+
+

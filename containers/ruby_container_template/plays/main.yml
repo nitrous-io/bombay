@@ -42,6 +42,10 @@
     - include: ../../../global/tasks/install_ansible_deps.yml
     # apt-get update
     - include: ../../../global/tasks/update_apt.yml
+    # Configure SSH
+    - include: ../../../global/tasks/container/configure_sshd_config.yml
+    # Add MOTD
+    - include: ../../../global/tasks/container/configure_motd.yml
     - include: ../../../global/tasks/container/install_packages.yml
     - include: ../../../global/tasks/container/install_locales.yml
 
