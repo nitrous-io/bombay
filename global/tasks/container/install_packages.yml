@@ -1,6 +1,10 @@
 ---
-- name: Install python-apt which has to be done without the apt module
-  action: shell apt-get -yy install python-apt python-software-properties
+- name: Install essential stuff via shell, which has to be done without the apt module
+  action: shell bash -c "dpkg -s $item || apt-get -yy install $item"
+  ignore_errors: True
+  with_items:
+   - python-apt
+   - python-software-properties
 
 - name: Update APT
   action: apt update-cache=yes

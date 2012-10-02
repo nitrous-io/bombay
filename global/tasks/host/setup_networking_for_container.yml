@@ -1,6 +1,7 @@
 ---
 - name: Setup Networking for the container
-  action: template src=../templates/container_network_config dest=/var/lib/lxc/$container_template/rootfs/etc/network/interfaces
+  # Paths are relative to the containers/${container_template}/plays directory
+  action: template src=../../../global/templates/container/network_config dest=/var/lib/lxc/$container_template/rootfs/etc/network/interfaces
 
 - name: Create an action user in the $container_template box
   action: shell chroot /var/lib/lxc/$container_template/rootfs useradd action -m -s /bin/bash creates=/var/lib/lxc/$container_template/rootfs/home/action
@@ -15,6 +16,7 @@
   action: shell chroot /var/lib/lxc/$container_template/rootfs chown action:action /home/action/.ssh/authorized_keys
 
 - name: Copy the sudoers file to $container_template so that the action user will have password-less sudo privileges
-  action: template src=../templates/container_sudoers dest=/var/lib/lxc/$container_template/rootfs/etc/sudoers owner=root group=root mode=0440
+  # Paths are relative to the containers/${container_template}/plays directory
+  action: template src=../../../global/templates/container/sudoers dest=/var/lib/lxc/$container_template/rootfs/etc/sudoers owner=root group=root mode=0440
 
 

@@ -1,0 +1,17 @@
+---
+- name: install the UTF-8 locale
+  action: shell /bin/bash -c "(locale -a | grep en_US) || (locale-gen en_US.UTF-8 && dpkg-reconfigure locales)"
+
+- name: install UTF-8 locale in /etc/default/locale
+  action: shell /bin/bash -c "(grep 'LC_ALL=\"en_US.UTF-8\"' /etc/default/locale) || (echo 'LC_ALL=\"en_US.UTF-8\"' >> /etc/default/locale)"
+
+- name: install LC_ALL,LANG,LANGUAGE=en_US in ${user}/.bashrc
+  action: shell /bin/bash -c "(grep '$item=en_US.UTF-8' /home/${user}/.bashrc) || (echo 'export $item=en_US.UTF-8' >> /home/${user}/.bashrc)"
+  with_items:
+   - LC_ALL
+   - LANG
+   - LANGUAGE
+
+- name: install LC_CTYPE=UTF-8
+  action: shell /bin/bash -c "(grep 'LC_CTYPE=UTF-8' /home/${user}/.bashrc) || (echo 'export LC_CTYPE=UTF-8' >> /home/${user}/.bashrc)"
+

@@ -4,7 +4,7 @@
   sudo: False
   gather_facts: False
   tasks:
-    - include: ../tasks/host/setup_bombay_ssh_keys.yml
+    - include: ../../../global/tasks/host/setup_bombay_ssh_keys.yml
 
 - hosts: localhost
   connection: local
@@ -16,15 +16,15 @@
     gateway: 192.168.254.1
   tasks:
     # Install Dependencies (via apt-get)
-    - include: ../tasks/host/install_deps.yml
+    - include: ../../../global/tasks/host/install_deps.yml
     # Setup Bridge Network
-    - include: ../tasks/host/setup_bridge_network.yml gateway=$gateway
+    - include: ../../../global/tasks/host/setup_bridge_network.yml gateway=$gateway
     # Create LXC container with the name
-    - include: ../tasks/host/create_lxc_container.yml container_template=$container_template
+    - include: ../../../global/tasks/host/create_lxc_container.yml container_template=$container_template
     # Setup keys so that we can run ansible commands in the container
-    - include: ../tasks/host/setup_networking_for_container.yml ip=$ip container_template=$container_template gateway=$gateway
+    - include: ../../../global/tasks/host/setup_networking_for_container.yml ip=$ip container_template=$container_template gateway=$gateway
     # Start the container if it isn't started
-    - include: ../tasks/host/start_container.yml container_template=$container_template
+    - include: ../../../global/tasks/host/start_container.yml container_template=$container_template
 
 # Install stuff which needs to be done as root
 - hosts: ruby_container_template
@@ -34,7 +34,8 @@
   gather_facts: False
 
   tasks:
-    - include: ../../../global/container_packages.yml
+    - include: ../../../global/tasks/container/install_packages.yml
+    - include: ../../../global/tasks/container/install_locales.yml
 
 # Install stuff which needs to be done not as root
 - hosts: ruby_container_template
@@ -44,6 +45,6 @@
   gather_facts: False
 
   tasks:
-    - include: ../../../global/nvm.yml version=v0.8.11 user=action
-    - include: ../../../global/rvm.yml version=1.9.3-p194 user=action
+    - include: ../../../global/tasks/container/install_ruby_via_rvm.yml version=1.9.3-p194 user=action
+    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=action
 
