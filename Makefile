@@ -9,6 +9,8 @@ setup:
 	@echo 'Setting up ansible $(ansible_version)...'
 	cd /tmp/ansible-$(ansible_version) && sudo python setup.py install
 	@echo 'Symlinking ansible.cfg to ~/.ansible.cfg and hosts to /etc/ansible/hosts'
+	sudo rm -rf /etc/ansible
+	rm -f ~/.ansible.cfg
 	sudo mkdir -p /etc/ansible
 	ln -s $(PWD)/setup/ansible.cfg ~/.ansible.cfg
 	sudo ln -s $(PWD)/setup/hosts /etc/ansible/hosts
