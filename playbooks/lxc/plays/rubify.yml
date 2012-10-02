@@ -3,9 +3,12 @@
   user: ubuntu
   sudo: True
   gather_facts: False
+
   vars:
     container: ${cont}
+
   tasks:
    - include: ../../users/tasks/action.yml
+   - include: ../../syslinux/tasks/dash2bash.yml
    - include: ../../global_tasks/apt_update.yml
    - include: ../../dev_setup/tasks/rubify.yml
