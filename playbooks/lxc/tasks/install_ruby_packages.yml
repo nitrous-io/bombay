@@ -1,6 +1,7 @@
 - name: install ruby related packages
   action: apt pkg=$item state=present
   with_items:
+    - curl
     - build-essential
     - libsqlite3-dev
     - libpq-dev
@@ -22,3 +23,7 @@
     - openssl
     - libssl-dev
     - libreadline-dev
+    - openssl
+    - libyaml-dev
+    - libreadline6-dev
+    - libreadline5 

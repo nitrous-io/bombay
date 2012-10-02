@@ -12,4 +12,4 @@
      action: shell curl -L https://get.rvm.io | bash -s stable &> /dev/null creates=${rvm_path}
 
    - name: install ruby-${ruby_ver} and set as default
-     action: shell source ${rvm_path}/scripts/rvm && ${rvm_path}/bin/rvm install ${ruby_ver} --binary  && ${rvm_path}/bin/rvm --default user ${ruby_ver}
+     action: shell source ${rvm_path}/scripts/rvm && ${rvm_path}/bin/rvm install ${ruby_ver} --binary  && ${rvm_path}/bin/rvm --default use ${ruby_ver}
