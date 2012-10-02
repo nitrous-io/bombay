@@ -12,20 +12,23 @@ setup:
 	sudo mkdir -p /etc/ansibleA
 	ln -s $(PWD)/setup/ansible.cfg ~/.ansible.cfg
 	sudo ln -s $(PWD)/setup/hosts /etc/ansible/hosts
-	@echo "** Done **:"
+	@echo "** Done **"
 
 generate:
 ifndef TEMPLATE
-	$(error Usage: make generate TEMPLATE=template_name)
-else
-	mkdir -p containers/$(TEMPLATE)
-	mkdir -p containers/$(TEMPLATE)/files
-	mkdir -p containers/$(TEMPLATE)/templates
-	mkdir -p containers/$(TEMPLATE)/plays
-	mkdir -p containers/$(TEMPLATE)/tasks
-	@echo "Created containers/$(TEMPLATE)"
-	@echo "** Done **"
+	$(error Usage: make generate TEMPLATE=template_name IP=ip GATEWAY=gateway)
 endif
+
+ifndef IP
+	$(error Usage: make generate TEMPLATE=template_name IP=ip GATEWAY=gateway)
+endif
+
+ifndef GATEWAY
+	$(error Usage: make generate TEMPLATE=template_name IP=ip GATEWAY=gateway)
+endif
+
+	./setup/generate_template.sh $(TEMPLATE) $(IP) $(GATEWAY)
+	@echo "** Done **"
 
 build:
 ifndef TEMPLATE
