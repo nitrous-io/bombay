@@ -1,6 +1,0 @@
----
-- name: create vanilla container
-  action: shell lxc-create -t ubuntu -n vanilla creates=/var/lib/lxc/vanilla_container -f /home/ubuntu/bombay/playbooks/lxc/files/vanilla_template_config
-  async: 900
-  poll: 10
-  tags: 

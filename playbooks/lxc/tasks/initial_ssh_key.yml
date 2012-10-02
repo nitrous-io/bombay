@@ -1,5 +1,0 @@
-- name: ensure .ssh dir
-  action: file dest=/var/lib/lxc/vanilla/rootfs/home/ubuntu/.ssh state=directory owner=ubuntu group=ubuntu mode=0700
-
-- name: initial key placement 
-  action: copy src=../files/ubuntu.pub dest=/var/lib/lxc/vanilla/rootfs/home/ubuntu/.ssh/authorized_keys state=file owner=ubuntu group=ubuntu mode=0644

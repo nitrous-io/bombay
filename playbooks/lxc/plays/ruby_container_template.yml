@@ -1,4 +1,0 @@
----
-- include: ./template_init.yml
-- include: ./rubify.yml
-- include: ../../rvm/plays/install_rvm.yml

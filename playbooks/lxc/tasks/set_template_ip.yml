@@ -1,3 +1,0 @@
----
-- name: copy interfaces based on container name
-  action: copy src=../files/${container}_interfaces dest=/var/lib/lxc/${container}/rootfs/etc/network/interfaces owner=ubuntu group=ubuntu mode=0644

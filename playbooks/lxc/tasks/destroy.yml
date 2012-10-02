@@ -1,4 +1,0 @@
----
-- name: destroy ${container} container
-  action: shell lxc-destroy -n ${container}
-  only_if: ${dest_container}

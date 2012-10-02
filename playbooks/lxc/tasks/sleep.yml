@@ -1,3 +1,0 @@
----
-- name: sleep for 15 seconds
-  action: command /bin/sleep 15

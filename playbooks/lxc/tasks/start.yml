@@ -1,3 +1,0 @@
----
-- name: start ${container} container
-  action: shell lxc-start -n ${container} -d

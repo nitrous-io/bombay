@@ -1,4 +1,0 @@
----
-- name: stop ${container} container
-  action: shell lxc-stop -n ${container}
-  ignore_errors: True

@@ -1,3 +1,0 @@
----
-- name: temporarily give super sudo to ubuntu
-  action: copy src=../files/sudoers_ubuntu dest=/var/lib/lxc/${container}/rootfs/etc/sudoers state=file mode=0440 owner=root group=root

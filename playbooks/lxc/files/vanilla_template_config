@@ -1,8 +1,0 @@
-lxc.network.type = veth
-lxc.network.flags = up
-lxc.network.link = br-lxc
-lxc.cgroup.cpu.shares = 512
-lxc.cgroup.memory.limit_in_bytes = 1024M
-lxc.devttydir = lxc
-lxc.tty = 4
-lxc.pts = 1024

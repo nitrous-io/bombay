@@ -1,8 +1,0 @@
----
-- hosts: ${hosts}
-  sudo: True
-  tasks:
-  - name: increase nofile for ${sysuser}
-    action: template src=../templates/etc_security_limits_${sysuser}.conf dest=/etc/security/limits.conf state=file owner=root group=root mode=0644
-  - name: apply limits.conf in pam
-    action: template src=../templates/etc_pam_dot_d_common-session dest=/etc/pam.d/common-session state=file owner=root group=root mode=0644
