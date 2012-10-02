@@ -4,11 +4,27 @@ Bombay is action.io's Box Builder. This is a series of scripts which
 lets us automate the creation of box templates which will be used to
 create boxes for users.
 
-## Meat of the Machine
+## Installation Instructions
 
-Bombay heavily uses [Ansible](http://ansible.cc/), playbooks for containers go in the containers/ directory
+This has been tested only on *Ubuntu 12.04 Precise* YMMV if you try it
+on another platform.
+
+Make sure you have ```build-essential``` and ```python``` setup on your
+machine. ```python``` is typically setup on Ubuntu by default;
+installing build-essential is as easy as
+
+```sudo apt-get install build-essential```
+
+```build-essential``` installs your build tools such as gcc, g++ and
+make.
+
+To setup the right environment for Bombay, including ansible, run
+
+```make setup```
 
 ## Building a container
+
+The ```ruby_container_template``` (for e.g.) can be built with this command:
 
 ```make build TEMPLATE=ruby_container_template```
 
