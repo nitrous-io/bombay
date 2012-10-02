@@ -15,6 +15,10 @@
     ip: 192.168.254.254
     gateway: 192.168.254.1
   tasks:
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../../global/tasks/install_ansible_deps.yml
+    # apt-get update
+    - include: ../../../global/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../../../global/tasks/host/install_deps.yml
     # Setup Bridge Network
@@ -34,6 +38,10 @@
   gather_facts: False
 
   tasks:
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../../global/tasks/install_ansible_deps.yml
+    # apt-get update
+    - include: ../../../global/tasks/update_apt.yml
     - include: ../../../global/tasks/container/install_packages.yml
     - include: ../../../global/tasks/container/install_locales.yml
 
