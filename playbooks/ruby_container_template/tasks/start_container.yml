@@ -1,0 +1,8 @@
+---
+- name: Check for container_template running status
+  action: shell lxc-info -n $container_template | head -1
+  register: container_status
+
+- name: Start the Container
+  action: shell lxc-start -n $container_template -d
+  only_if: "'${container_status.stdout}'.find('RUNNING') == -1"

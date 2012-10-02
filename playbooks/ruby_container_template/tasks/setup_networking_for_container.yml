@@ -1,0 +1,20 @@
+---
+- name: Setup Networking for the container
+  action: template src=../templates/container_network_config dest=/var/lib/lxc/$container_template/rootfs/etc/network/interfaces
+
+- name: Setup SSH keys for the current user
+  action: shell /usr/bin/ssh-keygen -N '' -b 1024 -f /etc/ansible/bombay -t rsa -q creates=/etc/ansible/bombay
+
+- name: Create a bombay user in the $container_template box
+  action: shell chroot /var/lib/lxc/$container_template/rootfs useradd bombay -m -s /bin/bash creates=/var/lib/lxc/$container_template/rootfs/home/bombay
+
+- name: Create an .ssh/authorized_keys file for the bombay user
+  action: shell chroot /var/lib/lxc/$container_template/rootfs su bombay -c "mkdir /home/bombay/.ssh" creates=/var/lib/lxc/$container_template/rootfs/home/bombay/.ssh
+
+- name: Copy the public key to the bombay user's authorized_keys file
+  action: shell cat /etc/ansible/bombay.pub >> /var/lib/lxc/$container_template/rootfs/home/bombay/.ssh/authorized_keys creates=/var/lib/lxc/$container_template/rootfs/home/bombay/.ssh/authorized_keys
+
+- name: Set the right permissions for the user's authorized_keys file
+  action: shell chroot /var/lib/lxc/$container_template/rootfs chown bombay:bombay /home/bombay/.ssh/authorized_keys
+
+

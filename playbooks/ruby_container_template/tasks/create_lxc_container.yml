@@ -1,0 +1,6 @@
+---
+- name: Setup the conf file for the default LXC config
+  action: template src=../templates/lxc_default.conf dest=/tmp/lxc_default.conf
+
+- name: Create LXC Container
+  action: shell lxc-create -n $container_template -t ubuntu -f /tmp/lxc_default.conf creates=/var/lib/lxc/$container_template

@@ -1,0 +1,16 @@
+---
+- name: Check if br-lxc is configured
+  action: shell cat /etc/network/interfaces
+  register: network_interfaces
+
+- name: Update /etc/network/interfaces
+  action: template src=../templates/host_network_config dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
+  only_if: "'${network_intefaces.stdout}'.find('br-lxc') != -1"
+
+- name: Check if br-lxc is up
+  action: shell /sbin/ifconfig br-lxc | head -1
+  register: ifconfig_br_lxc
+
+- name: Bring up the br-lxc network interface
+  action: command /sbin/ifup br-lxc
+  only_if: "len('${ifconfig_br_lxc.stdout}') == 0"

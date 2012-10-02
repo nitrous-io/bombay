@@ -5,5 +5,16 @@
   gather_facts: False
   vars:
     container_template: ruby_container_template
+    ip: 192.168.254.254
+    gateway: 192.168.254.1
   tasks:
+    # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
+    # Setup Bridge Network
+    - include: ../tasks/setup_bridge_network.yml gateway=$gateway
+    # Create LXC container with the name
+    - include: ../tasks/create_lxc_container.yml container_template=$container_template
+    # Setup keys so that we can run ansible commands in the container
+    - include: ../tasks/setup_networking_for_container.yml ip=$ip container_template=$container_template gateway=$gateway
+    # Start the container if it isn't started
+    - include: ../tasks/start_container.yml container_template=$container_template

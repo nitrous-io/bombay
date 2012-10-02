@@ -9,9 +9,6 @@
   action: apt pkg=$item state=present
   with_items:
    - lxc
-   - vlan
    - bridge-utils
-   - python-software-properties
-   - screen
   tags:
    - install
