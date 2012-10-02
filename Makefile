@@ -18,12 +18,12 @@ generate:
 ifndef TEMPLATE
 	$(error Usage: make generate TEMPLATE=template_name)
 else
-	mkdir -p playbooks/$(TEMPLATE)
-	mkdir -p playbooks/$(TEMPLATE)/files
-	mkdir -p playbooks/$(TEMPLATE)/templates
-	mkdir -p playbooks/$(TEMPLATE)/plays
-	mkdir -p playbooks/$(TEMPLATE)/tasks
-	@echo "Created playbooks/$(TEMPLATE)"
+	mkdir -p containers/$(TEMPLATE)
+	mkdir -p containers/$(TEMPLATE)/files
+	mkdir -p containers/$(TEMPLATE)/templates
+	mkdir -p containers/$(TEMPLATE)/plays
+	mkdir -p containers/$(TEMPLATE)/tasks
+	@echo "Created containers/$(TEMPLATE)"
 	@echo "** Done **"
 endif
 
