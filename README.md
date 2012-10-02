@@ -6,33 +6,16 @@ create boxes for users.
 
 ## Meat of the Machine
 
-Bombay heavily uses [Ansible](http://ansible.cc/), hence the directory playbooks.
-You need to log into rj-dev's machine to issue ansible commands.
+Bombay heavily uses [Ansible](http://ansible.cc/), playbooks for containers go in the containers/ directory
 
-## Commands tested working
+## Building a container
 
-### Vanilla container creation
+```make build TEMPLATE=ruby_container_template```
 
-Syntax: 
+will build a container called ruby_container_template in
+```/var/lib/lxc/ruby_container_template``` with the ip 192.168.254.254
 
-    ansible-playbook <playbook> -e "extra_options=value"
+If you need to SSH into a container to poke around and see what's what,
+you can issue the following command:
 
-Vanilla container creation:
-
-    cd ~/bombay/playbooks
-    ansible-playbook lxc/plays/vanilla_container_template.yml
-
-To destroy an existing vanilla container before creating a new one:
-
-    ansible-playbook lxc/plays/vanilla_container_template.yml -e "destroy=y"
-
-A vanilla container is used for setting up a base container to where to clone customized containers from.
-
-### Ruby container creation for templating
-
-Creating a ruby container for templating
-
-    ansible-playbook lxc/plays/ruby_templater.yml -e "destroy=y cont=ruby_template"
-
-Where "cont" is the container name. Note that it's required to name the container as 'ruby_template'. 
-The name is passed as a variable in ansible playbooks which determines how the playbook behaves.
+```ssh -i ~/.ansible/bombay action@192.168.254.254```
