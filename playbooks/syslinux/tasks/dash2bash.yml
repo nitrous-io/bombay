@@ -1,0 +1,5 @@
+---
+- name: remove /bin/sh to /bin/dash symlink
+  action: file dest=/bin/sh state=absent
+- name: have /bin/sh symlink to /bin/bash
+  action: file src=/bin/bash dest=/bin/sh state=link
