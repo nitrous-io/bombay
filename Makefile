@@ -27,6 +27,12 @@ else
 	@echo "** Done **"
 endif
 
+build:
+ifndef TEMPLATE
+	$(error Usage: make build TEMPLATE=template_name)
+else
+	ansible-playbook containers/$(TEMPLATE)/plays/main.yml
+endif
 
 .SILENT: setup generate
 

@@ -28,11 +28,11 @@
 
 - hosts: ruby_container_template
   connection: ssh
-  user: bombay
+  user: action
   sudo: True
   gather_facts: False
 
   tasks:
-    - include: ../tasks/container/create_action_user.yml
-    # Install dependencies
+    - include: ../../../global/container_packages.yml
+    - include: ../../../global/nvm.yml version=v0.8.11 user=action
 

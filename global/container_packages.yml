@@ -1,0 +1,36 @@
+---
+- name: Install python-apt which has to be done without the apt module
+  action: shell apt-get -yy install python-apt python-software-properties
+
+- name: Update APT
+  action: apt update-cache=yes
+  ignore_errors: True
+
+- name: Absolute essential packages for the container
+  action: apt pkg=$item state=present
+  with_items:
+   - build-essential
+   - wget
+   - curl
+   - libcurl3
+   - libcurl3-gnutls
+   - libcurl4-openssl-dev
+   - libsqlite3-dev
+   - libpq-dev
+   - libmysqlclient-dev
+   - imagemagick
+   - libmagickwand-dev
+   - libmagickcore-dev
+   - libyaml-dev
+   - openssl
+   - libreadline6-dev
+   - update-motd
+   - man-db
+   - ssh
+   - git-core
+   - nano
+   - emacs23-nox
+   - vim-nox
+   - tmux
+   - screen
+

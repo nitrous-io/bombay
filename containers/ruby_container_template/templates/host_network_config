@@ -13,3 +13,11 @@ auto br-lxc
 iface br-lxc inet static
     address {{ gateway }}
     netmask 255.255.255.0
+
+    post-up echo 1 > /proc/sys/net/ipv4/ip_forward
+    post-up iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+    pre-down echo 0 > /proc/sys/net/ipv4/ip_forward
+    pre-down iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+
+    bridge_ports none
+    bridge_stp off
