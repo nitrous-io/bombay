@@ -1,0 +1,7 @@
+---
+- name: install rvm
+  action: shell /bin/bash -c "curl -L https://get.rvm.io | bash -s stable" creates=/home/${user}/.rvm chdir=/home/${user}
+
+- name: install ruby-${version} and set as the default
+  action: shell /bin/bash -c "/home/${user}/.rvm/bin/rvm install ${version} --binary && /home/${user}/.rvm/bin/rvm alias create default ruby-${version}" creates=/home/${user}/.rvm/rubies/ruby-${version}/bin/ruby
+

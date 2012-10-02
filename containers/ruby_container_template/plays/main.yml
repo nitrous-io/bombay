@@ -26,6 +26,7 @@
     # Start the container if it isn't started
     - include: ../tasks/host/start_container.yml container_template=$container_template
 
+# Install stuff which needs to be done as root
 - hosts: ruby_container_template
   connection: ssh
   user: action
@@ -34,5 +35,15 @@
 
   tasks:
     - include: ../../../global/container_packages.yml
+
+# Install stuff which needs to be done not as root
+- hosts: ruby_container_template
+  connection: ssh
+  user: action
+  sudo: False
+  gather_facts: False
+
+  tasks:
     - include: ../../../global/nvm.yml version=v0.8.11 user=action
+    - include: ../../../global/rvm.yml version=1.9.3-p194 user=action
 
