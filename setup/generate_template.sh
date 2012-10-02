@@ -39,6 +39,8 @@ sed -i "s/BOMBAY_CONTAINER_TEMPLATE/${container_name}/" ${main_yml}
 sed -i "s/BOMBAY_IP/${ip}/" ${main_yml}
 sed -i "s/BOMBAY_GATEWAY/${gateway}/" ${main_yml}
 
+echo -e "\n\n[${container_name}]\n${ip}" >> setup/hosts
+
 
 
 
