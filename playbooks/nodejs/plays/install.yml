@@ -2,26 +2,27 @@
 - hosts: ruby_template
   user: action
   sudo: False
+  gather_facts: False
+
   vars:
    - node_ver: v0.8.11
+
   tasks:
-   - name: install nvm
-     action: git repo=git://github.com/creationix/nvm.git dest=/home/action/nvm
+   - name: clone nvm
+     action: git repo=git://github.com/creationix/nvm.git dest=/home/action/.nvm
 
    - name: download nodjs 64bit
-     action: get_url url=http://nodejs.org/dist/${nod_ver}/node-${node_ver}-linux-x64.tar.gz dest=/home/action/nvm/
+     action: get_url url=http://nodejs.org/dist/${node_ver}/node-${node_ver}-linux-x64.tar.gz dest=/home/action/.nvm/node-${node_ver}-linux-x64.tar.gz
 
    - name: unpack node
-     action: shell tar -C /home/action/nvm/ -xzf node-${node_ver}-linux-x64.tar.gz creates=/home/action/nvm/node-${node_ver}-linux-x64
+     action: command tar -xzf node-${node_ver}-linux-x64.tar.gz creates=/home/action/.nvm/node-${node_ver}-linux-x64 chdir=/home/action/.nvm
+
+   - name: remove existing nvm sourcer line
+     action: lineinfile name=/home/action/.bash_profile regexp="source ~/.nvm/nvm.sh" state=absent
+     ignore_errors: True
 
    - name: add sourcer in profile
-     action: shell echo "source ~/nvm/nvm.sh" >> ~/.bashrc
+     action: shell echo "source ~/.nvm/nvm.sh" >> /home/action/.bash_profile
 
-   - name: exec nvm.sh
-     action: shell /bin/bash /home/action/nvm/nvm.sh
-
-   - name: nvm use ${node_ver}
-     action: shell nvm use ${node_ver}
-
-   - name: set default node.js version
-     action: shell nvm alias default ${node_ver}
+   - name: apply nvm.sh and tell to set defaults
+     action: shell source /home/action/.nvm/nvm.sh && nvm use ${node_ver} && nvm alias default ${node_ver}

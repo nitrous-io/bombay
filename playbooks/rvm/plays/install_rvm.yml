@@ -14,4 +14,4 @@
      action: shell /usr/bin/env bash /home/action/.rvm/scripts/rvm
 
    - name: install ruby
-     action: shell /bin/bash /home/action/.rvm/bin/rvm install ${ruby_ver} --binary creates=/home/action/.rvm/environments/ruby-${ruby_ver}
+     action: shell /usr/bin/env bash /home/action/.rvm/bin/rvm install ${ruby_ver} --binary creates=/home/action/.rvm/environments/ruby-${ruby_ver}

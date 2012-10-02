@@ -10,7 +10,7 @@
   tasks:
 
    - name: copy set-rvm-default.sh
-     action: copy src=../files/set-rvm-default.sh dest=/home/action/set-rvm-default.sh owner=action group=action mode=0755
+     action: copy src=~/bombay/playbooks/rvm/files/set-rvm-default.sh dest=/home/action/set-rvm-default.sh owner=action group=action mode=0755
  
    - name: run set-rvm-default.sh
      action: shell /bin/bash /home/action/set-rvm-default.sh
