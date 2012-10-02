@@ -1,0 +1,3 @@
+---
+- name: remove ubuntu user from the container
+  action: user name=ubuntu state=absent remove=yes

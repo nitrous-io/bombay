@@ -46,9 +46,13 @@
     - include: ../../../global/tasks/update_apt.yml
     # Configure SSH
     - include: ../../../global/tasks/container/configure_sshd_config.yml
+    # Remove ubuntu user from the container
+    - include: ../../../global/tasks/container/remove_ubuntu_user.yml
     # Add MOTD
     - include: ../../../global/tasks/container/configure_motd.yml
+    # Install all the necessary packages for this container
     - include: ../../../global/tasks/container/install_packages.yml
+    # Install locales
     - include: ../../../global/tasks/container/install_locales.yml
 
 # Install stuff which needs to be done not as root
