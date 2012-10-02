@@ -1,0 +1,9 @@
+---
+- name: Check if key exists
+  action: shell head -1 $HOME/.ansible/bombay
+  ignore_errors: True
+  register: bombay_key_exists
+
+- name: Setup SSH keys for the current user
+  action: shell /usr/bin/ssh-keygen -N '' -b 1024 -f $HOME/.ansible/bombay -t rsa -q
+  only_if: "len('${bombay_key_exists.stdout}') == 0"

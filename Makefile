@@ -8,11 +8,10 @@ setup:
 	tar -zxvf /tmp/ansible-$(ansible_version).tar.gz --directory=/tmp
 	@echo 'Setting up ansible $(ansible_version)...'
 	cd /tmp/ansible-$(ansible_version) && sudo python setup.py install
-	@echo 'Copying .cfg and hosts to /etc/ansible'
-	sudo mkdir -p /etc/ansible
-	cp setup/ansible.cfg $(HOME)/.ansible.cfg
-	sudo cp setup/hosts /etc/ansible/hosts
-	sudo chown root:root /etc/ansible/hosts
+	@echo 'Symlinking ansible.cfg to ~/.ansible.cfg and hosts to /etc/ansible/hosts'
+	sudo mkdir -p /etc/ansibleA
+	ln -s $(PWD)/setup/ansible.cfg ~/.ansible.cfg
+	sudo ln -s $(PWD)/setup/hosts /etc/ansible/hosts
 	@echo "** Done **:"
 
 generate:
