@@ -18,8 +18,6 @@ Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/b
 # User privilege specification
 root	ALL=(ALL:ALL) ALL
 
-action ALL=(ALL) NOPASSWD: ALL
-
 # Allow members of group sudo to execute any command
 %sudo	ALL=(ALL:ALL) ALL
 

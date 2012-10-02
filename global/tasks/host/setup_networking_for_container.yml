@@ -15,8 +15,3 @@
 - name: Set the right permissions for the user's authorized_keys file
   action: shell chroot /var/lib/lxc/$container_template/rootfs chown action:action /home/action/.ssh/authorized_keys
 
-- name: Copy the sudoers file to $container_template so that the action user will have password-less sudo privileges
-  # Paths are relative to the containers/${container_template}/plays directory
-  action: template src=../../../global/templates/container/sudoers dest=/var/lib/lxc/$container_template/rootfs/etc/sudoers owner=root group=root mode=0440
-
-

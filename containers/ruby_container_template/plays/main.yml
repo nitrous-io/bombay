@@ -27,6 +27,8 @@
     - include: ../../../global/tasks/host/create_lxc_container.yml container_template=$container_template
     # Setup keys so that we can run ansible commands in the container
     - include: ../../../global/tasks/host/setup_networking_for_container.yml ip=$ip container_template=$container_template gateway=$gateway
+    # Add action to the password-less sudoers file
+    - include: ../../../global/tasks/add_user_to_sudoers.yml container_template=$container_template user=action
     # Start the container if it isn't started
     - include: ../../../global/tasks/host/start_container.yml container_template=$container_template
 
@@ -59,4 +61,15 @@
   tasks:
     - include: ../../../global/tasks/container/install_ruby_via_rvm.yml version=1.9.3-p194 user=action
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=action
+
+# Cleanup to be done after the creation of the container
+- hosts: localhost
+  connection: local
+  sudo: True
+  gather_facts: False
+  vars:
+    container_template: ruby_container_template
+  tasks:
+    # remove action from the sudoers file
+    - include: ../../../global/tasks/remove_user_from_sudoers.yml container_template=$container_template
 
