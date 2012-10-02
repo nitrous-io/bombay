@@ -1,12 +1,7 @@
 ---
-- name: Check if br-lxc is configured
-  action: shell cat /etc/network/interfaces
-  register: network_interfaces
-
 - name: Update /etc/network/interfaces
   # Paths are relative to the containers/${container_template}/plays directory
   action: template src=../../../global/templates/host/network_config dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
-  only_if: "'${network_intefaces.stdout}'.find('br-lxc') != -1"
 
 - name: Check if br-lxc is up
   action: shell /sbin/ifconfig br-lxc | head -1
