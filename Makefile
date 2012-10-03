@@ -41,6 +41,6 @@ else
 	ansible-playbook containers/$(TEMPLATE)/plays/main.yml
 endif
 
-.SILENT: setup generate
+.SILENT: setup generate build
 
-.PHONY: setup generate
+.PHONY: setup generate build
