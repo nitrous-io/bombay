@@ -46,3 +46,33 @@ this by issuing this command:
 The ```IP``` is the IP that will be used by Ansible to SSH into the container. The ```IP``` must be in the same subnet as the ```GATEWAY```.
 
 Once you run the command, the containers/php_container_template folder will be created and you can start editing playbooks, tasks, files and templates within it.
+
+## Troubleshooting
+
+If you get this error while building a box
+
+```
+TASK: [Update MOTD Header] ********************* 
+fatal: [192.168.254.254] => Traceback (most recent call last):
+  File
+"/usr/local/lib/python2.7/dist-packages/ansible/runner/__init__.py",
+line 427, in _executor
+    exec_rc = self._executor_internal(host)
+  File
+"/usr/local/lib/python2.7/dist-packages/ansible/runner/__init__.py",
+line 478, in _executor_internal
+    return self._executor_internal_inner(host, inject, port)
+  File
+"/usr/local/lib/python2.7/dist-packages/ansible/runner/__init__.py",
+line 595, in _executor_internal_inner
+    self._delete_remote_files(conn, tmp)
+  File
+"/usr/local/lib/python2.7/dist-packages/ansible/runner/__init__.py",
+line 152, in _delete_remote_files
+    raise Exception("not going to happen")
+Exception: not going to happen
+```
+
+just rerun the ```make build``` task (it is idempotent and so will skip
+over steps which have already been completed). This bug is supposedly
+fixed in the upcoming 0.8 release of ansible.
