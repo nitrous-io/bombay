@@ -41,6 +41,13 @@ else
 	ansible-playbook containers/$(TEMPLATE)/plays/main.yml
 endif
 
+release:
+ifndef template
+	$(error Usage: make release template=template_name)
+else
+	./setup/release_template.sh $(template)
+endif
+
 .SILENT: setup generate build
 
 .PHONY: setup generate build
