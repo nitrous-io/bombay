@@ -65,6 +65,7 @@
   tasks:
     - include: ../../../global/tasks/container/install_ruby_via_rvm.yml version=1.9.3-p194 user=action
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=action
+    - include: ../../../global/tasks/container/install_gem.yml gem=rails
 
 # Cleanup to be done after the creation of the container
 - hosts: localhost
