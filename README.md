@@ -36,6 +36,21 @@ you can issue the following command:
 
 ```ssh -i ~/.ansible/bombay action@192.168.254.254```
 
+## Releasing a container
+
+Once a container is built using the steps above, you can *release* it.
+Releasing means that the container is tar'red and gzip'ped and uploaded
+to S3, so that they can be downloaded by the box hosts.
+
+Files will be suffixed with the timestamp of release.
+
+You need to have ```s3cmd``` installed with your AWS credentials filled
+in in ~/.s3cfg
+
+To release a ```ruby_container_template```, issue this command:
+
+``` make release template=ruby_container_template```
+
 ## Creating a new container
 
 If you want to create a new container template (say for php), you can do
