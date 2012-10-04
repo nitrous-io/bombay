@@ -36,4 +36,4 @@ s3cmd put /tmp/${gzipped_file_name} s3://bombay-apse.action.io/${gzipped_file_na
 # Cleanup
 sudo rm -rf /tmp/${container_name}*
 
-echo "File is available in s3://bombay-apse.action.io/${gzipped_file_name}
+echo "File is available in s3://bombay-apse.action.io/${gzipped_file_name}"
