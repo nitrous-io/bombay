@@ -19,26 +19,26 @@ setup:
 	@echo "** Done **"
 
 generate:
-ifndef TEMPLATE
-	$(error Usage: make generate TEMPLATE=template_name IP=ip GATEWAY=gateway)
+ifndef template
+	$(error Usage: make generate template=template_name ip=ip gateway=gateway)
 endif
 
-ifndef IP
-	$(error Usage: make generate TEMPLATE=template_name IP=ip GATEWAY=gateway)
+ifndef ip
+	$(error Usage: make generate template=template_name ip=ip gateway=gateway)
 endif
 
-ifndef GATEWAY
-	$(error Usage: make generate TEMPLATE=template_name IP=ip GATEWAY=gateway)
+ifndef gateway
+	$(error Usage: make generate template=template_name ip=ip gateway=gateway)
 endif
 
-	./setup/generate_template.sh $(TEMPLATE) $(IP) $(GATEWAY)
+	./setup/generate_template.sh $(template) $(ip) $(gateway)
 	@echo "** Done **"
 
 build:
-ifndef TEMPLATE
-	$(error Usage: make build TEMPLATE=template_name)
+ifndef template
+	$(error Usage: make build template=template_name)
 else
-	ansible-playbook containers/$(TEMPLATE)/plays/main.yml
+	ansible-playbook containers/$(template)/plays/main.yml
 endif
 
 release:
