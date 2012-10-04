@@ -15,17 +15,20 @@ fi
 
 # Remove remnants of the previoous release
 if [ -d /tmp/${container_name} ]; then
-  rm -rf /tmp/${container_name}
+  sudo rm -rf /tmp/${container_name}
 fi
 
-sudo cp -rf /var/lib/lxc/${container_name} /tmp/
+sudo cp -pr /var/lib/lxc/${container_name} /tmp/
+
+# Remove extraneous features from the template
 sudo rm -rf /tmp/${container_name}/rootfs/home/action/.ssh
 sudo rm -rf /tmp/${container_name}/rootfs/var/log/*
+sudo rm -rf /tmp/${container_name}/rootfs/var/cache/apt/archives/*
 
 gzipped_file_name=${container_name}_${time_of_build}.tar.gz
 
 cd /tmp
-sudo bash -c "tar cvf - ${container_name} | gzip -c > ${gzipped_file_name}"
+sudo tar cpvzf ${gzipped_file_name} ${container_name}
 
 # Upload to S3
 s3cmd put /tmp/${gzipped_file_name} s3://bombay-apse.action.io/${gzipped_file_name}
