@@ -1,6 +1,4 @@
 #!/bin/bash
-
-#!/bin/bash
 [ -n "$DEBUG" ] && set -o xtrace
 set -o nounset
 shopt -s nullglob
@@ -33,7 +31,7 @@ touch containers/${container_name}/tasks/.gitkeep
 
 main_yml=containers/${container_name}/plays/main.yml
 
-cat setup/play_template.yml > ${main_yml}
+cat setup/container_play_template.yml > ${main_yml}
 
 sed -i "s/BOMBAY_CONTAINER_TEMPLATE/${container_name}/" ${main_yml}
 sed -i "s/BOMBAY_IP/${ip}/" ${main_yml}

@@ -13,20 +13,24 @@ setup:
 	@echo "** Done **"
 
 generate:
-ifndef ip
-	$(error Usage: make generate container=template_name ip=ip gateway=gateway)
-endif
+ifdef container
+	ifndef ip
+		$(error Usage: make generate container=template_name ip=ip gateway=gateway)
+	endif
 
-ifndef gateway
-	$(error Usage: make generate container=template_name ip=ip gateway=gateway)
-endif
+	ifndef gateway
+		$(error Usage: make generate container=template_name ip=ip gateway=gateway)
+	endif
 
-ifndef container
-	$(error Usage: make generate container=template_name ip=ip gateway=gateway)
-endif
-
-	./setup/generate_template.sh $(container) $(ip) $(gateway)
+	./setup/generate_container_template.sh $(container) $(ip) $(gateway)
 	@echo "** Done **"
+else ifdef server
+	./setup/generate_server_template.sh $(server)
+	@echo "** server template built in servers/$(server) . Done **"
+else
+	$(error Usage: make generate container=template_name ip=ip gateway=gateway)
+endif
+
 
 build:
 ifdef container
