@@ -1,0 +1,3 @@
+---
+- name: create deploy user
+  action: user name=$deploy_user state=present

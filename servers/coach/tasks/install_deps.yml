@@ -1,0 +1,6 @@
+---
+- name: Install packages
+  action: apt pkg=$(item) state=present
+  with_items:
+    - nginx
+    - stunnel4

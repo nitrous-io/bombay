@@ -1,0 +1,37 @@
+---
+- hosts: coach
+  sudo: True
+  gather_facts: False
+  vars:
+    app: coach
+    app_directory: /var/apps/${app}
+    deploy_user: action
+  tasks:
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../../global/tasks/install_ansible_deps.yml
+    # apt-get update
+    - include: ../../../global/tasks/update_apt.yml
+    # Install Dependencies (via apt-get)
+    - include: ../tasks/install_deps.yml
+    # Create Deploy User
+    - include: ../../../global/tasks/create_deploy_user.yml deploy_user=$deploy_user
+    # Create Capistrano Layout for $app_directory
+    - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory deploy_user=$deploy_user
+    # Setup .env
+    - name: setup env
+      action: copy src=../files/env.${environment} dest=$app_directory/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+    # Generate and Upload Public Key to GitHub
+    - include: ../../../global/tasks/generate_and_upload_public_key_to_github.yml gh_username=$gh_username gh_password=$gh_password deploy_user=$deploy_user
+    # Setup nginx
+    - include: ../../../global/tasks/install_nginx.yml
+    # Setup haproxy
+    - include: ../../../global/tasks/install_haproxy.yml
+    # Setup stunnel
+    - include: ../../../global/tasks/install_stunnel.yml
+  handlers:
+    - name: restart nginx
+      action: service name=nginx state=restarted
+    - name: restart haproxy
+      action: service name=haproxy state=restarted
+    - name: restart stunnel
+      action: service name=stunnel state=restarted

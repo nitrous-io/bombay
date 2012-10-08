@@ -1,0 +1,16 @@
+---
+- name: setup /etc/stunnel/{certs,keys} directory
+  action: file path=/etc/stunnel/$item state=directory owner=root group=root mode=0770
+  with_items:
+   - certs
+   - keys
+- name: move stunnel.pem to /etc/stunnel/certs directory
+  action: shell bash -c "mv /tmp/stunnel.pem /etc/stunnel/certs && chown root:root /etc/stunnel/certs/stunnel.pem" creates=/etc/stunnel/certs/stunnel.pem
+- name: move stunnel.key to /etc/stunnel/certs directory
+  action: shell bash -c "mv /tmp/stunnel.key /etc/stunnel/keys && chown root:root /etc/stunnel/keys/stunnel.key" creates=/etc/stunnel/keys/stunnel.key
+- name: setup stunnel.conf the way we want
+  action: copy src=../../global/files/stunnel.conf dest=/etc/stunnel/stunnel.conf owner=root group=root mode=0660
+- name: setup stunnel to be enabled
+  action: copy src=../../global/files/default_stunnel4 dest=/etc/default/stunnel4 owner=root group=root mode=0660
+  notify: restart stunnel
+

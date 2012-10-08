@@ -36,9 +36,11 @@ ifdef container
 else ifdef server
 
 ifndef env
-	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=development
+	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=development -i setup/hosts.servers.development
+else ifeq ($(env), development)
+	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i setup/hosts.servers.$(env)
 else
-	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env)
+	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i setup/hosts.servers.$(env) -c ssh
 endif
 
 else
@@ -52,6 +54,6 @@ else
 	./setup/release.sh $(container)
 endif
 
-.SILENT: setup generate build release
+.SILENT: setup generate release
 
 .PHONY: setup generate build release
