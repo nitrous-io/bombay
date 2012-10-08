@@ -19,9 +19,9 @@
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory deploy_user=$deploy_user
     # Setup .env
     - name: setup env
-      action: copy src=../files/env.${environment} dest=$app_directory/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+      action: copy src=../files/env.$env dest=$app_directory/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
     # Generate and Upload Public Key to GitHub
-    - include: ../../../global/tasks/generate_and_upload_public_key_to_github.yml gh_username=$gh_username gh_password=$gh_password deploy_user=$deploy_user
+    - include: ../../../global/tasks/register_github_keys.yml deploy_user=$deploy_user
     # Setup nginx
     - include: ../../../global/tasks/install_nginx.yml
     # Setup haproxy
@@ -34,4 +34,4 @@
     - name: restart haproxy
       action: service name=haproxy state=restarted
     - name: restart stunnel
-      action: service name=stunnel state=restarted
+      action: service name=stunnel4 state=restarted
