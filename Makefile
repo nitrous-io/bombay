@@ -10,8 +10,6 @@ setup:
 	tar -zxvf /tmp/ansible-$(ansible_version).tar.gz --directory=/tmp
 	@echo 'Setting up ansible $(ansible_version)...'
 	cd /tmp/ansible-$(ansible_version) && sudo python setup.py install
-	@echo 'Symlinking ansible.cfg to ~/.ansible.cfg and hosts to /etc/ansible/hosts'
-	sudo rm -rf /etc/ansible
 	@echo "** Done **"
 
 generate:
@@ -32,15 +30,15 @@ endif
 
 build:
 ifdef container
-	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook containers/$(container)/plays/main.yml -i setup/hosts.containers
+	ANSIBLE_CONFIG=setup/ansible.container.cfg ansible-playbook containers/$(container)/plays/main.yml -i setup/hosts.containers
 else ifdef server
 
 ifndef env
-	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=development -i setup/hosts.servers.development
+	ANSIBLE_CONFIG=setup/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=development -i setup/hosts.servers.development
 else ifeq ($(env), development)
-	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i setup/hosts.servers.$(env)
+	ANSIBLE_CONFIG=setup/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i setup/hosts.servers.$(env)
 else
-	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i setup/hosts.servers.$(env) -c ssh
+	ANSIBLE_CONFIG=setup/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i setup/hosts.servers.$(env) -c ssh
 endif
 
 else
