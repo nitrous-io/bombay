@@ -26,7 +26,7 @@ To setup the right environment for Bombay, including ansible, run
 
 The ```ruby_container_template``` (for e.g.) can be built with this command:
 
-```make build template=ruby_container_template```
+```make build container=ruby_container_template```
 
 will build a container called ruby_container_template in
 ```/var/lib/lxc/ruby_container_template``` with the ip 192.168.254.254
@@ -49,14 +49,14 @@ in in ~/.s3cfg
 
 To release a ```ruby_container_template```, issue this command:
 
-``` make release template=ruby_container_template```
+``` make release container=ruby_container_template```
 
 ## Creating a new container
 
 If you want to create a new container template (say for php), you can do
 this by issuing this command:
 
-```make generate template=php_container_template ip=192.168.254.253 gateway=192.168.254.1```
+```make generate container=php_container_template ip=192.168.254.253 gateway=192.168.254.1```
 
 The ```ip``` is the IP that will be used by Ansible to SSH into the container. The ```ip``` must be in the same subnet as the ```gateway```.
 
@@ -87,6 +87,6 @@ line 152, in _delete_remote_files
 Exception: not going to happen
 ```
 
-just rerun the ```make build``` task (it is idempotent and so will skip
+just rerun the ```make build container``` task (it is idempotent and so will skip
 over steps which have already been completed). This bug is supposedly
 fixed in the upcoming 0.8 release of ansible.

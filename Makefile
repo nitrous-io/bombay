@@ -5,49 +5,53 @@ setup:
 	@echo 'Installing ansible dependencies'
 	sudo apt-get -yy install python-paramiko python-yaml python-jinja2 python-simplejson
 	@echo 'Downloading ansible $(ansible_version) from GitHub...'
-	wget https://github.com/downloads/ansible/ansible/ansible-$(ansible_version).tar.gz --output-document=/tmp/ansible-$(ansible_version).tar.gz --quiet 
+	wget https://github.com/downloads/ansible/ansible/ansible-$(ansible_version).tar.gz --output-document=/tmp/ansible-$(ansible_version).tar.gz --quiet
 	@echo 'Expanding ansible $(ansible_version)'
 	tar -zxvf /tmp/ansible-$(ansible_version).tar.gz --directory=/tmp
 	@echo 'Setting up ansible $(ansible_version)...'
 	cd /tmp/ansible-$(ansible_version) && sudo python setup.py install
 	@echo 'Symlinking ansible.cfg to ~/.ansible.cfg and hosts to /etc/ansible/hosts'
 	sudo rm -rf /etc/ansible
-	rm -f ~/.ansible.cfg
-	sudo mkdir -p /etc/ansible
-	ln -s $(PWD)/setup/ansible.cfg ~/.ansible.cfg
-	sudo ln -s $(PWD)/setup/hosts /etc/ansible/hosts
 	@echo "** Done **"
 
 generate:
-ifndef template
-	$(error Usage: make generate template=template_name ip=ip gateway=gateway)
-endif
-
 ifndef ip
-	$(error Usage: make generate template=template_name ip=ip gateway=gateway)
+	$(error Usage: make generate container=template_name ip=ip gateway=gateway)
 endif
 
 ifndef gateway
-	$(error Usage: make generate template=template_name ip=ip gateway=gateway)
+	$(error Usage: make generate container=template_name ip=ip gateway=gateway)
 endif
 
-	./setup/generate_template.sh $(template) $(ip) $(gateway)
+ifndef container
+	$(error Usage: make generate container=template_name ip=ip gateway=gateway)
+endif
+
+	./setup/generate_template.sh $(container) $(ip) $(gateway)
 	@echo "** Done **"
 
 build:
-ifndef template
-	$(error Usage: make build template=template_name)
+ifdef container
+	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook containers/$(container)/plays/main.yml -i setup/hosts.containers
+else ifdef server
+
+ifndef env
+	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=development
 else
-	ansible-playbook containers/$(template)/plays/main.yml
+	ANSIBLE_CONFIG=setup/ansible.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env)
+endif
+
+else
+	$(error Usage: make container|server=name)
 endif
 
 release:
-ifndef template
-	$(error Usage: make release template=template_name)
+ifndef container
+	$(error Usage: make release container=name)
 else
-	./setup/release_template.sh $(template)
+	./setup/release.sh $(container)
 endif
 
-.SILENT: setup generate build
+.SILENT: setup generate build release
 
-.PHONY: setup generate build
+.PHONY: setup generate build release
