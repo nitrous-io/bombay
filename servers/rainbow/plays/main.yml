@@ -19,7 +19,9 @@
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory deploy_user=$deploy_user
     # Setup .env
     - name: setup env
-      action: copy src=../files/env.$env dest=$app_directory/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+      action: copy src=../files/env.$env dest=$app_directory/shared/config/.env owner=$deploy_user group=$deploy_user mode=0600
+    - name: setup database.coffee
+      action: copy src=../files/database.coffee.$env dest=$app_directory/shared/config/database.coffee owner=$deploy_user group=$deploy_user mode=0600
     # Generate and Upload Public Key to GitHub
     - include: ../../../global/tasks/register_github_keys.yml deploy_user=$deploy_user
     # Setup nginx
