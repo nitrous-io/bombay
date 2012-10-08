@@ -23,15 +23,14 @@
     # Generate and Upload Public Key to GitHub
     - include: ../../../global/tasks/register_github_keys.yml deploy_user=$deploy_user
     # Setup nginx
-    - include: ../../../global/tasks/install_nginx.yml
-    # Setup haproxy
-    - include: ../../../global/tasks/install_haproxy.yml
+    - name: setup nginx
+      action: copy src=../files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
+      notify: restart nginx
     # Setup stunnel
     - include: ../../../global/tasks/install_stunnel.yml
   handlers:
     - name: restart nginx
       action: service name=nginx state=restarted
-    - name: restart haproxy
-      action: service name=haproxy state=restarted
     - name: restart stunnel
       action: service name=stunnel4 state=restarted
+      ignore_errors: True

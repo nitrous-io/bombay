@@ -1,5 +1,0 @@
----
-- name: setup nginx
-  action: copy src=../../../global/files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
-  notify: restart nginx
-
