@@ -1,4 +1,8 @@
-*.development
-*.test
-*.production
-*.staging
+global/files/*.development
+global/files/*.test
+global/files/*.production
+global/files/*.staging
+servers/*/files/*.development
+servers/*/files/*.test
+servers/*/files/*.production
+servers/*/files/*.test
