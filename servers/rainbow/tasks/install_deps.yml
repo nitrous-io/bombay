@@ -6,4 +6,5 @@
     - stunnel4
     - haproxy
     - git-core
+    - build-essential
     - libpq-dev

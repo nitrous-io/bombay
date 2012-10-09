@@ -5,4 +5,5 @@
     - nginx
     - stunnel4
     - haproxy
+    - build-essential
     - git-core
