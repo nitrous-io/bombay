@@ -23,3 +23,6 @@
 - name: apply nvm.sh and set default version
   action: shell /bin/bash -c "source /home/${user}/.nvm/nvm.sh && nvm use ${version} && nvm alias default ${version}"
 
+- name: set permissions for .nvm
+  action: shell chown $user:$user -R /home/${user}/.nvm
+
