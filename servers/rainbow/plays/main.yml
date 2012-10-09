@@ -32,6 +32,8 @@
     - include: ../tasks/install_haproxy.yml
     # Setup stunnel
     - include: ../../../global/tasks/install_stunnel.yml
+    # Install NVM
+    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=action
   handlers:
     - name: restart nginx
       action: service name=nginx state=restarted
