@@ -1,0 +1,9 @@
+---
+- name: download container
+  action: shell s3cmd get s3://$s3_bucket/${name}_${timestamp}.tar.gz chdir=/tmp creates=/tmp/${name}_${timestamp}.tar.gz
+
+- name: unarchive the container
+  action: shell tar -pxvzf ${name}_${timestamp}.tar.gz chdir=/tmp creates=/tmp/$name
+
+- name: copy the contents over to /var/lib/lxc
+  action: shell cp -pr /tmp/$name /var/lib/lxc creates=/var/lib/lxc/$name

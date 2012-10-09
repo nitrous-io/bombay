@@ -1,0 +1,24 @@
+development:
+
+production:
+  ports:
+    - 22-22
+    - 10000-20000
+    - 65000-65000
+    - 443-443
+    - 80-80
+  hostname: usw1-1.actionbox.io
+  tags: boxhost, usw1-1.actionbox.io
+
+staging:
+  ports:
+    - 22-22
+    - 10000-20000
+    - 65000-65000
+    - 443-443
+    - 80-80
+  hostname: usw1-1-staging.actionbox.io
+  tags: boxhost, usw1-1-staging.actionbox.io
+
+# make provision box_host env=staging
+

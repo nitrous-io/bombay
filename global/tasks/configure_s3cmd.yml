@@ -1,0 +1,3 @@
+---
+- name: configure s3cmd
+  action: copy src=../../../global/files/s3cfg.$env dest=/home/ubuntu/.s3cfg owner=ubuntu group=ubuntu mode=0600

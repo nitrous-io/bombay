@@ -1,0 +1,47 @@
+---
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+  vars:
+    app_1: boxer
+    app_2: proxee
+    app_directory_1: /var/apps/${app_1}
+    app_directory_2: /var/apps/${app_2}
+    deploy_user: action
+    redis_port: 65000
+    redis_bind_ip: 127.0.0.1
+    s3_bucket: bombay-apse.action.io
+  tasks:
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../../global/tasks/install_ansible_deps.yml
+    # apt-get update
+    - include: ../../../global/tasks/update_apt.yml
+    # Install Dependencies (via apt-get)
+    - include: ../tasks/install_deps.yml
+    # Create Deploy User
+    - include: ../../../global/tasks/create_deploy_user.yml deploy_user=$deploy_user
+    # Create Capistrano Layout for $app_directory_1
+    - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_1 deploy_user=$deploy_user
+    # Setup .env for boxer
+    - name: setup env for boxer
+      action: copy src=../files/boxer_env.$env dest=$app_directory_1/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+    # Create Capistrano Layout for $app_directory_2
+    - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_2 deploy_user=$deploy_user
+    # Setup .env for proxee
+    - name: setup env for boxer
+      action: copy src=../files/proxee_env.$env dest=$app_directory_2/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+    # Generate and Upload Public Key to GitHub
+    - include: ../../../global/tasks/register_github_keys.yml deploy_user=$deploy_user
+    # Set limits for the user
+    - include: ../../../global/tasks/set_limits.yml user=$deploy_user attribute=nofile value=65536
+    # Install Redis Server
+    - include: ../../../global/tasks/install_redis.yml port=$redis_port ip=$redis_bind_ip
+    # Configure S3 Cmd
+    - include: ../../../global/tasks/configure_s3cmd.yml
+    # Install container
+    - include: ../tasks/install_action_container.yml name=ruby_container_template timestamp=1349334727 s3_bucket=$s3_bucket
+    # Install NVM
+    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=action
+  handlers:
+    - name: restart redis
+      action: service name=redis-server state=restarted

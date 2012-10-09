@@ -3,3 +3,6 @@ ec2-54-251-3-246.ap-southeast-1.compute.amazonaws.com
 
 [rainbow]
 ec2-122-248-214-75.ap-southeast-1.compute.amazonaws.com
+
+[box_host]
+ec2-122-248-196-105.ap-southeast-1.compute.amazonaws.com
