@@ -1,0 +1,3 @@
+ASK_ADMINS_FOR_PRIVATE_KEY
+
+and put it in a file called global/files/gh_action_deployer.$(env) that you are deploying to
