@@ -10,6 +10,7 @@
     app_directory_1: /var/apps/${app_1}
     app_directory_2: /var/apps/${app_2}
     deploy_user: action
+    node_version: v0.8.11
     redis_port: 65000
     redis_bind_ip: 127.0.0.1
     s3_bucket: bombay-apse.action.io
@@ -27,23 +28,32 @@
     # Setup .env for boxer
     - name: setup env for boxer
       action: copy src=../files/boxer_env.$env dest=$app_directory_1/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+    # Setup runtimes.coffee for boxer
+    - name: setup runtimes.coffee for boxer
+      action: copy src=../files/runtimes.coffee.$env dest=$app_directory_1/shared/config/runtimes.coffee owner=$deploy_user group=$deploy_user mode=0660
     # Create Capistrano Layout for $app_directory_2
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_2 deploy_user=$deploy_user
     # Setup .env for proxee
-    - name: setup env for boxer
+    - name: setup env for proxee
       action: copy src=../files/proxee_env.$env dest=$app_directory_2/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
     # Generate and Upload Public Key to GitHub
     - include: ../../../global/tasks/register_github_keys.yml deploy_user=$deploy_user
     # Set limits for the user
     - include: ../../../global/tasks/set_limits.yml user=$deploy_user attribute=nofile value=65536
     # Install Redis Server
-    - include: ../../../global/tasks/install_redis.yml port=$redis_port ip=$redis_bind_ip
+    - include: ../../../global/tasks/install_redis.yml port=$redis_port
     # Configure S3 Cmd
     - include: ../../../global/tasks/configure_s3cmd.yml
     # Install container
     - include: ../tasks/install_action_container.yml name=ruby_container_template timestamp=1349334727 s3_bucket=$s3_bucket
     # Install NVM
-    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=action
+    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
+    # Install npm packages
+    - include: ../../../global/tasks/install_npm.yml npm=forever
+    # Install Upstart for boxer
+    - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_1 deploy_user=$deploy_user node_version=$node_version
+    # Install Upstart for proxee
+    - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_2 deploy_user=$deploy_user node_version=$node_version
   handlers:
     - name: restart redis
-      action: service name=redis-server state=restarted
+      action: shell /etc/init.d/redis-server restart
