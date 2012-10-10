@@ -3,7 +3,6 @@
   action: apt pkg=$item state=present
   with_items:
     - git-core
-    - redis-server
     - lxc
     - bridge-utils
     - s3cmd

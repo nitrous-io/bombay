@@ -2,10 +2,14 @@
 - hosts: coach
   sudo: True
   gather_facts: False
+  vars_files:
+    - ../../../config/deploy_keys.yml
   vars:
     app: coach
     app_directory: /var/apps/${app}
     deploy_user: action
+    node_version: v0.8.11
+    redis_port: 65000
   tasks:
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
     - include: ../../../global/tasks/install_ansible_deps.yml
@@ -29,10 +33,20 @@
     # Setup stunnel
     - include: ../../../global/tasks/install_stunnel.yml
     # Install NVM
-    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=action
+    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
+    # Install npm packages
+    - include: ../../../global/tasks/install_npm.yml npm=$item
+      with_items:
+        - forever
+    # Install Upstart
+    - include: ../../../global/tasks/install_upstart_for_app.yml app=$app deploy_user=$deploy_user node_version=$node_version
+    # Install redis
+    - include: ../../../global/tasks/install_redis.yml port=$redis_port
   handlers:
     - name: restart nginx
       action: service name=nginx state=restarted
     - name: restart stunnel
       action: service name=stunnel4 state=restarted
       ignore_errors: True
+    - name: restart redis
+      action: service name=redis-server state=restarted

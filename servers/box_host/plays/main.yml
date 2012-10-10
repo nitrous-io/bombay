@@ -2,6 +2,8 @@
 - hosts: box_host
   sudo: True
   gather_facts: False
+  vars_files:
+    - ../../../config/deploy_keys.yml
   vars:
     app_1: boxer
     app_2: proxee

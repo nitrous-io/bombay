@@ -2,6 +2,8 @@
 - hosts: rainbow
   sudo: True
   gather_facts: False
+  vars_files:
+    - ../../../config/deploy_keys.yml
   vars:
     - app: rainbow
     - app_directory: /var/apps/${app}
