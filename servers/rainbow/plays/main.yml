@@ -8,6 +8,7 @@
     - app: rainbow
     - app_directory: /var/apps/${app}
     - deploy_user: action
+    - node_version: v0.8.11
   tasks:
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
     - include: ../../../global/tasks/install_ansible_deps.yml
@@ -35,7 +36,11 @@
     # Setup stunnel
     - include: ../../../global/tasks/install_stunnel.yml
     # Install NVM
-    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=action
+    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
+    # Install npm packages
+    - include: ../../../global/tasks/install_npm.yml npm=forever
+    # Install Upstart
+    - include: ../../../global/tasks/install_upstart_for_app.yml app=$app deploy_user=$deploy_user node_version=$node_version
   handlers:
     - name: restart nginx
       action: service name=nginx state=restarted
