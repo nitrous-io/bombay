@@ -249,7 +249,7 @@ module ActionIO
                   region: self.region
                 )
       server = compute.servers.all('tag:Name' => self.name).first
-      server.state == 'terminated' ? nil : server
+      (server.nil? || server.state == 'terminated') ? nil : server
     end
 
     def create_instance!
