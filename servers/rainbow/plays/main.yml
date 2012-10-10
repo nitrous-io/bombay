@@ -43,10 +43,9 @@
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app deploy_user=$deploy_user node_version=$node_version
   handlers:
     - name: restart nginx
-      action: service name=nginx state=restarted
+      action: shell /etc/init.d/nginx restart
     - name: restart haproxy
-      action: service name=haproxy state=restarted
+      action: shell /etc/init.d/haproxy restart
     - name: restart stunnel
-      action: service name=stunnel4 state=restarted
-      ignore_errors: True
+      action: shell /etc/init.d/stunnel4 restart
 
