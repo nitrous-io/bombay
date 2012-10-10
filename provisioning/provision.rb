@@ -285,6 +285,11 @@ module ActionIO
         server.wait_for { print "."; ready? }
         print "\n"
         compute.associate_address(server.id, self.ip)
+
+        print "Waiting for sshd"
+        print(".") until tcp_test_ssh(server.dns_name, 65100) {
+          puts("Done")
+        }
       end
 
       server
@@ -304,6 +309,24 @@ module ActionIO
     end
 
     protected
+    def tcp_test_ssh(hostname, ssh_port)
+      tcp_socket = TCPSocket.new(hostname, ssh_port)
+      readable = IO.select([tcp_socket], nil, nil, 5)
+      if readable
+        yield
+        true
+      else
+        false
+      end
+    rescue SocketError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::ENETUNREACH, IOError
+      sleep 2
+      false
+    rescue Errno::EPERM, Errno::ETIMEDOUT
+      false
+    ensure
+      tcp_socket && tcp_socket.close
+    end
+
     def get_root_domain_from(name)
       parsed_domain = Domainatrix.parse(name)
       "#{parsed_domain.domain}.#{parsed_domain.public_suffix}"
