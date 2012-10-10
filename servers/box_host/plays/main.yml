@@ -54,6 +54,8 @@
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_1 deploy_user=$deploy_user node_version=$node_version
     # Install Upstart for proxee
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_2 deploy_user=$deploy_user node_version=$node_version
+    # Initialize Redis
+    - include: ../tasks/initialize_redis.yml
   handlers:
     - name: restart redis
       action: shell /etc/init.d/redis-server restart

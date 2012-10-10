@@ -1,0 +1,23 @@
+---
+- name: number of entries in available_ips
+  action: shell redis-cli -p ${redis_port} llen available_ips
+  register: available_ips
+
+- name: number of entries in available_ports
+  action: shell redis-cli -p ${redis_port} llen available_ports
+  register: available_ports
+
+- name: upload the populate available_ips script
+  action: copy src=../files/populate_ips.sh dest=/tmp/populate_ips.sh owner=root group=root mode=0700
+
+- name: upload the populate available_ports script
+  action: copy src=../files/populate_ports.sh dest=/tmp/populate_ports.sh owner=root group=root mode=0700
+
+- name: populate available_ips in redis
+  action: shell /tmp/populate_ips.sh $redis_port
+  only_if: "'${available_ips.stdout}' == '0'"
+
+- name: populate available_ports in redis
+  action: shell /tmp/populate_ports.sh $redis_port
+  only_if: "'${available_ports.stdout}' == '0'"
+
