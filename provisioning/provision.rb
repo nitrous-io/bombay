@@ -86,7 +86,8 @@ module ActionIO
 
     def rule_exists_in_security_group?(rule, sg)
       sg.ip_permissions.select do |permission|
-        ports_condition = (permission['fromPort'].to_i == rule.port_range.begin.to_i && permission['toPort'].to_i == rule.port_range.end.to_i)
+        ports_condition = (permission['fromPort'].to_i == rule.port_range.begin.to_i &&
+                           permission['toPort'].to_i == rule.port_range.end.to_i)
         protocol_condition = (permission['ipProtocol'] == rule.protocol)
         ips = permission['ipRanges'].map { |i| i['cidrIp'] }
         groups = permission['groups'].map { |g| g['groupName'] }
@@ -231,19 +232,21 @@ module ActionIO
         puts "Could not find #{root_domain} in Route53 records"
         exit(1)
       else
+        domain_name = "ec2-#{self.ip.gsub(/\./, '-')}.#{self.region}.compute.amazonaws.com"
+
         result = zone.records.create(
-          value: self.ip,
+          value: domain_name,
           name: self.name,
-          type: 'A'
+          type: 'CNAME'
         )
 
         # Box Hosts need wildcard domain too because we allow
         # users to access individual boxes
         if root_domain == 'actionbox.io'
           zone.records.create(
-            value: self.ip,
+            value: domain_name,
             name: "*.#{self.name}",
-            type: 'A'
+            type: 'CNAME'
           )
         end
 
