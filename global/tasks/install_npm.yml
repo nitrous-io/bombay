@@ -1,0 +1,3 @@
+---
+- name: install npm
+  action: shell su $deploy_user bash -c "/home/$deploy_user/.nvm/$node_version/bin/npm install -g $npm"
