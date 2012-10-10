@@ -44,9 +44,8 @@
     - include: ../../../global/tasks/install_redis.yml port=$redis_port
   handlers:
     - name: restart nginx
-      action: service name=nginx state=restarted
+      action: shell /etc/init.d/nginx restart
     - name: restart stunnel
-      action: service name=stunnel4 state=restarted
-      ignore_errors: True
+      action: shell /etc/init.d/stunnel4 restart
     - name: restart redis
-      action: service name=redis-server state=restarted
+      action: shell /etc/init.d/redis-server restart
