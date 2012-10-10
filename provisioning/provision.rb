@@ -237,6 +237,16 @@ module ActionIO
           type: 'A'
         )
 
+        # Box Hosts need wildcard domain too because we allow
+        # users to access individual boxes
+        if root_domain == 'actionbox.io'
+          zone.records.create(
+            value: self.ip,
+            name: "*.#{self.name}",
+            type: 'A'
+          )
+        end
+
         puts "Created DNS record for #{self.name} -> #{result}"
       end
     end
