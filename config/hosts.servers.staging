@@ -1,8 +1,8 @@
 [coach]
-coach-apse-staging.action.io
+coach-apse1-staging.action.io
 
 [rainbow]
-rainbow-apse-staging.action.io
-
+rainbow-apse1-staging.action.io
 
 [box_host]
+apse1-staging.actionbox.io
