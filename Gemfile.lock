@@ -1,7 +1,19 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    actionio-inifile (2.0.4)
+      bones-git
+    addressable (2.3.2)
+    bones (3.8.0)
+      little-plugger (~> 1.1.3)
+      loquacious (~> 1.9.1)
+      rake (>= 0.8.7)
+    bones-git (1.3.0)
+      bones (>= 3.6)
+      git (>= 1.2.5)
     builder (3.1.3)
+    domainatrix (0.0.11)
+      addressable
     excon (0.16.4)
     fog (1.6.0)
       builder
@@ -14,8 +26,10 @@ GEM
       nokogiri (~> 1.5.0)
       ruby-hmac
     formatador (0.2.3)
-    inifile (2.0.2)
+    git (1.2.5)
     jruby-pageant (1.1.1)
+    little-plugger (1.1.3)
+    loquacious (1.9.1)
     mime-types (1.19)
     multi_json (1.3.6)
     net-scp (1.0.4)
@@ -23,11 +37,13 @@ GEM
     net-ssh (2.6.0)
       jruby-pageant (>= 1.1.1)
     nokogiri (1.5.5)
+    rake (0.9.2.2)
     ruby-hmac (0.4.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionio-inifile (~> 2.0.4)
+  domainatrix (~> 0.0.11)
   fog (~> 1.6.0)
-  inifile (~> 2.0.2)

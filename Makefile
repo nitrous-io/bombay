@@ -56,6 +56,25 @@ else
 	./generators/release_container.sh $(container)
 endif
 
+provision:
+ifndef server
+	$(error Usage: make provision env=staging server=rainbow region=ap-southeast-1 size=m1.small)
+endif
+
+ifndef env
+	$(error Usage: make provision env=staging server=rainbow region=ap-southeast-1 size=m1.small)
+endif
+
+ifndef size
+	$(error Usage: make provision env=staging server=rainbow region=ap-southeast-1 size=m1.small)
+endif
+
+ifndef region
+	$(error Usage: make provision env=staging server=rainbow region=ap-southeast-1 size=m1.small)
+endif
+
+	./provisioning/provision.rb $(env) $(server) $(region) $(size)
+
 .SILENT: setup generate release build
 
 .PHONY: setup generate build release
