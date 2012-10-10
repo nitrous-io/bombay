@@ -40,9 +40,9 @@ else ifdef server
 ifndef env
 	ANSIBLE_CONFIG=config/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=development -i config/hosts.servers.development
 else ifeq ($(env), development)
-	ANSIBLE_CONFIG=config/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i config/hosts.servers.$(env)
+	ANSIBLE_CONFIG=config/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i config/hosts.servers.$(env) --private-key=$(HOME)/.ec2/ap-southeast-1-keypair.pem
 else
-	ANSIBLE_CONFIG=config/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i config/hosts.servers.$(env) -c ssh
+	ANSIBLE_CONFIG=config/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i config/hosts.servers.$(env) --private-key=$(HOME)/.ec2/ap-southeast-1-keypair.pem
 endif
 
 else
