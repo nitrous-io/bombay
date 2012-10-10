@@ -1,0 +1,10 @@
+description "{{ app }}"
+author      "{{ deploy_user }}"
+
+start on startup
+stop on shutdown
+
+script
+    exec sudo -u {{ deploy_user }} bash -c "export PATH=$PATH:'/home/{{ deploy_user }}/.nvm/{{ node_version }}/bin' && cd /var/apps/{{ app }}/current && forever start boot.js"
+end script
+
