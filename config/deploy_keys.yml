@@ -1,0 +1,4 @@
+---
+deploy_keys:
+  # arun's arun-dev public key
+  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCcSyrZj0lrD3P6bc+5/q4uSO1ft/d0wUcg1mYWx6KQWZwjBkLvpuX8OF2vWHyrU/2hD74xax2kTIdK/YdvBD0KBhnUpmHoXqb6fbeWKhyK5VyJTM/I9yNNrqnTLA4+pT9MGT2nhMzzq8fWrqauiYTEtLppK2uiQ/Wns4X+AuYeODKNSZAJvhf3zHgyzhrWhuXU6VhJPbTFFSWjYzP6jRn1yM1mTJr3fLJMUm17MzQfzfkQTsKHQKJKSQzypqOaNAlDiAGiMbm3EeQzbsNcj800OIhQxs+Doz1rp6H41/o0JUKXA2CavFgwHMoP46VNyAOnadB98vIcqDkF4Mluc6eR arun@arun-dev
