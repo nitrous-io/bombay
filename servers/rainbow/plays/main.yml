@@ -16,6 +16,8 @@
     - include: ../../../global/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
+    # Install sudoers
+    - include: ../../../global/tasks/install_sudoers.yml file=../files/rainbow_sudoers
     # Create Deploy User
     - include: ../../../global/tasks/create_deploy_user.yml deploy_user=$deploy_user
     # Create Capistrano Layout for $app_directory

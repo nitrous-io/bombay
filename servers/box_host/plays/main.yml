@@ -20,11 +20,11 @@
     - include: ../../../global/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
-    # Install dependencies
-    - name: sudoers will enable action to execute boxer provisioning scripts
-      action: copy src=../files/box_host_sudoers dest=/tmp/sudoers owner=root group=root mode=440
-    - name: copy sudoers over
-      action: shell mv /tmp/sudoers /etc/sudoers
+    # Install sudoers
+    - include: ../../../global/tasks/install_sudoers.yml file=../files/box_host_sudoers
+    # Install pam.d/common-session which sets limits for non-interactive sessions
+    - name: install common-session in /etc/init.d/
+      action: copy src=../files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
     # Create Deploy User
     - include: ../../../global/tasks/create_deploy_user.yml deploy_user=$deploy_user
     # Create Capistrano Layout for $app_directory_1

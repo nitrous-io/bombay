@@ -1,0 +1,6 @@
+---
+- name: copy sudoers file
+  action: copy src=$file dest=/tmp/sudoers owner=root group=root mode=440
+- name: install /etc/sudoers
+  action: shell mv /tmp/sudoers /etc/sudoers
+
