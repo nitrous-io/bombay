@@ -34,7 +34,6 @@
 
 # Install stuff which needs to be done as root
 - hosts: ruby_container_template
-  connection: ssh
   user: action
   sudo: True
   gather_facts: False
@@ -53,11 +52,10 @@
     # Install all the necessary packages for this container
     - include: ../../../global/tasks/container/install_packages.yml
     # Install locales
-    - include: ../../../global/tasks/container/install_locales.yml user=action
+    - include: ../../../global/tasks/container/install_locales.yml user=$user
 
 # Install stuff which needs to be done not as root
 - hosts: ruby_container_template
-  connection: ssh
   user: action
   sudo: False
   gather_facts: False
@@ -66,6 +64,14 @@
     - include: ../../../global/tasks/container/install_ruby_via_rvm.yml version=1.9.3-p194 user=action
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=action
     - include: ../../../global/tasks/container/install_gem.yml gem=rails
+
+- hosts: ruby_container_template
+  user: action
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - include: ../../../global/tasks/container/add_rvm_ld_config.yml version=1.9.3-p194 user=action
 
 # Cleanup to be done after the creation of the container
 - hosts: localhost

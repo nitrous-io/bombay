@@ -1,0 +1,12 @@
+---
+- name: check if line exists
+  action: shell grep ${version} /etc/ld.so.conf.d/rvm.conf
+  register: "rvm_conf"
+  ignore_errors: True
+
+- name: add rvm ld config
+  action: shell echo '/home/${user}/.rvm/rubies/ruby-1.9.3-p194/lib/' >> /etc/ld.so.conf.d/rvm.conf
+  only_if: "len('${rvm_conf.stdout}') == 0"
+
+- name: ldconfig
+  action: shell ldconfig

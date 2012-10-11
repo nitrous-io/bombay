@@ -34,7 +34,7 @@ endif
 
 build:
 ifdef container
-	ANSIBLE_CONFIG=config/ansible.container.cfg ansible-playbook containers/$(container)/plays/main.yml -i config/hosts.containers
+	ANSIBLE_CONFIG=config/ansible.container.cfg ansible-playbook containers/$(container)/plays/main.yml -i config/hosts.containers --private-key=$(HOME)/.ansible/bombay
 else ifdef server
 
 ifndef env

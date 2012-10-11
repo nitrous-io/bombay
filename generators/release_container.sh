@@ -25,6 +25,9 @@ sudo rm -rf /tmp/${container_name}/rootfs/home/action/.ssh
 sudo rm -rf /tmp/${container_name}/rootfs/var/log/*
 sudo rm -rf /tmp/${container_name}/rootfs/var/cache/apt/archives/*
 
+# Add VERSION
+echo $time_of_build > /tmp/${container_name}/VERSION
+
 gzipped_file_name=${container_name}_${time_of_build}.tar.gz
 
 cd /tmp

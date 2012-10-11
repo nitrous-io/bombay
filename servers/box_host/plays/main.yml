@@ -52,7 +52,7 @@
     # Configure S3 Cmd
     - include: ../../../global/tasks/configure_s3cmd.yml
     # Install container
-    - include: ../tasks/install_action_container.yml name=ruby_container_template timestamp=1349334727 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1349954062 s3_bucket=$s3_bucket
     # Install NVM
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
     # Install Upstart for boxer
