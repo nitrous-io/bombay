@@ -199,9 +199,16 @@ module ActionIO
         record = zone.records.select { |r| r.name == "#{name}." }.first
 
         if record
-          self.ip = record.value.first
+          cname = record.value.first
+          cname_matcher = cname.match(/ec2-(\d+)-(\d+)-(\d+)-(\d+)\./)
+
+          if cname_matcher && cname_matcher.size == 5
+            self.ip = "#{cname_matcher[1]}.#{cname_matcher[2]}.#{cname_matcher[3]}.#{cname_matcher[4]}"
+          else
+            puts "IP Not Found for #{name}"
+          end
         else
-          puts "IP Not found for #{name}"
+          puts "IP Not Found for #{name}"
         end
       end
     end
