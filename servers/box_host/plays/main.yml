@@ -52,8 +52,6 @@
     - include: ../tasks/install_action_container.yml name=ruby_container_template timestamp=1349334727 s3_bucket=$s3_bucket
     # Install NVM
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
-    # Install npm packages
-    - include: ../../../global/tasks/install_npm.yml npm=forever
     # Install Upstart for boxer
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_1 deploy_user=$deploy_user node_version=$node_version
     # Install Upstart for proxee

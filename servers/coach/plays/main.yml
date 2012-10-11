@@ -36,10 +36,6 @@
     - include: ../../../global/tasks/install_stunnel.yml
     # Install NVM
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
-    # Install npm packages
-    - include: ../../../global/tasks/install_npm.yml npm=$item
-      with_items:
-        - forever
     # Install Upstart
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app deploy_user=$deploy_user node_version=$node_version
     # Install redis
