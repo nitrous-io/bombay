@@ -12,7 +12,6 @@
     deploy_user: action
     node_version: v0.8.11
     redis_port: 65000
-    redis_bind_ip: 127.0.0.1
     s3_bucket: bombay-apse.action.io
   tasks:
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
@@ -21,6 +20,11 @@
     - include: ../../../global/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
+    # Install dependencies
+    - name: sudoers will enable action to execute boxer provisioning scripts
+      action: copy src=../files/box_host_sudoers dest=/tmp/sudoers owner=root group=root mode=440
+    - name: copy sudoers over
+      action: shell mv /tmp/sudoers /etc/sudoers
     # Create Deploy User
     - include: ../../../global/tasks/create_deploy_user.yml deploy_user=$deploy_user
     # Create Capistrano Layout for $app_directory_1
@@ -55,7 +59,11 @@
     # Install Upstart for proxee
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_2 deploy_user=$deploy_user node_version=$node_version
     # Initialize Redis
-    - include: ../tasks/initialize_redis.yml
+    - include: ../tasks/setup_redis_init_script.yml
   handlers:
     - name: restart redis
       action: shell /etc/init.d/redis-server restart
+      notify: initialize redis
+    - name: initialize redis
+      action: shell /tmp/initialize_redis.sh $redis_port
+
