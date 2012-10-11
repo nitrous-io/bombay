@@ -7,7 +7,7 @@ shopt -s nullglob
 redis_port=${1}
 
 listlength="`redis-cli -p ${redis_port} llen available_ips`"
-if [ "\$listlength" -eq "0" ]
+if [ "$listlength" -eq "0" ]
   then
     for i in {2..254}
     do
