@@ -13,9 +13,12 @@
     node_version: v0.8.11
     redis_port: 65000
     s3_bucket: bombay-apse.action.io
+    gateway: 192.168.254.1
   tasks:
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
     - include: ../../../global/tasks/install_ansible_deps.yml
+    # Setup Bridge Network
+    - include: ../../../global/tasks/host/setup_bridge_network.yml gateway=$gateway
     # apt-get update
     - include: ../../../global/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
