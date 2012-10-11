@@ -62,6 +62,34 @@ The ```ip``` is the IP that will be used by Ansible to SSH into the container. T
 
 Once you run the command, the containers/php_container_template folder will be created and you can start editing playbooks, tasks, files and templates within it.
 
+## Provisioning a new server on AWS
+
+To provision a new server on AWS, run this command:
+
+``` sh
+make provision env=staging server=rainbow region=ap-southeast-1 size=m1.small
+```
+
+This will create an instance in the stated AWS region and instance size. The environment and server options sets the correct security policy and other options.
+
+## Building the server with Ansible
+
+After the new instance is built, we need to install the necessary packages using Ansible. Ansible will ssh into the instance and perform the necessary installations.
+
+``` sh
+make build env=staging server=rainbow
+```
+
+## Boostrap with Capistrano
+
+The last step would be to boostrap the application with Capistrano. Run the command below:
+
+``` sh
+cap staging deploy
+```
+
+This will setup the instance for deployment with Capistrano.
+
 ## Troubleshooting
 
 If you get this error while building a box
