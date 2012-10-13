@@ -1,8 +1,8 @@
 description "{{ app }}"
 author      "{{ deploy_user }}"
 
-start on startup mountall
-stop on shutdown
+start on runlevel [2345]
+stop on runlevel [!2345]
 
 # Automatically Respawn:
 respawn
