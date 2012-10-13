@@ -6,7 +6,7 @@ set -o nounset
 shopt -s nullglob
 
 container_name=${1}
-time_of_build=`date +%s`
+version=`date +%s`
 
 if [ ! -d /var/lib/lxc/${container_name} ]; then
 	echo "You do not seem to have built this container, run make build TEMPLATE=${container_name} to build the template"
@@ -22,13 +22,14 @@ sudo cp -pr /var/lib/lxc/${container_name} /tmp/
 
 # Remove extraneous features from the template
 sudo rm -rf /tmp/${container_name}/rootfs/home/action/.ssh
+sudo rm -rf /tmp/${contianer_name}/rootfs/home/action/.ansible
 sudo rm -rf /tmp/${container_name}/rootfs/var/log/*
 sudo rm -rf /tmp/${container_name}/rootfs/var/cache/apt/archives/*
 
 # Add VERSION
-echo $time_of_build > /tmp/${container_name}/VERSION
+echo $version > /tmp/${container_name}/VERSION
 
-gzipped_file_name=${container_name}_${time_of_build}.tar.gz
+gzipped_file_name=${container_name}_${version}.tar.gz
 
 cd /tmp
 sudo tar cpvzf ${gzipped_file_name} ${container_name}
