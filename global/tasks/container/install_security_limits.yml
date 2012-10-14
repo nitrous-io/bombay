@@ -1,0 +1,3 @@
+---
+- name: install security limits with sane stuff
+  action: template src=../../../global/templates/container/limits.conf.j2 dest=/etc/security/limits.conf owner=root group=root mode=0644 user=${user}
