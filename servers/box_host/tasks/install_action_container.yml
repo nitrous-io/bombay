@@ -1,9 +1,22 @@
 ---
+- name: get current version
+  action: shell cat /var/lib/lxc/$name/VERSION
+  register: container_version
+  ignore_errors: True
+
+- name: remove tmp remnants
+  action: shell rm -rf /tmp/${name}*
+  only_if: "'${container_version.stdout}' != '${version}'"
+
 - name: download container
   action: shell s3cmd get s3://$s3_bucket/${name}_${version}.tar.gz chdir=/tmp creates=/tmp/${name}_${version}.tar.gz
+  only_if: "'${container_version.stdout}' != '${version}'"
 
 - name: unarchive the container
   action: shell tar -pxvzf ${name}_${version}.tar.gz chdir=/tmp creates=/tmp/$name
+  only_if: "'${container_version.stdout}' != '${version}'"
 
 - name: copy the contents over to /var/lib/lxc
-  action: shell cp -pr /tmp/$name /var/lib/lxc creates=/var/lib/lxc/$name
+  action: shell rsync -az --delete /tmp/${name} /var/lib/lxc
+  only_if: "'${container_version.stdout}' != '${version}'"
+

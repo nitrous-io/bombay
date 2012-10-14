@@ -22,12 +22,12 @@ sudo cp -pr /var/lib/lxc/${container_name} /tmp/
 
 # Remove extraneous features from the template
 sudo rm -rf /tmp/${container_name}/rootfs/home/action/.ssh
-sudo rm -rf /tmp/${contianer_name}/rootfs/home/action/.ansible
+sudo rm -rf /tmp/${container_name}/rootfs/home/action/.ansible
 sudo rm -rf /tmp/${container_name}/rootfs/var/log/*
 sudo rm -rf /tmp/${container_name}/rootfs/var/cache/apt/archives/*
 
 # Add VERSION
-echo $version > /tmp/${container_name}/VERSION
+sudo bash -c "echo $version > /tmp/${container_name}/VERSION"
 
 gzipped_file_name=${container_name}_${version}.tar.gz
 
