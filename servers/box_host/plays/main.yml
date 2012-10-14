@@ -15,6 +15,8 @@
     s3_bucket: bombay-apse.action.io
     gateway: 192.168.254.1
   tasks:
+    # Set the hostname
+    - include: ../../../global/tasks/set_hostname.yml
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
     - include: ../../../global/tasks/install_ansible_deps.yml
     # Setup Bridge Network
