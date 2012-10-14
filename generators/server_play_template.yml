@@ -3,5 +3,6 @@
   sudo: True
   gather_facts: False
   tasks:
-    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    # Set the hostname
+    - include: ../../../global/tasks/set_hostname.yml
 
