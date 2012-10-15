@@ -22,12 +22,12 @@ touch servers/${server_name}/tasks/.gitkeep
 
 main_yml=servers/${server_name}/plays/main.yml
 
-cat setup/server_play_template.yml > ${main_yml}
+cat generators/server_play_template.yml > ${main_yml}
 
 sed -i "s/BOMBAY_SERVER_TEMPLATE/${server_name}/" ${main_yml}
 
-echo -e "\n\n[${server_name}]" >> setup/hosts.servers.development
-echo -e "\n\n[${server_name}]" >> setup/hosts.servers.production
-echo -e "\n\n[${server_name}]" >> setup/hosts.servers.staging
-echo -e "\n\n[${server_name}]" >> setup/hosts.servers.test
+echo -e "\n\n[${server_name}]" >> config/hosts.servers.development
+echo -e "\n\n[${server_name}]" >> config/hosts.servers.production
+echo -e "\n\n[${server_name}]" >> config/hosts.servers.staging
+echo -e "\n\n[${server_name}]" >> config/hosts.servers.test
 

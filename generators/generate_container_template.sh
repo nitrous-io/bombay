@@ -31,13 +31,13 @@ touch containers/${container_name}/tasks/.gitkeep
 
 main_yml=containers/${container_name}/plays/main.yml
 
-cat setup/container_play_template.yml > ${main_yml}
+cat generators/container_play_template.yml > ${main_yml}
 
 sed -i "s/BOMBAY_CONTAINER_TEMPLATE/${container_name}/" ${main_yml}
 sed -i "s/BOMBAY_IP/${ip}/" ${main_yml}
 sed -i "s/BOMBAY_GATEWAY/${gateway}/" ${main_yml}
 
-echo -e "\n\n[${container_name}]\n${ip}" >> setup/hosts
+echo -e "\n\n[${container_name}]\n${ip}" >> config/hosts.containers
 
 
 
