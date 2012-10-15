@@ -73,4 +73,5 @@
       # restart server after the very first provisioning, so that iptables etc. will be setup correctly
     - name: restart server
       action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
+      only_if: "'$env' != 'development'"
 
