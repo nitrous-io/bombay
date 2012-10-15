@@ -6,3 +6,5 @@ servers/*/files/*.development
 servers/*/files/*.staging
 servers/*/files/*.production
 servers/*/files/*.test
+
+dump.rdb
