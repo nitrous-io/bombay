@@ -52,8 +52,7 @@
 #ftp             hard    nproc           0
 #ftp             -       chroot          /ftp
 #@student        -       maxlogins       4
-{{ user }}       -       nproc           20
-{{ user }}       -       maxlogins       4
+{{ user }}       -       nproc           256
 {{ user }}       -       nofile          512
 
 # End of file
