@@ -142,7 +142,7 @@ module ActionIO
     attr_accessor  :name, :region, :size, :ip, :role
 
     REGION_TO_VANILLA_AMI = {
-      'ap-southeast-1'  => 'ami-b0aeeee2',
+      'ap-southeast-1'  => 'ami-fac686a8',
     }.freeze
 
     def initialize(opts = {})
