@@ -4,6 +4,9 @@ author      "{{ deploy_user }}"
 start on runlevel [2345]
 stop on runlevel [!2345]
 
+# Redirect stdout/stderr to /var/log/upstart/<job>.log
+console log
+
 # Automatically Respawn:
 respawn
 respawn limit 99 5
