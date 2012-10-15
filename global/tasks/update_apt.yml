@@ -1,6 +1,6 @@
 ---
 - name: Update APT
-  action: apt update-cache=yes
+  action: shell apt-get update
   ignore_errors: True
 
 

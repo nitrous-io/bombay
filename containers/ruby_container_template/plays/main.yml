@@ -41,10 +41,10 @@
     user: action
 
   tasks:
-    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
-    - include: ../../../global/tasks/install_ansible_deps.yml
     # apt-get update
     - include: ../../../global/tasks/update_apt.yml
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../../global/tasks/install_ansible_deps.yml
     # Configure SSH
     - include: ../../../global/tasks/container/configure_sshd_config.yml
     # Remove ubuntu user from the container
