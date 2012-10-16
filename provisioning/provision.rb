@@ -141,10 +141,6 @@ module ActionIO
   class Server
     attr_accessor  :name, :region, :size, :ip, :role
 
-    REGION_TO_VANILLA_AMI = {
-      'ap-southeast-1'  => 'ami-fac686a8',
-    }.freeze
-
     def initialize(opts = {})
       opts.each { |k,v| self.send("#{k}=", v) if self.respond_to?("#{k}=") }
     end
@@ -286,7 +282,7 @@ module ActionIO
       end
 
       server_def = {
-        image_id:           REGION_TO_VANILLA_AMI[self.region],
+        image_id:           choose_ami(self.region, self.role),
         flavor_id:          self.size,
         key_name:           "#{self.region}-keypair",
         availability_zone:  "#{self.region}a",
@@ -350,6 +346,21 @@ module ActionIO
     def get_root_domain_from(name)
       parsed_domain = Domainatrix.parse(name)
       "#{parsed_domain.domain}.#{parsed_domain.public_suffix}"
+    end
+
+    protected
+    def choose_ami(region, role)
+      if role == 'box_host'
+        case region
+        when 'ap-southeast-1' then 'ami-96cc8cc4'
+        else nil
+        end
+      else
+        case region
+        when 'ap-southeast-1' then 'ami-fac686a8'
+        else nil
+        end
+      end
     end
   end
 end
