@@ -1,0 +1,22 @@
+# -*- encoding: utf-8 -*-
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'bombay/version'
+
+Gem::Specification.new do |gem|
+  gem.name          = "bombay"
+  gem.version       = Bombay::VERSION
+  gem.authors       = ["arunthampi", "liangzan"]
+  gem.email         = ["arun@action.io", "zan@action.io"]
+  gem.description   = %q{bombay is the server/container creation tool for action.io}
+  gem.summary       = %q{bombay is the server/container creation tool for action.io}
+  gem.homepage      = "https://www.action.io"
+
+  gem.add_dependency  "fog",          "~> 1.6.0"
+  gem.add_dependency  "domainatrix",  "~> 0.0.11"
+  gem.add_dependency  "commander",    "~> 4.1.2"
+
+  gem.files         = `git ls-files`.split($/)
+  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.require_paths = ["lib"]
+end

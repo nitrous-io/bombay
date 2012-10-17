@@ -1,5 +1,4 @@
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'fog',              '~> 1.6.0'
-gem 'actionio-inifile', '~> 2.0.4', require: 'infile'
-gem 'domainatrix',      '~> 0.0.11'
+# Specify your gem's dependencies in bombay.gemspec
+gemspec

@@ -1,0 +1,72 @@
+#!/usr/bin/env ruby
+
+lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
+$LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
+
+require 'rubygems'
+require 'commander/import'
+require 'bombay'
+
+ANSIBLE_VERSION = '0.7.1'.freeze
+
+program :version, Bombay::VERSION
+program :description, 'bombay - anything is possible with bombay'
+
+command :setup do |c|
+  c.syntax = 'bombay setup'
+  c.summary = 'Setups all the requirements for bombay to work (ansible, etc.)'
+  c.description = 'Setups all the requirements for bombay to work (ansible, etc.)'
+  c.example 'Usage', c.syntax
+
+  c.action do
+    puts "Installing ansible dependencies"
+    system("sudo apt-get -yy install python-paramiko python-yaml python-jinja2 python-simplejson")
+    puts "Downloading ansible #{ANSIBLE_VERSION} from Github..."
+    system("wget https://github.com/downloads/ansible/ansible/ansible-#{ANSIBLE_VERSION}.tar.gz --output-document=/tmp/ansible-#{ANSIBLE_VERSION}.tar.gz --quiet")
+    puts "Expanding ansible #{ANSIBLE_VERSION}"
+    system("tar -zxvf /tmp/ansible-#{ANSIBLE_VERSION}.tar.gz --directory=/tmp")
+    puts "Setting up ansible #{ANSIBLE_VERSION}..."
+    install_status = system("cd /tmp/ansible-#{ANSIBLE_VERSION} && sudo python setup.py install")
+    puts install_status ? "** Done **" : "** Failed **"
+  end
+end
+
+command :build do |c|
+  c.syntax = "bombay build server|container --name name"
+  c.summary = "Build containers and/or servers"
+  c.description = c.summary
+  c.example 'Usage', c.syntax
+
+  c.action do |args, options|
+    if args.length != 2
+      puts "Usage: #{c.syntax}"
+    else
+      type, name = args
+
+      if type == 'server' || name == 'container'
+        puts "Usage: #{c.syntax}"
+      else
+
+      end
+    end
+  end
+end
+
+command :deploy do |c|
+  c.syntax = "bombay deploy container name --region region"
+  c.summary = "Deploy container to an S3 bucket in a region"
+  c.description = c.summary
+  c.example 'Usage', c.syntax
+
+  c.action do |args, options|
+    if args.length != 2
+      puts "Usage: #{c.syntax}"
+    else
+      if args[0] != 'container'
+        puts "Usage: #{c.syntax}"
+      else
+
+      end
+    end
+  end
+end
