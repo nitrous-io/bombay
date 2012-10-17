@@ -41,7 +41,10 @@ module Bombay
       ansible_hosts_file = File.join("/tmp", "#{role}-#{timestamp}.cfg")
       ansible_config_file = File.join("/tmp", "#{role}-config-#{timestamp}.cfg")
 
-      ansible_server_template_path = File.join(File.dirname(__FILE__), "templates", "ansible.server.config_template.erb")
+      ansible_server_template_path = File.join(File.dirname(__FILE__),
+                                               "templates",
+                                               "ansible.server.config_template.erb")
+
       ansible_config = ERB.new(File.read(ansible_server_template_path))
 
       if !File.exists?(keypair_file_path)
