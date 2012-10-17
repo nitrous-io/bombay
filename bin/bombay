@@ -32,7 +32,7 @@ command :setup do |c|
 end
 
 command :build do |c|
-  c.syntax = "bombay build server|container --name name"
+  c.syntax = "bombay build server|container name"
   c.summary = "Build containers and/or servers"
   c.description = c.summary
   c.example 'Usage', c.syntax
@@ -43,10 +43,18 @@ command :build do |c|
     else
       type, name = args
 
-      if type == 'server' || name == 'container'
-        puts "Usage: #{c.syntax}"
+      if type == 'server'
+      elsif type == 'container'
+        if !File.exists?(File.join("ansible", "containers", name, "plays", "main.yml"))
+          puts "** Error: Could not find a play for container #{name} in ansible/containers"
+        else
+          ENV['ANSIBLE_CONFIG'] = 'ansible/config/ansible.container.cfg'
+          system "ansible-playbook ansible/containers/#{name}/plays/main.yml " +
+                 "-i ansible/config/hosts.containers " +
+                 "--private-key=#{Dir.home}/.ansible/bombay"
+        end
       else
-
+        puts "Usage: #{c.syntax}"
       end
     end
   end
