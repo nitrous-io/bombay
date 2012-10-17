@@ -7,7 +7,7 @@ container_name=${1}
 ip=${2}
 gateway=${3}
 
-if [ -d containers/${container_name} ]; then
+if [ -d ansible/containers/${container_name} ]; then
 	echo "A container template with this name already exists"
 	exit 1
 fi
@@ -19,17 +19,17 @@ if [ $? == 0 ]; then
 	exit 1
 fi
 
-mkdir -p containers/${container_name}/plays
-mkdir -p containers/${container_name}/files
-mkdir -p containers/${container_name}/templates
-mkdir -p containers/${container_name}/tasks
+mkdir -p ansible/containers/${container_name}/plays
+mkdir -p ansible/containers/${container_name}/files
+mkdir -p ansible/containers/${container_name}/templates
+mkdir -p ansible/containers/${container_name}/tasks
 
-touch containers/${container_name}/plays/.gitkeep
-touch containers/${container_name}/files/.gitkeep
-touch containers/${container_name}/templates/.gitkeep
-touch containers/${container_name}/tasks/.gitkeep
+touch ansible/containers/${container_name}/plays/.gitkeep
+touch ansible/containers/${container_name}/files/.gitkeep
+touch ansible/containers/${container_name}/templates/.gitkeep
+touch ansible/containers/${container_name}/tasks/.gitkeep
 
-main_yml=containers/${container_name}/plays/main.yml
+main_yml=ansible/containers/${container_name}/plays/main.yml
 
 cat generators/container_play_template.yml > ${main_yml}
 
@@ -37,7 +37,7 @@ sed -i "s/BOMBAY_CONTAINER_TEMPLATE/${container_name}/" ${main_yml}
 sed -i "s/BOMBAY_IP/${ip}/" ${main_yml}
 sed -i "s/BOMBAY_GATEWAY/${gateway}/" ${main_yml}
 
-echo -e "\n\n[${container_name}]\n${ip}" >> config/hosts.containers
+echo -e "\n\n[${container_name}]\n${ip}" >> ansible/config/hosts.containers
 
 
 

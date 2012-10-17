@@ -26,7 +26,7 @@ ifdef container
 	@echo "** Done **"
 else ifdef server
 	./generators/generate_server_template.sh $(server)
-	@echo "** server template built in servers/$(server) . Done **"
+	@echo "** server template built in ansible/servers/$(server) . Done **"
 else
 	$(error Usage: make generate container=template_name ip=ip gateway=gateway)
 endif
@@ -34,15 +34,15 @@ endif
 
 build:
 ifdef container
-	ANSIBLE_CONFIG=config/ansible.container.cfg ansible-playbook containers/$(container)/plays/main.yml -i config/hosts.containers --private-key=$(HOME)/.ansible/bombay
+	ANSIBLE_CONFIG=ansible/config/ansible.container.cfg ansible-playbook ansible/containers/$(container)/plays/main.yml -i ansible/config/hosts.containers --private-key=$(HOME)/.ansible/bombay
 else ifdef server
 
 ifndef env
-	ANSIBLE_CONFIG=config/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=development -i config/hosts.servers.development -c local
+	ANSIBLE_CONFIG=ansible/config/ansible.server.cfg ansible-playbook ansible/servers/$(server)/plays/main.yml -e env=development -i ansible/config/hosts.servers.development -c local
 else ifeq ($(env), development)
-	ANSIBLE_CONFIG=config/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i config/hosts.servers.$(env) -c local
+	ANSIBLE_CONFIG=ansible/config/ansible.server.cfg ansible-playbook ansible/servers/$(server)/plays/main.yml -e env=$(env) -i ansible/config/hosts.servers.$(env) -c local
 else
-	ANSIBLE_CONFIG=config/ansible.server.cfg ansible-playbook servers/$(server)/plays/main.yml -e env=$(env) -i config/hosts.servers.$(env) --private-key=$(HOME)/.ec2/ap-southeast-1-keypair.pem
+	ANSIBLE_CONFIG=ansible/config/ansible.server.cfg ansible-playbook ansible/servers/$(server)/plays/main.yml -e env=$(env) -i ansible/config/hosts.servers.$(env) --private-key=$(HOME)/.ec2/ap-southeast-1-keypair.pem
 endif
 
 else

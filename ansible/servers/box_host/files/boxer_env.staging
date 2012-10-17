@@ -1,0 +1,6 @@
+REDIS_MQ_HOST=coach-apse1-staging.action.io
+REDIS_MQ_PORT=65000
+REDIS_STORE_HOST=127.0.0.1
+REDIS_STORE_PORT=65000
+BOXER_ID=apse1-staging.actionbox.io
+NODE_ENV=staging

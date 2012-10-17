@@ -1,0 +1,8 @@
+env = process.env.NODE_ENV
+
+runtimes =
+  staging:
+    runtimes:
+      rails: 'ruby_container_template'
+
+module.exports = runtimes[env]

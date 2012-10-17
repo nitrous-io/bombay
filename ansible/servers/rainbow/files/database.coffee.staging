@@ -1,0 +1,22 @@
+module.exports =
+  postgres:
+    development:
+      user:     'jenkins'
+      password: 'jenkins'
+      host:     'localhost'
+      port:     5432
+      database: 'actionio_development'
+    test:
+      user:     'jenkins'
+      password: 'jenkins'
+      host:     'localhost'
+      port:     5432
+      database: 'actionio_test'
+    production:
+      user:     'ffjmrymowlsqwu'
+      password: 'alv7lPQWLOpxbshPyOlcqYhhFW'
+      host:     'ec2-23-23-234-207.compute-1.amazonaws.com'
+      port:     5432
+      database: 'd3q8t99tlthbos'
+
+
