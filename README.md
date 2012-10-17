@@ -118,3 +118,17 @@ Exception: not going to happen
 just rerun the ```make build container``` task (it is idempotent and so will skip
 over steps which have already been completed). This bug is supposedly
 fixed in the upcoming 0.8 release of ansible.
+
+### Skipping installation prompts
+
+If your installation screen has prompts, you can prevent that by adding the environment variable
+
+```
+DEBIAN_FRONTEND=noninteractive
+```
+
+Example
+
+```
+DEBIAN_FRONTEND=noninteractive apt-get -y install nagios3 nagios-nrpe-plugin
+```
