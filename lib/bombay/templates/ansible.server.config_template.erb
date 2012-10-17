@@ -50,7 +50,7 @@ transport=paramiko
 # remote SSH port to be used when --port or "port:" or an equivalent inventory
 # variable is not specified.
 
-remote_port=65100
+remote_port = <%= ssh_port %>
 
 # if set, always run /usr/bin/ansible commands as this user, and assume this value
 # if "user:" is not set in a playbook.  If not set, use the current Unix user
@@ -61,16 +61,6 @@ remote_user = ubuntu
 # if set, always use this private key file for authentication, same as if passing
 # --private-key-file to ansible or ansible-playbook
 
-private_key_file = $HOME/.ec2/ap-southeast-1-keypair.pem
+private_key_file = <%= keypair_file_path %>
 
 [paramiko_connection]
-
-# nothing to configure yet
-
-[ssh_connection]
-
-# if uncommented, sets the ansible ssh arguments to the following.  Leaving off ControlPersist
-# will result in poor performance, so use transport=paramiko on older platforms rather than
-# removing it
-
-#ssh_args=-o ControlMaster=auto -o ControlPersist=60s -o IdentityFile=~/.ec2/ap-southeast-1-keypair.pem -o StrictHostKeyChecking=no -o ControlPath=/tmp/ansible-ssh-%h-%p-%r

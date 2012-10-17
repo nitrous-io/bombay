@@ -21,6 +21,10 @@ module Bombay
       FileUtils.chmod 0600, AWS_CREDENTIALS_FILE
     end
 
+    def self.clear_credentials!
+      FileUtils.rm_rf(AWS_CREDENTIALS_FILE) if File.exists?(AWS_CREDENTIALS_FILE)
+    end
+
     def self.load_credentials!
       if File.exists?(AWS_CREDENTIALS_FILE)
         credentials = YAML.load(File.read(AWS_CREDENTIALS_FILE))

@@ -1,3 +1,5 @@
+require 'yaml'
+
 module Bombay
   class SecurityGroup
     attr_accessor :name, :region, :rules
@@ -9,7 +11,7 @@ module Bombay
     end
 
     def inspect
-      "##{self.name}: #{self.rules.inspect}"
+      "#Bombay::SecurityGroup #{self.name}: #{self.rules.inspect}"
     end
 
     def create!
@@ -30,7 +32,7 @@ module Bombay
       end
 
       # Update the rules
-      # TODO: If the rule doesn't exist in ActionIO::SecurityGroup#rules,
+      # TODO: If the rule doesn't exist in Bombay::SecurityGroup#rules,
       # then you should delete it from the AWS Security Group
       self.rules.each do |rule|
         next if rule_exists_in_security_group?(rule, security_group)
@@ -65,36 +67,24 @@ module Bombay
     end
 
     def self.get_all_for(region)
-      ini_file = "config/security_groups.cfg"
+      security_groups_yml = YAML.load(File.read(File.join(Bombay::ROOT, 'ansible', 'config', 'security_groups.yml')))
       security_groups = {}
 
-      parsed_ini = IniFile.load(ini_file)
-
-      if parsed_ini
-        parsed_ini.each do |name|
-          if (security_group = security_groups[name]).nil?
-            security_group = self.new(name, region)
-            security_groups[name] = security_group
-          end
-
-          values = parsed_ini[name]['values']
-          values.each do |line|
-            port_range, protocol, source = line.split(/\s+/)
-            security_group.rules << ActionIO::SecurityRule.new(port_range: port_range,
-                                                               protocol: protocol,
-                                                               source: source,
-                                                               name: name)
-          end
+      security_groups_yml.each do |name, lines|
+        if (security_group = security_groups[name]).nil?
+          security_group = self.new(name, region)
+          security_groups[name] = security_group
         end
-      else
-        puts "Could not find #{ini_file}"
-        exit(1)
+
+        lines.each do |line|
+          port_range, protocol, source = line.split(/\s+/)
+          security_group.rules << Bombay::SecurityRule.new(port_range: port_range,
+                                                           protocol: protocol,
+                                                           source: source,
+                                                           name: name)
+        end
       end
 
-      if security_groups.empty?
-        puts "You haven't defined any security groups in #{ini_file}"
-        exit(1)
-      end
 
       security_groups.values
     end

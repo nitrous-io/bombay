@@ -93,19 +93,41 @@ command :build do |c|
         servers_by_region = Bombay::Server.initialize_role(name)
         # Prompt for region
         region = pick_region_from(servers_by_region)
+        puts "** Picked Region: #{region}\n"
+
         # Prompt for environment
         environment = pick_environment_from(servers_by_region[region])
-        # Check if server exists in AWS in that region
-        puts "Picked Region: #{region}"
-        puts "Picked Environment: #{environment}"
-        # If not, provision, once provisioned,
+        puts "** Picked Environment: #{environment}\n"
+
+        servers = servers_by_region[region][environment]
+
+        begin
+          Bombay::SecurityGroup.get_all_for(region).each { |sg| sg.create! }
+          # Check if server exists in AWS in that region
+          # If not, provision, once provisioned,
+          servers.each { |s| s.provision! unless s.exists? }
+        rescue Fog::Service::Error => e
+          if e.to_s =~ /AuthFailure/
+            puts "** Error: Your AWS Credentials are invalid, please try again."
+            Bombay::AwsAuthenticator.clear_credentials!
+          else
+            raise e
+          end
+        end
+
         # run ansible playbook
+        begin
+          Bombay::Server.build!(servers, region)
+        rescue Bombay::PrivateKeyDoesNotExistError => e
+          puts "** Error: Private Key file for #{region} does not exist at #{e.message}"
+        end
       elsif type == 'container'
         if !File.exists?(File.join("ansible", "containers", name, "plays", "main.yml"))
           puts "** Error: Could not find a play for container #{name} in ansible/containers"
-        else
-          Bombay::AnsibleRunner.run_container_play(name)
+          exit(1)
         end
+
+        Bombay::AnsibleRunner.run_container_play(name)
       else
         puts "Usage: #{c.syntax}"
       end
