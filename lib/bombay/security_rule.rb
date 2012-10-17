@@ -1,4 +1,4 @@
-module ActionIO
+module Bombay
   class SecurityRule
     attr_accessor :port_range, :protocol, :source
 

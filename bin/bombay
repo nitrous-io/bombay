@@ -7,10 +7,49 @@ require 'rubygems'
 require 'commander/import'
 require 'bombay'
 
+require 'yaml'
+
 ANSIBLE_VERSION = '0.7.1'.freeze
 
 program :version, Bombay::VERSION
 program :description, 'bombay - anything is possible with bombay'
+
+def set_aws_credentials!
+  unless Bombay::AwsAuthenticator.load_credentials!
+    access_key = ask "AWS Access Key ID: "
+    secret_key = password "AWS Secret Key: "
+
+    Bombay::AwsAuthenticator.set_credentials!(access_key, secret_key)
+  end
+end
+
+def pick_region_from(servers_by_region)
+  picked_region = nil
+
+  if servers_by_region.count > 1
+    while servers_by_region[picked_region].nil?
+      picked_region = ask "Pick a region from #{servers_by_region.keys.join(',')}: "
+    end
+  else
+    picked_region = servers_by_region.keys.first
+  end
+
+  picked_region
+end
+
+def pick_environment_from(environments)
+  picked_environment = nil
+
+  if environments.count > 1
+    while environments[picked_environment].nil?
+      picked_environment = ask "Pick an environment from #{environments.keys.join(',')}: "
+    end
+  else
+    picked_environment = environments.keys.first
+  end
+
+  picked_environment
+end
 
 command :setup do |c|
   c.syntax = 'bombay setup'
@@ -44,14 +83,28 @@ command :build do |c|
       type, name = args
 
       if type == 'server'
+        if !File.exists?(File.join("ansible", "servers", name, "plays", "main.yml"))
+          puts "** Error: Could not find a play for server #{name} in ansible/servers"
+          exit(1)
+        end
+
+        set_aws_credentials!
+        # Check for server config in servers/#{name}/config.yml
+        servers_by_region = Bombay::Server.initialize_role(name)
+        # Prompt for region
+        region = pick_region_from(servers_by_region)
+        # Prompt for environment
+        environment = pick_environment_from(servers_by_region[region])
+        # Check if server exists in AWS in that region
+        puts "Picked Region: #{region}"
+        puts "Picked Environment: #{environment}"
+        # If not, provision, once provisioned,
+        # run ansible playbook
       elsif type == 'container'
         if !File.exists?(File.join("ansible", "containers", name, "plays", "main.yml"))
           puts "** Error: Could not find a play for container #{name} in ansible/containers"
         else
-          ENV['ANSIBLE_CONFIG'] = 'ansible/config/ansible.container.cfg'
-          system "ansible-playbook ansible/containers/#{name}/plays/main.yml " +
-                 "-i ansible/config/hosts.containers " +
-                 "--private-key=#{Dir.home}/.ansible/bombay"
+          Bombay::AnsibleRunner.run_container_play(name)
         end
       else
         puts "Usage: #{c.syntax}"

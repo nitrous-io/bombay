@@ -1,4 +1,4 @@
-module ActionIO
+module Bombay
   class SecurityGroup
     attr_accessor :name, :region, :rules
 

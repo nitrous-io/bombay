@@ -1,42 +1,45 @@
-module ActionIO
+require 'yaml'
+
+module Bombay
+  class ConfigFileMissingError    < RuntimeError; end
+
   class Server
-    attr_accessor  :name, :region, :size, :ip, :role
+    attr_accessor  :hostname, :role, :region, :size, :ip, :ami
 
     def initialize(opts = {})
       opts.each { |k,v| self.send("#{k}=", v) if self.respond_to?("#{k}=") }
     end
 
-    def self.get_all_for(env, role, region, size)
-      ini_file = "config/hosts.servers.#{env}"
-      servers = []
+    def self.initialize_role(role)
+      config_file_path = File.join(Bombay::ROOT, 'ansible', 'servers', role, 'config.yml')
+      raise ConfigFileMissingError unless File.exists?(config_file_path)
+      region_to_server_map = {}
 
-      parsed_ini = IniFile.load(ini_file)
+      regions_config = YAML.load(File.read(config_file_path))
+      regions_config.each do |region_config|
+        envs = {}
 
-      if parsed_ini
-        section = parsed_ini[role]
-        if section
-          server_domains = section['values']
-
-          if server_domains.empty?
-            puts "Could not find #{role} in #{ini_file}"
-            exit(1)
+        region_config['environments'].each do |env, server|
+          server = Bombay::Server.new(hostname: server['hostname'],
+                                      size: server['size'],
+                                      ami: server['ami'],
+                                      role: role,
+                                      region: region_config['region'])
+          if envs[env].nil?
+            envs[env] = [server]
+          else
+            envs[env] += server
           end
-
-          server_domains.each { |d| p d; servers << self.new(name: d, region: region, size: size, role: role) }
-        else
-          puts "Could not find #{role} in #{ini_file}"
-          exit(1)
         end
-      else
-        puts "Could not find #{ini_file}"
-        exit(1)
+
+        region_to_server_map[region_config['region']] = envs
       end
 
-      servers
+      region_to_server_map
     end
 
     def inspect
-      "#{self.name}: #{self.region}: #{self.size}"
+      "#Bombay::Server #{self.hostname}: #{self.region}: #{self.size}"
     end
 
     def assign_ip_from_dns!
@@ -143,7 +146,7 @@ module ActionIO
       end
 
       server_def = {
-        image_id:           choose_ami(self.region, self.role),
+        image_id:           self.ami,
         flavor_id:          self.size,
         key_name:           "#{self.region}-keypair",
         availability_zone:  "#{self.region}a",
@@ -207,21 +210,6 @@ module ActionIO
     def get_root_domain_from(name)
       parsed_domain = Domainatrix.parse(name)
       "#{parsed_domain.domain}.#{parsed_domain.public_suffix}"
-    end
-
-    protected
-    def choose_ami(region, role)
-      if role == 'box_host'
-        case region
-        when 'ap-southeast-1' then 'ami-96cc8cc4'
-        else nil
-        end
-      else
-        case region
-        when 'ap-southeast-1' then 'ami-fac686a8'
-        else nil
-        end
-      end
     end
   end
 end
