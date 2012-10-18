@@ -72,7 +72,7 @@ module Bombay
       raise ConfigFileMissingError unless File.exists?(config_file_path)
       region_to_server_map = {}
 
-      regions_config = YAML.load(File.read(config_file_path))
+      regions_config = YAML.load(File.read(config_file_path))['regions']
       regions_config.each do |region_config|
         envs = {}
 
@@ -93,6 +93,23 @@ module Bombay
       end
 
       region_to_server_map
+    end
+
+    def self.setup_sensitive_vars!(name, environment)
+      config_yml = YAML.load(File.read(File.join(Bombay::ROOT, 'ansible', 'servers', name, 'config.yml')))
+      sensitive_vars = config_yml['sensitive_vars']
+
+      puts "** Info: Need to enter these sensitive variables:\n\n"
+
+      sensitive_vars['global'].each do |file, vars|
+        root_directory = File.join(Bombay::ROOT, 'ansible', 'global', 'files')
+        set_sensitive_vars_for(root_directory, file, environment, vars)
+      end
+
+      sensitive_vars[name].each do |file, vars|
+        root_directory = File.join(Bombay::ROOT, 'ansible', 'servers', name, 'files')
+        set_sensitive_vars_for(root_directory, file, environment, vars)
+      end
     end
 
     protected
@@ -247,6 +264,33 @@ module Bombay
       false
     ensure
       tcp_socket && tcp_socket.close
+    end
+
+    def self.set_sensitive_vars_for(root_directory, file, environment, vars)
+      file_name = File.join(root_directory, "#{file}.#{environment}")
+
+      if !File.exists?(file_name)
+        sensitive_info = {}
+
+        vars.each do |var|
+          prompt = var['prompt']
+          prompt = "#{prompt} (Default: #{var['default']})" if var['default']
+          prompt = "#{prompt}:"
+
+          while sensitive_info[var['name']].blank?
+            sensitive_info[var['name']] = (var['multiline'] ? ask_editor(prompt) : ask(prompt))
+            if sensitive_info[var['name']].blank?
+              sensitive_info[var['name']] = var['default']
+            end
+          end
+        end
+
+        sensitive_template = ERB.new(File.read(File.join(root_directory, "#{file}.sensitive.erb")))
+
+        File.open(file_name, 'w') do |f|
+          f.puts(sensitive_template.result(binding))
+        end
+      end
     end
   end
 end

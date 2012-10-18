@@ -1,5 +1,6 @@
 require "domainatrix"
 require "fog"
+require "active_support/all"
 
 module Bombay
   ROOT = File.expand_path(File.dirname(__FILE__) + '/../')
@@ -17,3 +18,4 @@ require "bombay/server"
 require "bombay/security_rule"
 require "bombay/security_group"
 require "bombay/aws_authenticator"
+require "bombay/ansible_runner"

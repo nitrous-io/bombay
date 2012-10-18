@@ -1,4 +1,0 @@
-[default]
-access_key = ASK_ADMINS_FOR_ACCESS_KEY
-secret_key = ASK_ADMINS_FOR_SECRET_KEY
-use_https = True
