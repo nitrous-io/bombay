@@ -6,10 +6,6 @@ module Bombay
              "-i ansible/config/hosts.containers " +
              "--private-key=#{Dir.home}/.ansible/bombay"
     end
-
-    def self.run_server_play(name, region, env)
-
-    end
   end
 end
 
