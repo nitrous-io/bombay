@@ -3,7 +3,7 @@ require 'erb'
 
 module Bombay
   class Server
-    attr_accessor  :hostname, :role, :region, :size, :ip, :ami
+    attr_accessor  :hostname, :role, :region, :size, :ip, :ami, :block_devices
 
     SSH_PORT = 65100
 
@@ -33,6 +33,7 @@ module Bombay
 
     def self.build!(servers, region, environment)
       keypair_file_path = File.join(Dir.home, '.ec2', "#{region}-keypair.pem")
+      # Used by the ERB binding
       ssh_port = Bombay::Server::SSH_PORT
 
       role = servers.first.role
@@ -81,7 +82,8 @@ module Bombay
                                       size: server['size'],
                                       ami: server['ami'],
                                       role: role,
-                                      region: region_config['region'])
+                                      region: region_config['region'],
+                                      block_devices: server['block_devices'])
           if envs[env].nil?
             envs[env] = [server]
           else
@@ -121,13 +123,13 @@ module Bombay
               aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
             )
 
-      root_domain = get_root_domain_from(self.name)
+      root_domain = get_root_domain_from(self.hostname)
       zone = dns.zones.select { |z| z.domain == "#{root_domain}." }.first
 
       if zone.nil?
         raise Bombay::DnsZoneMissingError
       else
-        record = zone.records.select { |r| r.name == "#{name}." }.first
+        record = zone.records.select { |r| r.name == "#{self.hostname}." }.first
 
         if record
           cname = record.value.first
@@ -214,6 +216,10 @@ module Bombay
           Purpose:  self.role
         }
       }
+
+      unless self.block_devices.empty?
+        server_def[:block_device_mapping] = self.block_devices
+      end
 
       server = compute.servers.create(server_def)
 

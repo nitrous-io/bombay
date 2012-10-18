@@ -101,8 +101,6 @@ command :build do |c|
 
         servers = servers_by_region[region][environment]
 
-        Bombay::Server.setup_sensitive_vars!(name, environment)
-
         begin
           Bombay::SecurityGroup.get_all_for(region).each { |sg| sg.create! }
           # Check if server exists in AWS in that region
@@ -117,8 +115,9 @@ command :build do |c|
           end
         end
 
-        # run ansible playbook
+        # run ansible playbooks
         begin
+          Bombay::Server.setup_sensitive_vars!(name, environment)
           Bombay::Server.build!(servers, region, environment)
         rescue Bombay::PrivateKeyDoesNotExistError => e
           puts "** Error: Private Key file for #{region} does not exist at #{e.message}"
