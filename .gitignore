@@ -1,10 +1,10 @@
-global/files/*.development
-global/files/*.test
-global/files/*.production
-global/files/*.staging
-servers/*/files/*.development
-servers/*/files/*.staging
-servers/*/files/*.production
-servers/*/files/*.test
+ansible/global/files/*.development
+ansible/global/files/*.test
+ansible/global/files/*.production
+ansible/global/files/*.staging
+ansible/servers/*/files/*.development
+ansible/servers/*/files/*.staging
+ansible/servers/*/files/*.production
+ansible/servers/*/files/*.test
 
 dump.rdb
