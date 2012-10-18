@@ -3,7 +3,7 @@ sensitive_vars:
   global:
     github_private_key:
       - name: github_key
-        prompt: Private Key used by the box to pull from GitHub repos
+        prompt: Replace this line with the private key used by the box to pull from GitHub repos
         multiline: true
     s3cfg:
       - name: aws_access_key_id
@@ -12,16 +12,16 @@ sensitive_vars:
         prompt: AWS Secret Access Key (needed to pull stuff from S3)
     stunnel_key:
       - name: stunnel_key
-        prompt: Action.IO SSL Private Key used in Stunnel
+        prompt: Replace this line with the Action.IO SSL Private Key used in Stunnel
         multiline: true
     stunnel_pem:
       - name: stunnel_cert
-        prompt: Action.IO SSL Cert used in Stunnel
+        prompt: Replace this line with the Action.IO SSL Cert used in Stunnel
         multiline: true
   coach:
     env:
       - name: webhook_host
-        prompt: The name of the webhook host (https://www.action.io, https://staging.action.io, etc.). Remember to add https if it does use https
+        prompt: The name of the webhook host (remember to add https if it does use https)
       - name: webhook_username
         prompt: The username used in basic auth for the webhook host (check Heroku config for the webhook host to get it)
       - name: webhook_password
