@@ -1,0 +1,10 @@
+module.exports =
+  postgres:
+    <%= sensitive_info['environment'] %>:
+      user:     '<%= sensitive_info['pg_user'] %>'
+      password: '<%= sensitive_info['pg_password'] %>'
+      host:     '<%= sensitive_info['pg_hostname'] %>'
+      port:     <%= sensitive_info['pg_port'] %>
+      database: '<%= sensitive_info['pg_database'] %>'
+
+
