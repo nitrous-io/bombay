@@ -150,7 +150,7 @@ command :deploy do |c|
       if args[0] != 'container'
         puts "Usage: #{c.syntax}"
       else
-
+        system "./generators/release_container.sh #{args[1]}"
       end
     end
   end
