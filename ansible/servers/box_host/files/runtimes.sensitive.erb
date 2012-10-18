@@ -1,8 +1,8 @@
 env = process.env.NODE_ENV
 
 runtimes =
-  production:
+  <%= sensitive_info['environment'] %>:
     runtimes:
-      rails: 'ruby_container_template'
+      <%= sensitive_info['runtimes'] %>
 
 module.exports = runtimes[env]
