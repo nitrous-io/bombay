@@ -117,7 +117,7 @@ command :build do |c|
 
         # run ansible playbook
         begin
-          Bombay::Server.build!(servers, region)
+          Bombay::Server.build!(servers, region, environment)
         rescue Bombay::PrivateKeyDoesNotExistError => e
           puts "** Error: Private Key file for #{region} does not exist at #{e.message}"
         end
