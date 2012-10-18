@@ -1,8 +1,7 @@
 env = process.env.NODE_ENV
 
 runtimes =
-  <%= sensitive_info['environment'] %>:
-    runtimes:
-      <%= sensitive_info['runtimes'] %>
+  runtimes:
+    <%= sensitive_info['runtimes'] %>
 
-module.exports = runtimes[env]
+module.exports = runtimes
