@@ -245,8 +245,8 @@ module Bombay
                   aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
                   region: self.region
                 )
-      server = compute.servers.all('tag:Name' => self.hostname).first
-      (server.nil? || server.state == 'terminated') ? nil : server
+      servers = compute.servers.all('tag:Name' => self.hostname)
+      servers.select { |s| s.state == 'running' }.first
     end
 
     def get_root_domain_from(name)
