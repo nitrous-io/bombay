@@ -7,4 +7,5 @@
     - bridge-utils
     - s3cmd
     - build-essential
+    - xfsprogs
 

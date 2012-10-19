@@ -11,6 +11,10 @@
     node_version: v0.8.11
     redis_port: 65000
   tasks:
+    - name: mkdir /var/action
+      action: shell mkdir -p /var/action
+    - name: mount /dev/xvdg
+      action: mount name=/var/action src=/dev/xvdg fstype=xfs opts=defaults,nouuid,comment=cloudconfig state=mounted
     # Set the hostname
     - include: ../../../global/tasks/set_hostname.yml
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
@@ -19,6 +23,9 @@
     - include: ../../../global/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
+    # Grow the /dev/sdg partition
+    - name: xfs_growfs /dev/xvdg
+      action: shell xfs_growfs /dev/xvdg
     # Install sudoers
     - include: ../../../global/tasks/install_sudoers.yml file=../files/coach_sudoers
     # Create Deploy User

@@ -7,3 +7,4 @@
     - haproxy
     - build-essential
     - git-core
+    - xfsprogs

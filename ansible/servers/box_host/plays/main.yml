@@ -15,6 +15,14 @@
     s3_bucket: bombay-apse.action.io
     gateway: 192.168.254.1
   tasks:
+    - name: mkdir /var/lib/lxc
+      action: shell mkdir -p /var/lib/lxc
+    - name: mount /dev/xvdf
+      action: mount name=/var/lib/lxc src=/dev/xvdf fstype=xfs opts=defaults,nouuid,prjquota,comment=cloudconfig state=mounted
+    - name: mkdir /var/action
+      action: shell mkdir -p /var/action
+    - name: mount /dev/xvdg
+      action: mount name=/var/action src=/dev/xvdg fstype=xfs opts=defaults,nouuid,comment=cloudconfig state=mounted
     # Set the hostname
     - include: ../../../global/tasks/set_hostname.yml
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
@@ -25,6 +33,12 @@
     - include: ../../../global/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
+    # Grow the /dev/sdf partition
+    - name: xfs_growfs /dev/xvdf
+      action: shell xfs_growfs /dev/xvdf
+    # Grow the /dev/sdg partition
+    - name: xfs_growfs /dev/xvdg
+      action: shell xfs_growfs /dev/xvdg
     # Install sudoers
     - include: ../../../global/tasks/install_sudoers.yml file=../files/box_host_sudoers
     # Install pam.d/common-session which sets limits for non-interactive sessions
@@ -39,7 +53,7 @@
       action: copy src=../files/boxer_env.$env dest=$app_directory_1/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
     # Setup runtimes.coffee for boxer
     - name: setup runtimes.coffee for boxer
-      action: copy src=../files/runtimes.coffee.$env dest=$app_directory_1/shared/config/runtimes.coffee owner=$deploy_user group=$deploy_user mode=0660
+      action: copy src=../files/runtimes.$env dest=$app_directory_1/shared/config/runtimes.coffee owner=$deploy_user group=$deploy_user mode=0660
     # Create Capistrano Layout for $app_directory_2
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_2 deploy_user=$deploy_user
     # Setup .env for proxee
