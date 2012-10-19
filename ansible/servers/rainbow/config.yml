@@ -19,7 +19,7 @@ sensitive_vars:
         prompt: The Secret Token used in the Rails app (look at the Heroku Config to get this)
       - name: environment
         prompt: The environment used by rainbow (e.g. development, production, staging, etc.)
-    proxee_env:
+    database:
       - name: environment
         prompt: The environment used by rainbow (e.g. development, production, staging, etc.)
       - name: pg_user
@@ -27,7 +27,7 @@ sensitive_vars:
       - name: pg_password
         prompt: The postgres password (used by the Rails app, get it from Heroku)
       - name: pg_hostname
-        prompt: The postgres username (used by the Rails app, get it from Heroku)
+        prompt: The postgres host (used by the Rails app, get it from Heroku)
       - name: pg_port
         prompt: The postgres port (used by the Rails app, get it from Heroku)
         default: 5432
