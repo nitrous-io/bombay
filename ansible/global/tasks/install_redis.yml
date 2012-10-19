@@ -1,6 +1,8 @@
 ---
 - name: install redis
   action: apt pkg=redis-server state=present
+- name: install /var/action/redis
+  action: shell mkdir -p /var/action/redis && chown -R redis:redis /var/action/redis
 - name: configure redis
   action: template src=../../../global/templates/redis.public.conf.j2 dest=/etc/redis/redis.conf owner=redis group=redis mode=0660 port=$port
   notify: restart redis
