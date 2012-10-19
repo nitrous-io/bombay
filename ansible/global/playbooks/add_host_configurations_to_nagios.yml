@@ -1,0 +1,11 @@
+---
+- hosts: nagios
+  sudo: True
+  gather_facts: False
+  vars_files:
+    - ../../../config/nagios-host.yml
+  tasks:
+    - name: copy the host configuration to nagios server
+      action: template src=../../../global/templates/nagios_host.cfg.j2 dest=/etc/nagios3/action-io/${nagios_host_name}.cfg nagios_host_name=$nagios_host_name nagios_host_ip=$nagios_host_ip user=root group=root mode=0644
+    - name: restart nagios server
+      action: shell /etc/init.d/nagios3 restart

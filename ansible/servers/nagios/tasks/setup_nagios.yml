@@ -1,0 +1,21 @@
+---
+- name: create the directory for actionio hosts
+  action: file path=/etc/nagios3/action-io owner=root group=root mode=0755 state=directory
+- name: copy the nagios main config
+  action: copy src=../files/nagios.cfg dest=/etc/nagios3/nagios.cfg owner=root group=root mode=0664
+- name: copy the nagios contacts config
+  action: copy src=../files/contacts_nagios2.cfg dest=/etc/nagios3/conf.d/contacts_nagios2.cfg owner=root group=root mode=0664
+- name: copy the nagios services config
+  action: copy src=../files/services_nagios2.cfg dest=/etc/nagios3/conf.d/services_nagios2.cfg owner=root group=root mode=0664
+- name: stop nagios
+  action: shell /etc/init.d/nagios3 stop
+- name: adds www-data to nagios group for the rw dir
+  action: shell dpkg-statoverride --update --add nagios www-data 2710 /var/lib/nagios3/rw
+  ignore_errors: True
+- name: update the permissions for nagios3 dir
+  action: shell dpkg-statoverride --update --add nagios nagios 751 /var/lib/nagios3
+  ignore_errors: True
+- name: set the password for nagiosadmin
+  action: shell htpasswd -b -c /etc/nagios3/htpasswd.users nagiosadmin $nagios_password
+- name: start nagios
+  action: shell /etc/init.d/nagios3 start

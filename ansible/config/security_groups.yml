@@ -5,6 +5,10 @@ rainbow:
   - 443 tcp 0.0.0.0/0
   # SSH
   - 65100 tcp 0.0.0.0/0
+  # Nagios
+  - 5666 tcp nagios
+  # ICMP
+  - all icmp nagios
 
 box_host:
   # http ports for servers
@@ -13,6 +17,10 @@ box_host:
   - 10000-20000 tcp 0.0.0.0/0
   # ssh
   - 65100 tcp 0.0.0.0/0
+  # Nagios
+  - 5666 tcp nagios
+  # ICMP
+  - all icmp nagios
 
 coach:
   # ssl
@@ -23,4 +31,7 @@ coach:
   - 65100 tcp 0.0.0.0/0
   # e.g. by ip
   # 65200 tcp 192.168.254.1
-
+  # Nagios
+  - 5666 tcp nagios
+  # ICMP
+  - all icmp nagios
