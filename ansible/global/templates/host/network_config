@@ -8,6 +8,8 @@ iface lo inet loopback
 # The primary network interface
 auto eth0
 iface eth0 inet dhcp
+    pre-up iptables-restore < /var/action/iptables.rules
+    post-down iptables-save > /var/action/iptables.rules
 
 auto br-lxc
 iface br-lxc inet static
