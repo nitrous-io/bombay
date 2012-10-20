@@ -4,14 +4,18 @@ module Bombay
   class Container
     attr_accessor :name
 
-    def initialize(opts = {})
-      opts.each { |k,v| self.send("#{k}=", v) if self.respond_to?("#{k}=") }
+    def initialize(name)
+      self.name = name
     end
 
     def build!
-      ENV['ANSIBLE_CONFIG'] = 'ansible/config/ansible.container.cfg'
-      system "ansible-playbook ansible/containers/#{self.name}/plays/main.yml " +
-             "-i ansible/config/hosts.containers " +
+      if !File.exists?(File.join(Bombay::ROOT, "ansible", "containers", name, "plays", "main.yml"))
+        raise Bombay::ConfigFileMissingError
+      end
+
+      ENV['ANSIBLE_CONFIG'] = "#{Bombay::ROOT}/ansible/config/ansible.container.cfg"
+      system "ansible-playbook #{Bombay::ROOT}/ansible/containers/#{self.name}/plays/main.yml " +
+             "-i #{Bombay::ROOT}/ansible/config/hosts.containers " +
              "--private-key=#{Dir.home}/.ansible/bombay"
     end
 

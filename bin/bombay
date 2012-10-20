@@ -123,12 +123,12 @@ command :build do |c|
           puts "** Error: Private Key file for #{region} does not exist at #{e.message}"
         end
       elsif type == 'container'
-        if !File.exists?(File.join("ansible", "containers", name, "plays", "main.yml"))
-          puts "** Error: Could not find a play for container #{name} in ansible/containers"
+        begin
+          Bombay::Container.new(name).build!
+        rescue Bombay::ConfigFileMissingError
+          puts "** Error: Couldn't find container #{args[1]}"
           exit(1)
         end
-
-        Bombay::Container.new(name: name).build!
       else
         puts "Usage: #{c.syntax}"
       end
@@ -150,9 +150,10 @@ command :deploy do |c|
         puts "Usage: #{c.syntax}"
       else
         begin
-          Bombay::Container.new(name: args[1]).deploy!
+          Bombay::Container.new(args[1]).deploy!
         rescue Bombay::ConfigFileMissingError
           puts "** Error: Couldn't find container #{args[1]}"
+          exit(1)
         end
       end
     end
