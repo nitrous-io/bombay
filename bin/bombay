@@ -128,7 +128,7 @@ command :build do |c|
           exit(1)
         end
 
-        Bombay::AnsibleRunner.run_container_play(name)
+        Bombay::Container.new(name: name).build!
       else
         puts "Usage: #{c.syntax}"
       end
@@ -149,7 +149,7 @@ command :deploy do |c|
       if args[0] != 'container'
         puts "Usage: #{c.syntax}"
       else
-        system "./generators/release_container.sh #{args[1]}"
+        Bombay::Container.new(name: args[1]).deploy!
       end
     end
   end

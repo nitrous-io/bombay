@@ -127,7 +127,7 @@ module Bombay
       zone = dns.zones.select { |z| z.domain == "#{root_domain}." }.first
 
       if zone.nil?
-        raise Bombay::DnsZoneMissingError
+        raise Bombay::AwsDnsZoneMissingError
       else
         record = zone.records.select { |r| r.name == "#{self.hostname}." }.first
 
@@ -138,10 +138,10 @@ module Bombay
           if cname_matcher && cname_matcher.size == 5
             self.ip = "#{cname_matcher[1]}.#{cname_matcher[2]}.#{cname_matcher[3]}.#{cname_matcher[4]}"
           else
-            raise Bombay::ElasticIpError
+            raise Bombay::AwsElasticIpError
           end
         else
-          raise Bombay::ElasticIpError
+          raise Bombay::AwsElasticIpError
         end
       end
     end
@@ -157,7 +157,7 @@ module Bombay
       zone = dns.zones.select { |z| z.domain == "#{root_domain}." }.first
 
       if zone.nil?
-        raise Bombay::DnsZoneMissingError
+        raise Bombay::AwsDnsZoneMissingError
       else
         domain_name = "ec2-#{self.ip.gsub(/\./, '-')}.#{self.region}.compute.amazonaws.com"
 
@@ -201,7 +201,7 @@ module Bombay
                 )
 
       if compute.security_groups.get(self.role).nil?
-        raise Bombay::SecurityGroupMissingError
+        raise Bombay::AwsSecurityGroupMissingError
       end
 
       server_def = {
