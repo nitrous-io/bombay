@@ -149,7 +149,11 @@ command :deploy do |c|
       if args[0] != 'container'
         puts "Usage: #{c.syntax}"
       else
-        Bombay::Container.new(name: args[1]).deploy!
+        begin
+          Bombay::Container.new(name: args[1]).deploy!
+        rescue Bombay::ConfigFileMissingError
+          puts "** Error: Couldn't find container #{args[1]}"
+        end
       end
     end
   end
