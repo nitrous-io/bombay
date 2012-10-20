@@ -24,6 +24,7 @@ module Bombay
       delete_from_container = [
         "rootfs/home/action/.ssh",
         "rootfs/home/action/.ansible",
+        "rootfs/home/action/.cache",
         "rootfs/var/log/*",
         "rootfs/var/cache/apt/archives/*"
       ]
