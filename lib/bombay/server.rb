@@ -103,14 +103,18 @@ module Bombay
 
       puts "** Info: Need to enter these sensitive variables:\n\n"
 
-      sensitive_vars['global'].each do |file, vars|
-        root_directory = File.join(Bombay::ROOT, 'ansible', 'global', 'files')
-        set_sensitive_vars_for(root_directory, file, environment, vars)
+      if sensitive_vars['global']
+        sensitive_vars['global'].each do |file, vars|
+          root_directory = File.join(Bombay::ROOT, 'ansible', 'global', 'files')
+          set_sensitive_vars_for(root_directory, file, environment, vars)
+        end
       end
 
-      sensitive_vars[name].each do |file, vars|
-        root_directory = File.join(Bombay::ROOT, 'ansible', 'servers', name, 'files')
-        set_sensitive_vars_for(root_directory, file, environment, vars)
+      if sensitive_vars[name]
+        sensitive_vars[name].each do |file, vars|
+          root_directory = File.join(Bombay::ROOT, 'ansible', 'servers', name, 'files')
+          set_sensitive_vars_for(root_directory, file, environment, vars)
+        end
       end
     end
 
@@ -138,8 +142,6 @@ module Bombay
           else
             raise Bombay::AwsElasticIpError
           end
-        else
-          raise Bombay::AwsElasticIpError
         end
       end
     end
@@ -205,7 +207,7 @@ module Bombay
       }
     }
 
-    unless self.block_devices.empty?
+    if self.block_devices && !self.block_devices.empty?
       server_def[:block_device_mapping] = self.block_devices
     end
 
@@ -244,7 +246,7 @@ module Bombay
     end
 
     current_file_dir = File.expand_path(File.dirname(__FILE__))
-    file_path = File.join(current_file_dir, '..', 'ansible', 'config', file_name)
+    file_path = File.join(current_file_dir, '..', '..', 'ansible', 'config', file_name)
 
     File.open(file_path, 'w') do |file|
       file.write YAML.dump(server_config)
