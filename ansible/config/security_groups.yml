@@ -35,3 +35,9 @@ coach:
   - 5666 tcp nagios
   # ICMP
   - all icmp nagios
+
+nagios:
+  # http
+  - 80 tcp 0.0.0.0/0
+  # ssh
+  - 65100 tcp 0.0.0.0/0
