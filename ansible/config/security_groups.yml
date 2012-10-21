@@ -8,7 +8,7 @@ rainbow:
   # Nagios
   - 5666 tcp nagios
   # ICMP
-  - all icmp nagios
+  #- all icmp nagios
 
 box_host:
   # http ports for servers
@@ -20,7 +20,7 @@ box_host:
   # Nagios
   - 5666 tcp nagios
   # ICMP
-  - all icmp nagios
+  #- all icmp nagios
 
 coach:
   # ssl
@@ -34,7 +34,7 @@ coach:
   # Nagios
   - 5666 tcp nagios
   # ICMP
-  - all icmp nagios
+  #- all icmp nagios
 
 nagios:
   # http
