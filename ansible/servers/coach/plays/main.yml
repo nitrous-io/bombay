@@ -61,4 +61,4 @@
       action: shell /etc/init.d/redis-server restart
 
 # copy the host config to the nagios server
-- include: ../../../global/playbooks/add_host_configuration_to_nagios.yml
+- include: ../../../global/playbooks/add_host_configurations_to_nagios.yml
