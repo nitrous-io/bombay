@@ -45,4 +45,12 @@ regions:
             Ebs.SnapshotId: snap-1d909139
             Ebs.VolumeSize: 8
             Ebs.DeleteOnTermination: 'false'
-
+      production:
+        hostname: coach-apse1.action.io
+        size: m1.small
+        ami: ami-e6d999b4
+        block_devices:
+          - DeviceName: /dev/sdg
+            Ebs.SnapshotId: snap-1d909139
+            Ebs.VolumeSize: 8
+            Ebs.DeleteOnTermination: 'false'
