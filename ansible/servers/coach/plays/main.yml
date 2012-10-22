@@ -4,7 +4,7 @@
   gather_facts: False
   vars_files:
     - ../../../config/deploy_keys.yml
-    - ../../../config/nagios-server.yml
+    #- ../../../config/nagios-server.yml
   vars:
     app: coach
     app_directory: /var/apps/${app}
@@ -51,7 +51,7 @@
     # Install redis
     - include: ../../../global/tasks/install_redis.yml port=$redis_port
     # Install nagios nrpe server
-    - include: ../../../global/tasks/install_nagios_nrpe_server.yml
+    #- include: ../../../global/tasks/install_nagios_nrpe_server.yml
   handlers:
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
@@ -61,4 +61,4 @@
       action: shell /etc/init.d/redis-server restart
 
 # copy the host config to the nagios server
-- include: ../../../global/playbooks/add_host_configurations_to_nagios.yml
+#- include: ../../../global/playbooks/add_host_configurations_to_nagios.yml

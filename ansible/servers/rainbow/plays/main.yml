@@ -4,7 +4,7 @@
   gather_facts: False
   vars_files:
     - ../../../config/deploy_keys.yml
-    - ../../../config/nagios-server.yml
+    #- ../../../config/nagios-server.yml
   vars:
     - app: rainbow
     - app_directory: /var/apps/${app}
@@ -45,7 +45,7 @@
     # Install Upstart
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app deploy_user=$deploy_user node_version=$node_version
     # Install nagios nrpe server
-    - include: ../../../global/tasks/install_nagios_nrpe_server.yml
+    #- include: ../../../global/tasks/install_nagios_nrpe_server.yml
   handlers:
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
@@ -55,4 +55,4 @@
       action: shell /etc/init.d/stunnel4 restart
 
 # copy the host config to the nagios server
-- include: ../../../global/playbooks/add_host_configurations_to_nagios.yml
+#- include: ../../../global/playbooks/add_host_configurations_to_nagios.yml
