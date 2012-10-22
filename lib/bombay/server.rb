@@ -3,7 +3,7 @@ require 'erb'
 
 module Bombay
   class Server
-    attr_accessor  :hostname, :role, :region, :size, :ip, :ami, :block_devices
+    attr_accessor :hostname, :role, :region, :size, :ip, :ami, :block_devices
 
     SSH_PORT = 65100
 
@@ -52,7 +52,7 @@ module Bombay
         raise Bombay::PrivateKeyDoesNotExistError, keypair_file_path
       end
 
-      hosts_file_content = "[#{role}]\n#{servers.map(&:hostname).join("\n")}"
+      hosts_file_content = build_hosts_file_content(role, servers, region, environment)
       File.open(ansible_hosts_file, 'w') { |f| f.puts(hosts_file_content) }
       File.open(ansible_config_file, 'w') { |f| f.puts(ansible_config.result(binding)) }
 
@@ -66,6 +66,19 @@ module Bombay
 
       FileUtils.rm_rf(ansible_hosts_file)
       FileUtils.rm_rf(ansible_config_file)
+    end
+
+    def self.build_hosts_file_content(role, servers, region, environment)
+      file_content = "[#{role}]\n#{servers.map(&:hostname).join("\n")}"
+      servers_config_file_path = File.join(Bombay::ROOT, 'ansible', 'servers', role, 'servers.yml')
+      if File.exists?(servers_config_file_path)
+        servers_config = YAML.load(File.read(servers_config_file_path))
+        roles_config = servers_config['regions'][region]['environments'][environment]['roles']
+        roles_config.each do |role, hosts|
+          file_content << "\n[#{role}]\n#{hosts.join("\n")}"
+        end
+      end
+      file_content
     end
 
     def self.initialize_role(role)
