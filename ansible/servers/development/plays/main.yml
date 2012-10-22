@@ -1,0 +1,95 @@
+---
+- hosts: 127.0.0.1
+  sudo: True
+  gather_facts: False
+  connect: local
+  vars_prompt:
+    user: "What is your username?"
+  vars:
+    env: development
+    node_version: v0.8.12
+    redis_port: 65000
+    s3_bucket: bombay-apse.action.io
+    gateway: 192.168.254.1
+
+  tasks:
+    # Building LXC
+    - name: mkdir /var/lib/lxc
+      action: shell mkdir -p /var/lib/lxc
+    - name: mount /dev/xvdf
+      action: mount name=/var/lib/lxc src=/dev/xvdf fstype=xfs opts=defaults,nouuid,prjquota,comment=cloudconfig state=mounted
+
+    # Building XFS
+    - name: mkdir /var/action
+      action: shell mkdir -p /var/action
+    - name: mount /dev/xvdg
+      action: mount name=/var/action src=/dev/xvdg fstype=xfs opts=defaults,nouuid,comment=cloudconfig state=mounted
+
+    # Install Dependencies (via apt-get)
+    - include: ../tasks/install_deps.yml
+
+    # Grow the /dev/sdf partition
+    - name: xfs_growfs /dev/xvdf
+      action: shell xfs_growfs /dev/xvdf
+
+    # Grow the /dev/sdg partition
+    - name: xfs_growfs /dev/xvdg
+      action: shell xfs_growfs /dev/xvdg
+
+    # Install sudoers
+    - include: ../../../global/tasks/install_sudoers.yml file=../files/action_sudoers
+
+    # Setup nginx
+    - name: setup nginx
+      action: copy src=../files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
+      notify: restart nginx
+
+    # Setup stunnel
+    - include: ../../../global/tasks/install_stunnel.yml
+
+    # Install NVM
+    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$user
+
+    # Setup haproxy
+    - include: ../../../servers/rainbow/tasks/install_haproxy.yml
+
+    # Setup Bridge Network
+    - include: ../../../global/tasks/host/setup_bridge_network.yml gateway=$gateway
+
+    # Install pam.d/common-session which sets limits for non-interactive sessions
+    - name: install common-session in /etc/init.d/
+      action: copy src=../files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
+
+    # Set limits for the user
+    - include: ../../../global/tasks/set_limits.yml user=$user attribute=nofile value=65536
+
+    # Configure S3 Cmd
+    - include: ../../../global/tasks/configure_s3cmd.yml
+
+    # Install container
+    - include: ../../../servers/box_host/tasks/install_action_container.yml name=ruby_container_template version=1350283256 s3_bucket=$s3_bucket
+
+    # Install redis
+    - include: ../../../global/tasks/install_redis.yml port=$redis_port
+
+    # Initialize Redis
+    - include: ../../../servers/box_host/tasks/setup_redis_init_script.yml
+
+    # Copying the config files
+    - name: copy configuration files
+      action: copy src=../files/boxer_env.development dest=/home/$user/configs/boxer_env.development
+      action: copy src=../files/rainbow_env.development dest=/home/$user/configs/rainbow_env.development
+      action: copy src=../files/coach_env.development dest=/home/$user/configs/coach_env.development
+      action: copy src=../files/database.development dest=/home/$user/configs/database.development
+      action: copy src=../files/proxee_env.development dest=/home/$user/configs/proxee_env.development
+      action: copy src=../files/runtimes.development dest=/home/$user/configs/runtimes.development
+
+  handlers:
+    - name: restart nginx
+      action: shell /etc/init.d/nginx restart
+    - name: restart stunnel
+      action: shell /etc/init.d/stunnel4 restart
+    - name: restart redis
+      action: shell /etc/init.d/redis-server restart
+    - name: restart haproxy
+      action: shell /etc/init.d/haproxy restart
