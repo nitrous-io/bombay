@@ -4,6 +4,7 @@
   gather_facts: False
   vars_files:
     - ../../../config/deploy_keys.yml
+    - ../../../config/nagios-server.yml
   vars:
     app_1: boxer
     app_2: proxee
@@ -77,6 +78,8 @@
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_2 deploy_user=$deploy_user node_version=$node_version
     # Initialize Redis
     - include: ../tasks/setup_redis_init_script.yml
+    # Install nagios nrpe server
+    - include: ../../../global/tasks/install_nagios_nrpe_server.yml
   handlers:
     - name: restart redis
       action: shell /etc/init.d/redis-server restart
@@ -89,3 +92,5 @@
       action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
       only_if: "'$env' != 'development'"
 
+# copy the host config to the nagios server
+- include: ../../../global/playbooks/add_host_configurations_to_nagios.yml
