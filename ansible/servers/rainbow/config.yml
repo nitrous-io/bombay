@@ -40,6 +40,7 @@ regions:
         hostname: rainbow-apse1-staging.action.io
         size: m1.small
         ami: ami-e6d999b4
-
-
-
+      production:
+        hostname: rainbow-apse1.action.io
+        size: m1.small
+        ami: ami-e6d999b4
