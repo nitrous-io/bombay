@@ -1,0 +1,4 @@
+---
+- name: install upstart_node
+  action: template src=../../../global/templates/upstart_node.sh.j2 dest=/usr/local/bin/upstart_node owner=root group=root mode=0700
+

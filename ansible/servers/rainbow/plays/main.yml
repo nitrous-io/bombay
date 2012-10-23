@@ -44,6 +44,17 @@
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
     # Install Upstart
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app deploy_user=$deploy_user node_version=$node_version
+    # Install cap script which does the whole capistrano deploy for boxer
+    - include: ../../../global/tasks/install_cap.yml
+    # Install a script which does upstart restarts
+    - include: ../../../global/tasks/install_upstart_node.yml
+    # Deploy boxer using capistrano technique
+    - name: deploy app
+      action: shell su $deploy_user -c '/usr/local/bin/cap ${app}'
+    - name: copy over stuff needed by boxer
+      action: shell su $deploy_user -c "cp /var/apps/${app}/shared/config/.env /var/apps/${app}/current/ && cp /var/apps/$app/shared/config/database.coffee /var/apps/$app/current/config/"
+    - name: restart app
+      action: shell /usr/local/bin/upstart_node ${app}
     # Install nagios nrpe server
     #- include: ../../../global/tasks/install_nagios_nrpe_server.yml
   handlers:

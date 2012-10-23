@@ -8,8 +8,8 @@
   vars:
     app_1: boxer
     app_2: proxee
-    app_directory_1: /var/apps/${app_1}
-    app_directory_2: /var/apps/${app_2}
+    app_directory_1: /var/apps/$app_1
+    app_directory_2: /var/apps/$app_2
     deploy_user: action
     node_version: v0.8.11
     redis_port: 65000
@@ -78,6 +78,24 @@
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_2 deploy_user=$deploy_user node_version=$node_version
     # Initialize Redis
     - include: ../tasks/setup_redis_init_script.yml
+    # Install cap script which does the whole capistrano deploy for boxer
+    - include: ../../../global/tasks/install_cap.yml
+    # Install a script which does upstart restarts
+    - include: ../../../global/tasks/install_upstart_node.yml
+    # Deploy boxer using capistrano technique
+    - name: deploy app
+      action: shell su $deploy_user -c '/usr/local/bin/cap ${app_1}'
+    - name: copy over stuff needed by boxer
+      action: shell su $deploy_user -c "cp /var/apps/${app_1}/shared/config/.env /var/apps/${app_1}/current/ && cp /var/apps/${app_1}/shared/config/runtimes.coffee /var/apps/${app_1}/current/config/"
+    - name: restart app
+      action: shell /usr/local/bin/upstart_node ${app_1}
+    # Deploy proxee using capistrano technique
+    - name: deploy app
+      action: shell su $deploy_user -c '/usr/local/bin/cap ${app_2}'
+    - name: copy over stuff needed by proxee
+      action: shell su $deploy_user -c "cp /var/apps/${app_2}/shared/config/.env /var/apps/${app_2}/current/"
+    - name: restart app
+      action: shell /usr/local/bin/upstart_node ${app_2}
     # Install nagios nrpe server
     #- include: ../../../global/tasks/install_nagios_nrpe_server.yml
   handlers:

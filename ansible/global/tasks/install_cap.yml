@@ -1,0 +1,4 @@
+---
+- name: install cap.sh
+  action: template src=../../../global/templates/cap.sh.j2 dest=/usr/local/bin/cap owner=$deploy_user group=$deploy_user mode=0700
+

@@ -31,7 +31,7 @@
     - include: ../../../global/tasks/install_sudoers.yml file=../files/coach_sudoers
     # Create Deploy User
     - include: ../../../global/tasks/create_deploy_user.yml deploy_user=$deploy_user
-    # Create Capistrano Layout for $app_directory
+    # Create capistrano layout
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory deploy_user=$deploy_user
     # Setup .env
     - name: setup env
@@ -50,6 +50,17 @@
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app deploy_user=$deploy_user node_version=$node_version
     # Install redis
     - include: ../../../global/tasks/install_redis.yml port=$redis_port
+    # Install cap script which does the whole capistrano deploy for boxer
+    - include: ../../../global/tasks/install_cap.yml
+    # Install a script which does upstart restarts
+    - include: ../../../global/tasks/install_upstart_node.yml
+    # Deploy boxer using capistrano technique
+    - name: deploy app
+      action: shell su $deploy_user -c '/usr/local/bin/cap ${app}'
+    - name: copy over stuff needed by boxer
+      action: shell su $deploy_user -c "cp /var/apps/${app}/shared/config/.env /var/apps/${app}/current/"
+    - name: restart app
+      action: shell /usr/local/bin/upstart_node ${app}
     # Install nagios nrpe server
     #- include: ../../../global/tasks/install_nagios_nrpe_server.yml
   handlers:

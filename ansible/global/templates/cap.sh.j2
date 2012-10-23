@@ -1,0 +1,31 @@
+#!/bin/bash
+
+app=${1}
+deploy_sha=`git ls-remote git@github.com:action-io/${app}.git master | awk '{ print $1 }'`
+timestamp=`date +%s`
+latest_release=/var/apps/${app}/releases/${timestamp}
+shared_path=/var/apps/${app}/shared
+
+source ~/.bash_profile
+
+if [ -d /var/apps/${app}/shared/cached-copy ]; then
+  cd /var/apps/${app}/shared/cached-copy && git fetch -q origin && git fetch --tags -q origin && git reset -q --hard ${deploy_sha} && git submodule -q init && for mod in `git submodule status | awk '{ print $2 }'`; do git config -f .git/config submodule.${mod}.url `git config -f .gitmodules --get submodule.${mod}.url` && echo Synced $mod; done && git submodule -q sync && export GIT_RECURSIVE=$([ ! "`git --version`" \< "git version 1.6.5" ] && echo --recursive) && git submodule -q update --init $GIT_RECURSIVE && git clean -q -d -x -f;
+else
+  git clone -q git@github.com:action-io/${app}.git /var/apps/${app}/shared/cached-copy && cd /var/apps/${app}/shared/cached-copy && git checkout -q -b deploy ${deploy_sha} && git submodule -q init && git submodule -q sync && export GIT_RECURSIVE=$([ ! "`git --version`" \< "git version 1.6.5" ] && echo --recursive) && git submodule -q update --init $GIT_RECURSIVE;
+fi
+
+# Copy over the code to /releases/$timestamp
+cp -RPp /var/apps/${app}/shared/cached-copy /var/apps/${app}/releases/${timestamp} && (echo $deploy_sha > /var/apps/${app}/releases/${timestamp}/REVISION)
+
+# Change permissions
+chmod -R g+w /var/apps/${app}/releases/${timestamp}
+
+# Symlink log and node_modules
+rm -rf ${latest_release}/log ${latest_release}/node_modules && ln -s ${shared_path}/log ${latest_release}/log && ln -s ${shared_path}/node_modules ${latest_release}/node_modules
+
+# run npm
+cd ${latest_release} && npm install node-gyp && npm install && npm install ws --ws:native && npm prune
+
+# Symlink to current
+rm -f /var/apps/${app}/current && ln -s /var/apps/${app}/releases/${timestamp} /var/apps/${app}/current
+

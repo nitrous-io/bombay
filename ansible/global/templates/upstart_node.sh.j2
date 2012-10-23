@@ -1,0 +1,10 @@
+#!/bin/bash
+
+app=${1}
+
+# restart the service, yo
+if [ -f /var/run/${app}.pid ]; then
+  /usr/sbin/service ${app} stop
+fi
+
+/usr/sbin/service ${app} start
