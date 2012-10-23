@@ -2,9 +2,10 @@
 - hosts: 127.0.0.1
   sudo: True
   gather_facts: False
-  connect: local
   vars_prompt:
     user: "What is your username?"
+    aws_access_key: "What is your aws access key?"
+    aws_secret_access_key: "What is your aws secret access key?"
   vars:
     env: development
     node_version: v0.8.12
@@ -22,7 +23,20 @@
       notify: restart nginx
 
     # Setup stunnel
-    - include: ../../../global/tasks/install_stunnel.yml
+    - name: setup /etc/stunnel/{certs,keys} directory
+      action: file path=/etc/stunnel/$item state=directory owner=root group=root mode=0770
+      with_items:
+       - certs
+       - keys
+    - name: move stunnel.pem to /etc/stunnel/certs directory
+      action: copy src=../files/stunnel.pem dest=/etc/stunnel/certs/stunnel.pem owner=root group=root mode=0660
+    - name: move stunnel.key to /etc/stunnel/certs directory
+      action: copy src=../files/stunnel.key dest=/etc/stunnel/keys/stunnel.key owner=root group=root mode=0660
+    - name: setup stunnel.conf the way we want
+      action: copy src=../../../global/files/stunnel.conf dest=/etc/stunnel/stunnel.conf owner=root group=root mode=0660
+    - name: setup stunnel to be enabled
+      action: copy src=../../../global/files/default_stunnel4 dest=/etc/default/stunnel4 owner=root group=root mode=0660
+      notify: restart stunnel
 
     # Setup haproxy
     - include: ../../../servers/rainbow/tasks/install_haproxy.yml
@@ -38,9 +52,13 @@
     - include: ../../../global/tasks/set_limits.yml user=$user attribute=nofile value=65536
 
     # Configure S3 Cmd
-    - include: ../../../global/tasks/configure_s3cmd.yml
+    - name: configure s3cmd
+      action: template src=../templates/s3cfg.j2 dest=/home/$user/.s3cfg owner=$user group=$user mode=0600 aws_access_key=$aws_access_key aws_secret_access_key=$aws_secret_access_key
 
     # Install container
+    - name: mkdir /var/lib/lxc
+      action: shell mkdir -p /var/lib/lxc
+
     - include: ../../../servers/box_host/tasks/install_action_container.yml name=ruby_container_template version=1350283256 s3_bucket=$s3_bucket
 
     # Install redis
@@ -49,14 +67,34 @@
     # Initialize Redis
     - include: ../../../servers/box_host/tasks/setup_redis_init_script.yml
 
-    # Copying the config files
-    - name: copy configuration files
-      action: copy src=../files/boxer_env.development dest=/home/$user/configs/boxer_env.development
-      action: copy src=../files/rainbow_env.development dest=/home/$user/configs/rainbow_env.development
-      action: copy src=../files/coach_env.development dest=/home/$user/configs/coach_env.development
-      action: copy src=../files/database.development dest=/home/$user/configs/database.development
-      action: copy src=../files/proxee_env.development dest=/home/$user/configs/proxee_env.development
-      action: copy src=../files/runtimes.development dest=/home/$user/configs/runtimes.development
+    # Create configs dir
+    - name: create configs dir
+      action: shell mkdir /home/$user/configs
+      ignore_errors: True
+
+    # Copying boxer configs
+    - name: copy boxer configs
+      action: copy src=../files/boxer_env.dev dest=/home/$user/configs/boxer_env.dev
+
+    # Copying rainbow configs
+    - name: copy rainbow configs
+      action: copy src=../files/rainbow_env.dev dest=/home/$user/configs/rainbow_env.dev
+
+    # Copying coach configs
+    - name: copy coach configs
+      action: copy src=../files/coach_env.dev dest=/home/$user/configs/coach_env.dev
+
+    # Copying database configs
+    - name: copy database configs
+      action: copy src=../files/database.dev dest=/home/$user/configs/database.dev
+
+    # Copying proxee configs
+    - name: copy proxee configs
+      action: copy src=../files/proxee_env.dev dest=/home/$user/configs/proxee_env.dev
+
+    # Copying runtimes configs
+    - name: copy runtimes configs
+      action: copy src=../files/runtimes.dev dest=/home/$user/configs/runtimes.dev
 
   handlers:
     - name: restart nginx
