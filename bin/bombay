@@ -9,7 +9,7 @@ require 'bombay'
 
 require 'yaml'
 
-ANSIBLE_VERSION = '0.7.1'.freeze
+ANSIBLE_VERSION = '0.8'.freeze
 
 program :version, Bombay::VERSION
 program :description, 'bombay - anything is possible with bombay'
