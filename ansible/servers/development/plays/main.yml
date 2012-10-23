@@ -47,9 +47,6 @@
     # Setup stunnel
     - include: ../../../global/tasks/install_stunnel.yml
 
-    # Install NVM
-    - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$user
-
     # Setup haproxy
     - include: ../../../servers/rainbow/tasks/install_haproxy.yml
 
