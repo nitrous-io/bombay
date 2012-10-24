@@ -20,8 +20,8 @@ cp -RPp /var/apps/${app}/shared/cached-copy /var/apps/${app}/releases/${timestam
 # Change permissions
 chmod -R g+w /var/apps/${app}/releases/${timestamp}
 
-# Symlink log and node_modules
-rm -rf ${latest_release}/log ${latest_release}/node_modules && ln -s ${shared_path}/log ${latest_release}/log && ln -s ${shared_path}/node_modules ${latest_release}/node_modules
+# Symlink log and bust node_modules
+rm -rf ${latest_release}/log ${latest_release}/node_modules && ln -s ${shared_path}/log ${latest_release}/log && mkdir ${latest_release}/node_modules
 
 # run npm
 cd ${latest_release} && npm install node-gyp && npm install && npm install ws --ws:native && npm prune
