@@ -10,5 +10,4 @@
    - shared/system
    - shared/log
    - shared/pids
-   - shared/node_modules
    - shared/config
