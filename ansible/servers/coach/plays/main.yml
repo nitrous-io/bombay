@@ -54,11 +54,11 @@
     # Install a script which does upstart restarts
     - include: ../../../global/tasks/install_upstart_node.yml
     # Deploy boxer using capistrano technique
-    - name: deploy app
+    - name: deploy coach
       action: shell su $deploy_user -c '/usr/local/bin/cap ${app}'
-    - name: copy over stuff needed by boxer
+    - name: copy over stuff needed by coach
       action: shell su $deploy_user -c "cp /var/apps/${app}/shared/config/.env /var/apps/${app}/current/"
-    - name: restart app
+    - name: restart coach
       action: shell /usr/local/bin/upstart_node ${app}
     # Install nagios nrpe server
     #- include: ../../../global/tasks/install_nagios_nrpe_server.yml
