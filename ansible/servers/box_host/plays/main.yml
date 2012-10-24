@@ -29,7 +29,7 @@
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
     - include: ../../../global/tasks/install_ansible_deps.yml
     # Setup Bridge Network
-    - include: ../../../global/tasks/host/setup_bridge_network.yml gateway=$gateway
+    - include: ../../../global/tasks/host/setup_bridge_network.yml
     # apt-get update
     - include: ../../../global/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
@@ -83,14 +83,16 @@
     # Install a script which does upstart restarts
     - include: ../../../global/tasks/install_upstart_node.yml
     # Deploy boxer using capistrano technique
-    - name: deploy app
+    - name: deploy boxer
       action: shell su $deploy_user -c '/usr/local/bin/cap ${app_1}'
     - name: copy over stuff needed by boxer
       action: shell su $deploy_user -c "cp /var/apps/${app_1}/shared/config/.env /var/apps/${app_1}/current/ && cp /var/apps/${app_1}/shared/config/runtimes.coffee /var/apps/${app_1}/current/config/"
+    - name: set root permissions on boxer scripts
+      action: shell bash -c "chown -R root:root /var/apps/${app_1}/current/scripts/* && chmod 0500 /var/apps/${app_1}/current/scripts/*"
     - name: restart app
       action: shell /usr/local/bin/upstart_node ${app_1}
     # Deploy proxee using capistrano technique
-    - name: deploy app
+    - name: deploy proxee
       action: shell su $deploy_user -c '/usr/local/bin/cap ${app_2}'
     - name: copy over stuff needed by proxee
       action: shell su $deploy_user -c "cp /var/apps/${app_2}/shared/config/.env /var/apps/${app_2}/current/"
