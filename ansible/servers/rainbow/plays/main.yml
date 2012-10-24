@@ -3,7 +3,6 @@
   sudo: True
   gather_facts: False
   vars_files:
-    - ../../../config/deploy_keys.yml
     #- ../../../config/nagios-server.yml
   vars:
     - app: rainbow
