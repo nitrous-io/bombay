@@ -52,3 +52,23 @@ regions:
             Ebs.SnapshotId: snap-1d909139
             Ebs.VolumeSize: 8
             Ebs.DeleteOnTermination: 'false'
+  - region: us-west-1
+    environments:
+      staging:
+        hostname: coach-usw1-staging.action.io
+        size: m1.small
+        ami: ami-977b5dd2
+        block_devices:
+          - DeviceName: /dev/sdg
+            Ebs.SnapshotId: snap-566c3c7a
+            Ebs.VolumeSize: 8
+            Ebs.DeleteOnTermination: 'false'
+      production:
+        hostname: coach-usw1.action.io
+        size: m1.small
+        ami: ami-977b5dd2
+        block_devices:
+          - DeviceName: /dev/sdg
+            Ebs.SnapshotId: snap-566c3c7a
+            Ebs.VolumeSize: 8
+            Ebs.DeleteOnTermination: 'false'
