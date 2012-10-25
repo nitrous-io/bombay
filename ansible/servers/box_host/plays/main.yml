@@ -47,15 +47,15 @@
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_1 deploy_user=$deploy_user
     # Setup .env for boxer
     - name: setup env for boxer
-      action: copy src=../files/boxer_env.$env dest=$app_directory_1/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+      action: copy src=../files/boxer_env.${region}.${env} dest=$app_directory_1/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
     # Setup runtimes.coffee for boxer
     - name: setup runtimes.coffee for boxer
-      action: copy src=../files/runtimes.$env dest=$app_directory_1/shared/config/runtimes.coffee owner=$deploy_user group=$deploy_user mode=0660
-    # Create Capistrano Layout for $app_directory_2
+      action: copy src=../files/runtimes.${region}.${env} dest=$app_directory_1/shared/config/runtimes.coffee owner=$deploy_user group=$deploy_user mode=0660
+    # Create Capistrano Layout for $app_directory_2}
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_2 deploy_user=$deploy_user
     # Setup .env for proxee
     - name: setup env for proxee
-      action: copy src=../files/proxee_env.$env dest=$app_directory_2/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+      action: copy src=../files/proxee_env.${region}.${env} dest=$app_directory_2/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
     # Generate and Upload Public Key to GitHub
     - include: ../../../global/tasks/register_github_keys.yml deploy_user=$deploy_user
     # Set limits for the user
@@ -104,5 +104,4 @@
       # restart server after the very first provisioning, so that iptables etc. will be setup correctly
     - name: restart server
       action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
-      only_if: "'$env' != 'development'"
 

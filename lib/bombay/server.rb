@@ -58,11 +58,13 @@ module Bombay
 
       ENV['ANSIBLE_CONFIG'] = ansible_config_file
 
-      system "cd #{Bombay::ROOT}/ansible && " +
+      command = "cd #{Bombay::ROOT}/ansible && " +
         "ansible-playbook servers/#{role}/plays/main.yml " +
-        "-e env=#{environment} " +
+        "-e \"env=#{environment} region=#{region}\" " +
         "-i #{ansible_hosts_file} " +
         "--private-key=#{keypair_file_path}"
+
+      system command
 
       FileUtils.rm_rf(ansible_hosts_file)
       FileUtils.rm_rf(ansible_config_file)
@@ -110,7 +112,7 @@ module Bombay
       region_to_server_map
     end
 
-    def self.setup_sensitive_vars!(name, environment)
+    def self.setup_sensitive_vars!(name, environment, region)
       config_yml = YAML.load(File.read(File.join(Bombay::ROOT, 'ansible', 'servers', name, 'config.yml')))
       sensitive_vars = config_yml['sensitive_vars']
 
@@ -119,14 +121,14 @@ module Bombay
       if sensitive_vars['global']
         sensitive_vars['global'].each do |file, vars|
           root_directory = File.join(Bombay::ROOT, 'ansible', 'global', 'files')
-          set_sensitive_vars_for(root_directory, file, environment, vars)
+          set_sensitive_vars_for(root_directory, file, environment, region, vars)
         end
       end
 
       if sensitive_vars[name]
         sensitive_vars[name].each do |file, vars|
           root_directory = File.join(Bombay::ROOT, 'ansible', 'servers', name, 'files')
-          set_sensitive_vars_for(root_directory, file, environment, vars)
+          set_sensitive_vars_for(root_directory, file, environment, region, vars)
         end
       end
     end
@@ -299,8 +301,8 @@ module Bombay
     tcp_socket && tcp_socket.close
   end
 
-  def self.set_sensitive_vars_for(root_directory, file, environment, vars)
-    file_name = File.join(root_directory, "#{file}.#{environment}")
+  def self.set_sensitive_vars_for(root_directory, file, environment, region, vars)
+    file_name = File.join(root_directory, "#{file}.#{region}.#{environment}")
 
     if !File.exists?(file_name)
       sensitive_info = {}
