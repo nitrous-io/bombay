@@ -172,9 +172,9 @@ module Bombay
       else
         domain_name = "ec2-#{self.ip.gsub(/\./, '-')}.#{self.region}.compute.amazonaws.com"
 
-        result = zone.records.create(value: domain_name,
-                                     name: self.hostname,
-                                     type: 'CNAME')
+        zone.records.create(value: domain_name,
+                            name: self.hostname,
+                            type: 'CNAME')
 
         # Box Hosts need wildcard domain too because we allow
         # users to access individual boxes
@@ -184,7 +184,7 @@ module Bombay
                               type: 'CNAME')
         end
 
-        puts "Created DNS record for #{self.hostname} -> #{result}"
+        puts "Created DNS record for #{self.hostname}"
       end
     end
 
