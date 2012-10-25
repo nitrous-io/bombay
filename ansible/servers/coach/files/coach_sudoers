@@ -18,9 +18,6 @@ Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/
 # User privilege specification
 root    ALL=(ALL:ALL) ALL
 
-# action can sudo all the provisioning scripts
-action ALL=(ALL) NOPASSWD: /usr/sbin/service coach *
-
 # Allow members of group sudo to execute any command
 %sudo   ALL=(ALL:ALL) ALL
 

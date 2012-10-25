@@ -19,7 +19,7 @@ Defaults        secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/
 root    ALL=(ALL:ALL) ALL
 
 # action can sudo all the provisioning scripts
-action ALL=(ALL) NOPASSWD: /var/apps/boxer/current/scripts/*, NOPASSWD: /usr/sbin/service boxer *, NOPASSWD: /usr/sbin/service proxee *
+action ALL=(ALL) NOPASSWD: /var/apps/boxer/current/scripts/*
 
 # Allow members of group sudo to execute any command
 %sudo   ALL=(ALL:ALL) ALL
