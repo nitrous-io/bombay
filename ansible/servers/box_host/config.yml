@@ -40,7 +40,7 @@ sensitive_vars:
         default: 9000
     runtimes:
       - name: runtimes
-        prompt: Replace this line with the runtimes in the format <name> '<lxc template name>' separated by a colon
+        prompt: "Replace this line with the runtimes as a JSON hash, e.g. { 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
         multiline: true
 regions:
   - region: ap-southeast-1
