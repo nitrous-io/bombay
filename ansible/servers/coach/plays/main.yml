@@ -60,8 +60,6 @@
       action: shell su $deploy_user -c "cp /var/apps/${app}/shared/config/.env /var/apps/${app}/current/"
     - name: restart coach
       action: shell /usr/local/bin/upstart_node ${app}
-    # Install nagios nrpe server
-    #- include: ../../../global/tasks/install_nagios_nrpe_server.yml
   handlers:
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
@@ -70,5 +68,3 @@
     - name: restart redis
       action: shell /etc/init.d/redis-server restart
 
-# copy the host config to the nagios server
-#- include: ../../../global/playbooks/add_host_configurations_to_nagios.yml

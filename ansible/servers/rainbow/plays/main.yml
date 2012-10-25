@@ -54,8 +54,6 @@
       action: shell su $deploy_user -c "cp /var/apps/${app}/shared/config/.env /var/apps/${app}/current/ && cp /var/apps/$app/shared/config/database.coffee /var/apps/$app/current/config/"
     - name: restart rainbow
       action: shell /usr/local/bin/upstart_node ${app}
-    # Install nagios nrpe server
-    #- include: ../../../global/tasks/install_nagios_nrpe_server.yml
   handlers:
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
@@ -64,5 +62,3 @@
     - name: restart stunnel
       action: shell /etc/init.d/stunnel4 restart
 
-# copy the host config to the nagios server
-#- include: ../../../global/playbooks/add_host_configurations_to_nagios.yml

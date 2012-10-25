@@ -94,8 +94,6 @@
       action: shell su $deploy_user -c "cp /var/apps/${app_2}/shared/config/.env /var/apps/${app_2}/current/"
     - name: restart app
       action: shell /usr/local/bin/upstart_node ${app_2}
-    # Install nagios nrpe server
-    #- include: ../../../global/tasks/install_nagios_nrpe_server.yml
   handlers:
     - name: restart redis
       action: shell /etc/init.d/redis-server restart
@@ -108,5 +106,3 @@
       action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
       only_if: "'$env' != 'development'"
 
-# copy the host config to the nagios server
-#- include: ../../../global/playbooks/add_host_configurations_to_nagios.yml

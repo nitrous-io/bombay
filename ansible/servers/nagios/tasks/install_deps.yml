@@ -1,3 +1,0 @@
----
-- name: Install packages
-  action: shell DEBIAN_FRONTEND=noninteractive apt-get -y install nagios3 nagios-nrpe-plugin
