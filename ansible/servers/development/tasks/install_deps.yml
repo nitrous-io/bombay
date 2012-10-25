@@ -13,3 +13,6 @@
     - bridge-utils
     - s3cmd
     - postgresql
+    - libxml2-dev
+    - libqt4-dev
+    - libxslt-dev

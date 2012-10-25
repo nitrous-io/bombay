@@ -1,8 +1,0 @@
-module.exports =
-  postgres:
-    development:
-      user:     pg_user
-      password: pg_password
-      host:     pg_hostname
-      port:     5432
-      database: rainbow_development
