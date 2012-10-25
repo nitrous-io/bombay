@@ -31,8 +31,6 @@ sensitive_vars:
       - name: redis_port
         prompt: The port for the Redis MQ used by Coach
         default: 65000
-      - name: environment
-        prompt: The environment used by coach (e.g. development, production, staging, etc.)
 regions:
   - region: ap-southeast-1
     environments:

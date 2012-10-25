@@ -17,15 +17,11 @@ sensitive_vars:
     env:
       - name: secret_token
         prompt: The Secret Token used in the Rails app (look at the Heroku Config to get this)
-      - name: environment
-        prompt: The environment used by rainbow (e.g. development, production, staging, etc.)
       - name: cors_allowed_origin
         prompt: The domain you want to allow for CORS (e.g. https://staging.action.io, https://www.action.io)
       - name: socketio_allowed_origin
         prompt: The domains you want to allow for socket.io (e.g. https://staging.action.io, https://www.action.io)
     database:
-      - name: environment
-        prompt: The environment used by rainbow (e.g. development, production, staging, etc.)
       - name: pg_user
         prompt: The postgres username (used by the Rails app, get it from Heroku)
       - name: pg_password

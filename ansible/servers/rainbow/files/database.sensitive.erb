@@ -1,6 +1,6 @@
 module.exports =
   postgres:
-    <%= sensitive_info['environment'] %>:
+    production:
       user:     '<%= sensitive_info['pg_user'] %>'
       password: '<%= sensitive_info['pg_password'] %>'
       host:     '<%= sensitive_info['pg_hostname'] %>'

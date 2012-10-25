@@ -25,8 +25,6 @@ sensitive_vars:
         default: 65000
       - name: boxer_id
         prompt: Boxer ID will be used as the ID for this box host (it is the hostname for the boxhost)
-      - name: environment
-        prompt: The environment used by boxer (e.g. development, production, staging, etc.)
     proxee_env:
       - name: redis_store_host
         prompt: The hostname for the Redis store host used by boxer and proxee
@@ -40,8 +38,6 @@ sensitive_vars:
       - name: end_port
         prompt: The end point for all ports which proxee will proxy
         default: 9000
-      - name: environment
-        prompt: The environment used by proxee (e.g. development, production, staging, etc.)
     runtimes:
       - name: runtimes
         prompt: Replace this line with the runtimes in the format <name> '<lxc template name>' separated by a colon
