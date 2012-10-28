@@ -23,26 +23,29 @@ def set_aws_credentials!
   end
 end
 
-def pick_region_from(servers_by_region)
+def pick_regions_from(servers_by_region)
+  picked_regions = []
   picked_region = nil
 
   if servers_by_region.count > 1
     while servers_by_region[picked_region].nil?
-      picked_region = ask "Pick a region from #{servers_by_region.keys.join(',')}: "
+      picked_region = ask "Pick a region from #{servers_by_region.keys.join(',')} (or type 'all' to build in all regions): "
+      return servers_by_region.keys if picked_region == 'all'
     end
   else
-    picked_region = servers_by_region.keys.first
+    picked_regions << servers_by_region.keys.first
   end
 
-  picked_region
+  picked_regions
 end
 
-def pick_environment_from(environments)
+def pick_environment_from(servers_by_region, region)
+  environments = servers_by_region[region]
   picked_environment = nil
 
   if environments.count > 1
     while environments[picked_environment].nil?
-      picked_environment = ask "Pick an environment from #{environments.keys.join(',')}: "
+      picked_environment = ask "Pick an environment from #{environments.keys.join(',')} in region #{region}: "
     end
   else
     picked_environment = environments.keys.first
@@ -92,35 +95,40 @@ command :build do |c|
         # Check for server config in servers/#{name}/config.yml
         servers_by_region = Bombay::Server.initialize_role(name)
         # Prompt for region
-        region = pick_region_from(servers_by_region)
-        puts "** Picked Region: #{region}\n"
+        regions = pick_regions_from(servers_by_region)
+        puts "** Picked Region(s): #{regions.join(',')}\n"
+        environment = nil
 
-        # Prompt for environment
-        environment = pick_environment_from(servers_by_region[region])
-        puts "** Picked Environment: #{environment}\n"
-
-        servers = servers_by_region[region][environment]
-
-        begin
-          Bombay::SecurityGroup.get_all_for(region).each { |sg| sg.create! }
-          # Check if server exists in AWS in that region
-          # If not, provision, once provisioned,
-          servers.each { |s| s.provision! unless s.exists? }
-        rescue Fog::Service::Error => e
-          if e.to_s =~ /AuthFailure/
-            puts "** Error: Your AWS Credentials are invalid, please try again."
-            Bombay::AwsAuthenticator.clear_credentials!
-          else
-            raise e
+        regions.each do |region|
+          # Prompt for environment
+          if environment.nil?
+            environment = pick_environment_from(servers_by_region, region)
+            puts "** Picked Environment: #{environment}\n"
           end
-        end
 
-        # run ansible playbooks
-        begin
-          Bombay::Server.setup_sensitive_vars!(name, environment, region)
-          Bombay::Server.build!(servers, region, environment)
-        rescue Bombay::PrivateKeyDoesNotExistError => e
-          puts "** Error: Private Key file for #{region} does not exist at #{e.message}"
+          servers = servers_by_region[region][environment]
+
+          begin
+            Bombay::SecurityGroup.get_all_for(region).each { |sg| sg.create! }
+            # Check if server exists in AWS in that region
+            # If not, provision, once provisioned,
+            servers.each { |s| s.provision! unless s.exists? }
+          rescue Fog::Service::Error => e
+            if e.to_s =~ /AuthFailure/
+              puts "** Error: Your AWS Credentials are invalid, please try again."
+              Bombay::AwsAuthenticator.clear_credentials!
+            else
+              raise e
+            end
+          end
+
+          # run ansible playbooks
+          begin
+            Bombay::Server.setup_sensitive_vars!(name, environment, region)
+            Bombay::Server.build!(servers, region, environment)
+          rescue Bombay::PrivateKeyDoesNotExistError => e
+            puts "** Error: Private Key file for #{region} does not exist at #{e.message}"
+          end
         end
       elsif type == 'container'
         begin
