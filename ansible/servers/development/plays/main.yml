@@ -115,7 +115,7 @@
 
     # Copying boxer env config
     - name: copy boxer env config
-      action: template src=../templates/boxer_env.j2 dest=/home/$user/$workspace/boxer/.env owner=$user group=$user mode=0644 
+      action: template src=../templates/boxer_env.j2 dest=/home/$user/$workspace/boxer/.env owner=$user group=$user mode=0644
 
     # Copying boxer runtimes config
     - name: copy boxer runtimes config
@@ -132,7 +132,7 @@
 
     # Copying rainbow env configs
     - name: copy rainbow configs
-      action: copy src=../files/rainbow_env dest=/home/$user/$workspace/rainbow/.env
+      action: copy src=../files/rainbow_env dest=/home/$user/$workspace/rainbow/.env owner=$user gourp=$user mode=0644
 
     # Copying rainbow database configs
     - name: copy rainbow configs
@@ -154,7 +154,7 @@
 
     # Copying coach configs
     - name: copy coach configs
-      action: copy src=../files/coach_env dest=/home/$user/$workspace/coach/.env
+      action: copy src=../files/coach_env dest=/home/$user/$workspace/coach/.env owner=$user group=$user mode=0644
 
     # Install node modules
     - name: install node modules for coach
@@ -167,7 +167,7 @@
 
     # Copying proxee configs
     - name: copy proxee configs
-      action: copy src=../files/proxee_env dest=/home/$user/$workspace/proxee/.env
+      action: copy src=../files/proxee_env dest=/home/$user/$workspace/proxee/.env owner=$user group=$user mode=0644
 
     # Install node modules
     - name: install node modules for proxee
@@ -185,7 +185,7 @@
 
     # Copying env configs
     - name: copy env config
-      action: copy src=../files/actionio_env dest=/home/$user/$workspace/action.io/.env
+      action: copy src=../files/actionio_env dest=/home/$user/$workspace/action.io/.env owner=$user group=$user mode=0644
 
     # Copying database configs
     - name: copy database config
