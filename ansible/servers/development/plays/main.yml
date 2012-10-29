@@ -76,16 +76,6 @@
     # Install node with nvm
     - include: ../../../global/tasks/container/install_node_via_nvm.yml user=$user version=$node_version
 
-    # Remove tmp directory
-    - name: remove tmp directory
-      action: shell rm /home/$user/tmp
-      ignore_errors: True
-
-    # Remove npm directory created by root
-    - name: remove npm directory created by root
-      action: shell rm /home/$user/.npm
-      ignore_errors: True
-
     # Copy postgresql config
     - name: copy postgresql config
       action: copy src=../files/pg_hba.conf dest=/etc/postgresql/9.1/main/pg_hba.conf owner=postgres group=postgres mode=0640
@@ -133,7 +123,7 @@
 
     # Install node modules
     - name: install node modules for boxer
-      action: shell /home/$user/.nvm/$node_version/bin/npm install chdir=/home/$user/$workspace/boxer
+      action: shell sudo -u $user /home/$user/.nvm/$node_version/bin/npm install chdir=/home/$user/$workspace/boxer
 
     # Clone rainbow
     - name: git clone rainbow
@@ -168,7 +158,7 @@
 
     # Install node modules
     - name: install node modules for coach
-      action: shell /home/$user/.nvm/$node_version/bin/npm install chdir=/home/$user/$workspace/coach
+      action: shell sudo -u $user /home/$user/.nvm/$node_version/bin/npm install chdir=/home/$user/$workspace/coach
 
     # Clone proxee
     - name: git clone proxee
@@ -181,7 +171,7 @@
 
     # Install node modules
     - name: install node modules for proxee
-      action: shell /home/$user/.nvm/$node_version/bin/npm install chdir=/home/$user/$workspace/proxee
+      action: shell sudo -u $user /home/$user/.nvm/$node_version/bin/npm install chdir=/home/$user/$workspace/proxee
 
     # Clone action.io
     - name: git clone action io
