@@ -7,3 +7,5 @@ ACTIONMAILER_USERNAME=sendgrid-user
 ACTIONMAILER_PASSWORD=sendgrid-password
 ACTIONMAILER_ADDRESS=sendgrid-address
 ACTIONMAILER_PORT=587
+RAILS_DOMAIN=action.io
+RAILS_HOST=dev.action.io
