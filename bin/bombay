@@ -32,6 +32,8 @@ def pick_regions_from(servers_by_region)
       picked_region = ask "Pick a region from #{servers_by_region.keys.join(',')} (or type 'all' to build in all regions): "
       return servers_by_region.keys if picked_region == 'all'
     end
+
+    picked_regions << picked_region
   else
     picked_regions << servers_by_region.keys.first
   end
