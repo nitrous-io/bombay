@@ -64,8 +64,10 @@
     - include: ../../../global/tasks/install_redis.yml port=$redis_port
     # Configure S3 Cmd
     - include: ../../../global/tasks/configure_s3cmd.yml
-    # Install container
-    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1350283256 s3_bucket=$s3_bucket
+    # Install ruby container
+    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1351549490 s3_bucket=$s3_bucket
+    # Install nodejs container
+    - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1351548226 s3_bucket=$s3_bucket
     # Install NVM
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
     # Install Upstart for boxer
