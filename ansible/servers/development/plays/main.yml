@@ -79,11 +79,11 @@
     # Copy postgresql config
     - name: copy postgresql config
       action: copy src=../files/pg_hba.conf dest=/etc/postgresql/9.1/main/pg_hba.conf owner=postgres group=postgres mode=0640
-      notify: restart postgresql
 
     # create postgresql user
     - name: create postgresql user
       action: shell echo "CREATE ROLE ${pg_user} with CREATEDB LOGIN PASSWORD '${pg_user_password}'" | sudo -u postgres psql -U postgres
+      notify: restart postgresql
 
     # create actionio_development db in postgresql
     - name: create {actionio_development,actionio_test,actionio_production} db
@@ -105,13 +105,17 @@
       ignore_errors: True
 
     # Register boxer ip
+    - name: query for ip
+      action: shell curl http://169.254.169.254/latest/meta-data/public-ipv4 > /tmp/ip
+
+    # Register boxer ip
     - name: register boxer ip
-      action: shell curl http://169.254.169.254/latest/meta-data/public-ipv4
+      action: shell cat /tmp/ip
       register: boxer_ip
 
     # Copying boxer env config
     - name: copy boxer env config
-      action: template src=../templates/boxer_env.j2 dest=/home/$user/$workspace/boxer/.env owner=$user group=$user mode=0644 boxer_ip=${boxer_ip.stdout}
+      action: template src=../templates/boxer_env.j2 dest=/home/$user/$workspace/boxer/.env owner=$user group=$user mode=0644 
 
     # Copying boxer runtimes config
     - name: copy boxer runtimes config
