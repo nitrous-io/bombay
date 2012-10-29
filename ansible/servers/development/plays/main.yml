@@ -76,6 +76,16 @@
     # Install node with nvm
     - include: ../../../global/tasks/container/install_node_via_nvm.yml user=$user version=$node_version
 
+    # Remove tmp directory
+    - name: remove tmp directory
+      action: shell rm /home/$user/tmp
+      ignore_errors: True
+
+    # Remove npm directory created by root
+    - name: remove npm directory created by root
+      action: shell rm /home/$user/.npm
+      ignore_errors: True
+
     # Copy postgresql config
     - name: copy postgresql config
       action: copy src=../files/pg_hba.conf dest=/etc/postgresql/9.1/main/pg_hba.conf owner=postgres group=postgres mode=0640
