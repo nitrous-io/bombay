@@ -107,6 +107,8 @@ r.save
 
 Download the [ssh tunnel](http://www.macupdate.com/app/mac/10128/ssh-tunnel-manager). And use the settings from attached image.
 
+![SSH Tunnel Settings](https://raw.github.com/action-io/bombay/dev-box/ansible/servers/development/ssh_tunnel.png?login=liangzan&token=e6057bb393838c11773540138ed3a2a1)
+
 Next run boxer, coach, rainbow and action.io individually using the command
 
 ```
