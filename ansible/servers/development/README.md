@@ -62,9 +62,11 @@ Install RVM
 
 You may choose to reboot at this point in time
 
+## Ansible setup
+
 Next we want to clone the bombay project as it contains the script necessary to setup the development environment.
 
-Assuming your project directory is called 'Projects',
+Assuming your project directory is called __Projects__,
 
 ```
 cd Projects
@@ -81,6 +83,8 @@ ansible-playbook ansible/servers/development/plays/main.yml
 ```
 
 That should initiate the playbook to build the environment.
+
+## Post Ansible setup
 
 Once done, go to the __action.io__ directory,
 
@@ -104,6 +108,8 @@ r.box_server_uri = 'https://dev.action.io:5001'
 r.coach_uri = 'http://dev.action.io:5002'
 r.save
 ```
+
+## Running the setup
 
 Download the [ssh tunnel](http://www.macupdate.com/app/mac/10128/ssh-tunnel-manager). And use the settings from attached image.
 
