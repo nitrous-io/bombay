@@ -6,3 +6,7 @@
 
 [nodejs_container_template]
 192.168.254.253
+
+[ruby_container_template_sudo]
+192.168.254.252
+
