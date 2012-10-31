@@ -100,7 +100,7 @@ module Bombay
           host_vars.merge!(assemble_host_vars_from_hash(env_config['host_vars'] || {}))
 
           env_config['hosts'].each do |server|
-            host_vars.merge!(assemble_host_vars_from_hash(server['host_vars'] || {}))
+            vars_to_use = host_vars.merge(assemble_host_vars_from_hash(server['host_vars'] || {}))
 
             server = Bombay::Server.new(hostname: server['hostname'],
                                         size: server['size'],
@@ -108,12 +108,9 @@ module Bombay
                                         role: role,
                                         region: region_config['region'],
                                         block_devices: server['block_devices'],
-                                        host_vars: host_vars)
-            if envs[env].nil?
-              envs[env] = [server]
-            else
-              envs[env] += server
-            end
+                                        host_vars: vars_to_use)
+
+            envs[env].nil? ? envs[env] = [server] : envs[env] << server
           end
         end
 
@@ -252,7 +249,7 @@ module Bombay
         server.wait_for { print "."; ready? }
         print "\n"
         compute.associate_address(server.id, self.ip)
-        record_host_config(server)
+
         print "Waiting for sshd"
         print(".") until tcp_test_ssh(server.dns_name, SSH_PORT) {
           puts("Done")
@@ -260,31 +257,6 @@ module Bombay
       end
 
       server
-    end
-
-    def record_host_config(server)
-      host_name = server.tags && server.tags["Name"] ? server.tags['Name'] : server.dns_name
-
-      if server.groups && server.groups.include?('nagios')
-        file_name = 'nagios-server.yml'
-        server_config = {
-          'nagios_server_name' => host_name,
-          'nagios_server_ip' => server.private_ip_address
-        }
-      else
-        file_name = 'nagios-host.yml'
-        server_config = {
-          'nagios_host_name' => host_name,
-          'nagios_host_ip' => server.private_ip_address
-        }
-      end
-
-      current_file_dir = File.expand_path(File.dirname(__FILE__))
-      file_path = File.join(current_file_dir, '..', '..', 'ansible', 'config', file_name)
-
-      File.open(file_path, 'w') do |file|
-        file.write YAML.dump(server_config)
-      end
     end
 
     def find_instance

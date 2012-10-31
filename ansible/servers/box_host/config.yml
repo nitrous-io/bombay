@@ -69,6 +69,28 @@ regions:
                 Ebs.SnapshotId: snap-1d909139
                 Ebs.VolumeSize: 8
                 Ebs.DeleteOnTermination: 'false'
+
+          - hostname: apse1-admin-staging.actionbox.io
+            size: m1.small
+            ami: ami-e6d999b4
+            host_vars:
+              boxer:
+                - name: boxer_id
+                  value: apse1-admin-staging.actionbox.io
+                - name: runtimes
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template', 'rails_with_sudo': 'rails_container_template_sudo' }"
+                - name: admin
+                  value: true
+            block_devices:
+              - DeviceName: /dev/sdf
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 40
+                Ebs.DeleteOnTermination: 'false'
+              - DeviceName: /dev/sdg
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 8
+                Ebs.DeleteOnTermination: 'false'
+
       production:
         host_vars:
           boxer:

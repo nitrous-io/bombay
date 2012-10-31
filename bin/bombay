@@ -43,10 +43,11 @@ end
 
 def pick_environment_from(servers_by_region, region)
   environments = servers_by_region[region]
+  puts "Envs: #{environments.keys} Count: #{environments.count}"
   picked_environment = nil
 
   if environments.count > 1
-    while environments[picked_environment].nil?
+    while environments[picked_environment].blank?
       picked_environment = ask "Pick an environment from #{environments.keys.join(',')} in region #{region}: "
     end
   else
@@ -96,6 +97,7 @@ command :build do |c|
         set_aws_credentials!
         # Check for server config in servers/#{name}/config.yml
         servers_by_region = Bombay::Server.initialize_role(name)
+
         # Prompt for region
         regions = pick_regions_from(servers_by_region)
         puts "** Picked Region(s): #{regions.join(',')}\n"

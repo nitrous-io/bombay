@@ -73,6 +73,8 @@
     - include: ../tasks/install_action_container.yml name=ruby_container_template version=1351549490 s3_bucket=$s3_bucket
     # Install nodejs container
     - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1351548226 s3_bucket=$s3_bucket
+    # Install rails_with_sudo container (only in sudo)
+    - include: ../tasks/install_admin_action_container.yml name=ruby_container_template_sudo version=1351594006 s3_bucket=$s3_bucket
     # Install NVM
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
     # Install Upstart for boxer
@@ -101,12 +103,13 @@
       action: shell su $deploy_user -c "cp /var/apps/${app_2}/shared/config/.env /var/apps/${app_2}/current/"
     - name: restart app
       action: shell /usr/local/bin/upstart_node ${app_2}
+
   handlers:
     - name: restart redis
       action: shell /etc/init.d/redis-server restart
       notify: initialize redis
     - name: initialize redis
-      action: shell /tmp/initialize_redis.sh $redis_port
+      action: shell /tmp/initialize_redis.sh $boxer_redis_port
       notify: restart server
       # restart server after the very first provisioning, so that iptables etc. will be setup correctly
     - name: restart server
