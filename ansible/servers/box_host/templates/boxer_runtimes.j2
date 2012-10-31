@@ -1,6 +1,6 @@
 env = process.env.NODE_ENV
 
 runtimes =
-  runtimes: <%= sensitive_info['runtimes'] %>
+  runtimes: {{ boxer_runtimes }}
 
 module.exports = runtimes

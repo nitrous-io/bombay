@@ -1,12 +1,2 @@
-ansible/global/files/*.development
-ansible/global/files/*.test
-ansible/global/files/*.production
-ansible/global/files/*.staging
-ansible/servers/*/files/*.development
-ansible/servers/*/files/*.staging
-ansible/servers/*/files/*.production
-ansible/servers/*/files/*.test
-nagios-server.yml
-nagios-host.yml
 .rvmrc
 dump.rdb

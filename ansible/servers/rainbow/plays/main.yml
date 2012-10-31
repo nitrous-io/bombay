@@ -2,6 +2,11 @@
 - hosts: rainbow
   sudo: True
   gather_facts: False
+  vars_files:
+    - ../../../vars_files/github_private_key.yml
+    - ../../../vars_files/stunnel_key.yml
+    - ../../../vars_files/stunnel_pem.yml
+    - ../../../vars_files/rainbow.${env}.yml
   vars:
     - app: rainbow
     - app_directory: /var/apps/${app}
@@ -24,9 +29,9 @@
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory deploy_user=$deploy_user
     # Setup .env
     - name: setup env
-      action: copy src=../files/env.${region}.${env} dest=$app_directory/shared/config/.env owner=$deploy_user group=$deploy_user mode=0600
+      action: template src=../templates/env.j2 dest=$app_directory/shared/config/.env owner=$deploy_user group=$deploy_user mode=0600
     - name: setup database.coffee
-      action: copy src=../files/database.${region}.${env} dest=$app_directory/shared/config/database.coffee owner=$deploy_user group=$deploy_user mode=0600
+      action: template src=../templates/database.coffee.j2 dest=$app_directory/shared/config/database.coffee owner=$deploy_user group=$deploy_user mode=0600
     # Generate and Upload Public Key to GitHub
     - include: ../../../global/tasks/register_github_keys.yml deploy_user=$deploy_user
     # Setup nginx

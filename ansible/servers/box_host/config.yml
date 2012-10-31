@@ -1,101 +1,142 @@
 ---
-sensitive_vars:
-  global:
-    github_private_key:
+var_files:
+  github_private_key:
+    context: global
+    vars:
       - name: github_key
         prompt: Replace this line with the private key used by the box to pull from GitHub repos
         multiline: true
-    s3cfg:
+  s3cfg:
+    context: global
+    vars:
       - name: aws_access_key_id
         prompt: AWS Access Key ID (needed to pull from stuff from S3)
       - name: aws_secret_access_key
         prompt: AWS Secret Access Key (needed to pull stuff from S3)
-  box_host:
-    boxer_env:
-      - name: redis_store_host
-        prompt: The hostname for the Redis store host used by boxer and proxee
-        default: 127.0.0.1
-      - name: redis_store_port
-        prompt: The port for the Redis store host used by boxer and proxee
-        default: 65000
-      - name: redis_mq_host
-        prompt: The hostname for the Redis store host used by boxer and proxee
-      - name: redis_mq_port
-        prompt: The port for the Redis store host used by boxer and proxee
-        default: 65000
-      - name: boxer_id
-        prompt: Boxer ID will be used as the ID for this box host (it is the hostname for the boxhost)
-    proxee_env:
-      - name: redis_store_host
-        prompt: The hostname for the Redis store host used by boxer and proxee
-        default: 127.0.0.1
-      - name: redis_store_port
-        prompt: The port for the Redis store host used by boxer and proxee
-        default: 65000
-      - name: start_port
-        prompt: The starting point for all ports which proxee will proxy
-        default: 3000
-      - name: end_port
-        prompt: The end point for all ports which proxee will proxy
-        default: 9000
-    runtimes:
-      - name: runtimes
-        prompt: "Replace this line with the runtimes as a JSON hash, e.g. { 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
-        multiline: true
+  boxer_airbrake_key:
+    context: environment
+    vars:
+      - name: boxer_airbrake_key
+        prompt: Airbrake API Key for Boxer
+  proxee_airbrake_key:
+    context: environment
+    vars:
+      - name: proxee_airbrake_key
+        prompt: Airbrake API Key for Proxee
+
+host_vars:
+  boxer:
+    - name: redis_store_host
+      value: 127.0.0.1
+    - name: redis_store_port
+      value: 65000
+    - name: redis_mq_port
+      value: 65000
+  proxee:
+    - name: redis_store_host
+      value: 127.0.0.1
+    - name: redis_store_port
+      value: 65000
+    - name: start_port
+      value: 3000
+    - name: end_port
+      value: 9000
+
 regions:
   - region: ap-southeast-1
     environments:
       staging:
-        hostname: apse1-staging.actionbox.io
-        size: m1.small
-        ami: ami-e6d999b4
-        block_devices:
-          - DeviceName: /dev/sdf
-            Ebs.SnapshotId: snap-1d909139
-            Ebs.VolumeSize: 40
-            Ebs.DeleteOnTermination: 'false'
-          - DeviceName: /dev/sdg
-            Ebs.SnapshotId: snap-1d909139
-            Ebs.VolumeSize: 8
-            Ebs.DeleteOnTermination: 'false'
+        host_vars:
+          boxer:
+            - name: redis_mq_host
+              value: coach-apse1-staging.action.io
+        hosts:
+          - hostname: apse1-staging.actionbox.io
+            size: m1.small
+            ami: ami-e6d999b4
+            host_vars:
+              boxer:
+                - name: boxer_id
+                  value: apse1-staging.actionbox.io
+                - name: runtimes
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
+            block_devices:
+              - DeviceName: /dev/sdf
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 40
+                Ebs.DeleteOnTermination: 'false'
+              - DeviceName: /dev/sdg
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 8
+                Ebs.DeleteOnTermination: 'false'
       production:
-        hostname: apse1.actionbox.io
-        size: m1.small
-        ami: ami-e6d999b4
-        block_devices:
-          - DeviceName: /dev/sdf
-            Ebs.SnapshotId: snap-1d909139
-            Ebs.VolumeSize: 40
-            Ebs.DeleteOnTermination: 'false'
-          - DeviceName: /dev/sdg
-            Ebs.SnapshotId: snap-1d909139
-            Ebs.VolumeSize: 8
-            Ebs.DeleteOnTermination: 'false'
+        host_vars:
+          boxer:
+            - name: redis_mq_host
+              value: coach-apse1.action.io
+        hosts:
+          - hostname: apse1.actionbox.io
+            size: m1.small
+            ami: ami-e6d999b4
+            host_vars:
+              boxer:
+                - name: boxer_id
+                  value: apse1.actionbox.io
+                - name: runtimes
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
+            block_devices:
+              - DeviceName: /dev/sdf
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 40
+                Ebs.DeleteOnTermination: 'false'
+              - DeviceName: /dev/sdg
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 8
+                Ebs.DeleteOnTermination: 'false'
   - region: us-west-1
     environments:
       staging:
-        hostname: usw1-staging.actionbox.io
-        size: m1.small
-        ami: ami-977b5dd2
-        block_devices:
-          - DeviceName: /dev/sdf
-            Ebs.SnapshotId: snap-566c3c7a
-            Ebs.VolumeSize: 40
-            Ebs.DeleteOnTermination: 'false'
-          - DeviceName: /dev/sdg
-            Ebs.SnapshotId: snap-566c3c7a
-            Ebs.VolumeSize: 8
-            Ebs.DeleteOnTermination: 'false'
+        host_vars:
+          boxer:
+            - name: redis_mq_host
+              value: coach-usw1-staging.action.io
+        hosts:
+          - hostname: usw1-staging.actionbox.io
+            size: m1.small
+            ami: ami-977b5dd2
+            host_vars:
+              boxer:
+                - name: boxer_id
+                  value: usw1-staging.actionbox.io
+                - name: runtimes
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
+            block_devices:
+              - DeviceName: /dev/sdf
+                Ebs.SnapshotId: snap-566c3c7a
+                Ebs.VolumeSize: 40
+                Ebs.DeleteOnTermination: 'false'
+              - DeviceName: /dev/sdg
+                Ebs.SnapshotId: snap-566c3c7a
+                Ebs.VolumeSize: 8
+                Ebs.DeleteOnTermination: 'false'
+
       production:
-        hostname: usw1.actionbox.io
-        size: m1.small
-        ami: ami-977b5dd2
-        block_devices:
-          - DeviceName: /dev/sdf
-            Ebs.SnapshotId: snap-566c3c7a
-            Ebs.VolumeSize: 40
-            Ebs.DeleteOnTermination: 'false'
-          - DeviceName: /dev/sdg
-            Ebs.SnapshotId: snap-566c3c7a
-            Ebs.VolumeSize: 8
-            Ebs.DeleteOnTermination: 'false'
+        hosts:
+          - hostname: usw1.actionbox.io
+            size: m1.small
+            ami: ami-977b5dd2
+            host_vars:
+              boxer:
+                - name: boxer_id
+                  value: usw1.actionbox.io
+                - name: runtimes
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
+            block_devices:
+              - DeviceName: /dev/sdf
+                Ebs.SnapshotId: snap-566c3c7a
+                Ebs.VolumeSize: 40
+                Ebs.DeleteOnTermination: 'false'
+              - DeviceName: /dev/sdg
+                Ebs.SnapshotId: snap-566c3c7a
+                Ebs.VolumeSize: 8
+                Ebs.DeleteOnTermination: 'false'

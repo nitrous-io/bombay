@@ -2,6 +2,11 @@
 - hosts: box_host
   sudo: True
   gather_facts: False
+  vars_files:
+    - ../../../vars_files/github_private_key.yml
+    - ../../../vars_files/s3cfg.yml
+    - ../../../vars_files/boxer_airbrake_key.${env}.yml
+    - ../../../vars_files/proxee_airbrake_key.${env}.yml
   vars:
     app_1: boxer
     app_2: proxee
@@ -9,8 +14,8 @@
     app_directory_2: /var/apps/$app_2
     deploy_user: action
     node_version: v0.8.11
-    redis_port: 65000
     s3_bucket: bombay-apse.action.io
+
   tasks:
     - name: mkdir /var/lib/lxc
       action: shell mkdir -p /var/lib/lxc
@@ -47,21 +52,21 @@
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_1 deploy_user=$deploy_user
     # Setup .env for boxer
     - name: setup env for boxer
-      action: copy src=../files/boxer_env.${region}.${env} dest=$app_directory_1/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+      action: template src=../templates/boxer_env.j2 dest=$app_directory_1/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
     # Setup runtimes.coffee for boxer
     - name: setup runtimes.coffee for boxer
-      action: copy src=../files/runtimes.${region}.${env} dest=$app_directory_1/shared/config/runtimes.coffee owner=$deploy_user group=$deploy_user mode=0660
+      action: template src=../templates/boxer_runtimes.j2 dest=$app_directory_1/shared/config/runtimes.coffee owner=$deploy_user group=$deploy_user mode=0660
     # Create Capistrano Layout for $app_directory_2}
     - include: ../../../global/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_2 deploy_user=$deploy_user
     # Setup .env for proxee
     - name: setup env for proxee
-      action: copy src=../files/proxee_env.${region}.${env} dest=$app_directory_2/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+      action: template src=../templates/proxee_env.j2 dest=$app_directory_2/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
     # Generate and Upload Public Key to GitHub
     - include: ../../../global/tasks/register_github_keys.yml deploy_user=$deploy_user
     # Set limits for the user
     - include: ../../../global/tasks/set_limits.yml user=$deploy_user attribute=nofile value=65536
     # Install Redis Server
-    - include: ../../../global/tasks/install_redis.yml port=$redis_port
+    - include: ../../../global/tasks/install_redis.yml port=$boxer_redis_store_port
     # Configure S3 Cmd
     - include: ../../../global/tasks/configure_s3cmd.yml
     # Install ruby container

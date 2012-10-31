@@ -5,9 +5,9 @@
    - certs
    - keys
 - name: move stunnel.pem to /etc/stunnel/certs directory
-  action: copy src=../../../global/files/stunnel_pem.${region}.${env} dest=/etc/stunnel/certs/stunnel.pem owner=root group=root mode=0660
+  action: template src=../../../global/templates/stunnel_pem.j2 dest=/etc/stunnel/certs/stunnel.pem owner=root group=root mode=0660
 - name: move stunnel.key to /etc/stunnel/certs directory
-  action: copy src=../../../global/files/stunnel_key.${region}.${env} dest=/etc/stunnel/keys/stunnel.key owner=root group=root mode=0660
+  action: template src=../../../global/templates/stunnel_key.j2 dest=/etc/stunnel/keys/stunnel.key owner=root group=root mode=0660
 - name: setup stunnel.conf the way we want
   action: copy src=../../../global/files/stunnel.conf dest=/etc/stunnel/stunnel.conf owner=root group=root mode=0660
 - name: setup stunnel to be enabled
