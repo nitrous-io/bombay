@@ -43,7 +43,6 @@ end
 
 def pick_environment_from(servers_by_region, region)
   environments = servers_by_region[region]
-  puts "Envs: #{environments.keys} Count: #{environments.count}"
   picked_environment = nil
 
   if environments.count > 1
