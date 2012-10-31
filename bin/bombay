@@ -110,8 +110,6 @@ command :build do |c|
 
           servers = servers_by_region[region][environment]
 
-          servers.each { |s| p s }
-
           begin
             Bombay::SecurityGroup.get_all_for(region).each { |sg| sg.create! }
             # Check if server exists in AWS in that region

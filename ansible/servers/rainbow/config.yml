@@ -1,5 +1,5 @@
 ---
-var_files:
+vars_files:
   github_private_key:
     context: global
     vars:

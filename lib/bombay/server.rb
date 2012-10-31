@@ -126,9 +126,9 @@ module Bombay
     def self.setup_vars_files!(role, environment)
       config_yml = YAML.load(File.read(File.join(Bombay::ROOT, 'ansible', 'servers', role, 'config.yml')))
 
-      var_files = config_yml['var_files'] || {}
+      vars_files = config_yml['vars_files'] || {}
 
-      var_files.each do |name, var_body|
+      vars_files.each do |name, var_body|
         if var_body['context'] == 'global'
           var_file_name = File.join(Bombay::ROOT, 'ansible', 'vars_files', "#{name}.yml")
         elsif var_body['context'] == 'environment'
@@ -138,7 +138,7 @@ module Bombay
         end
 
         if !File.exists?(var_file_name)
-          puts "Please enter these values to be placed in the var file var_files/#{name}.#{environment}.yml:"
+          puts "Please enter these values to be placed in the var file vars_files/#{name}.#{environment}.yml:"
           output_hash = {}
 
           var_body['vars'].each do |var|
@@ -318,33 +318,6 @@ module Bombay
       false
     ensure
       tcp_socket && tcp_socket.close
-    end
-
-    def self.set_config_vars_for(root_directory, file, environment, region, vars)
-      file_name = File.join(root_directory, "#{file}.#{region}.#{environment}")
-
-      if !File.exists?(file_name)
-        config_info = {}
-
-        vars.each do |var|
-          prompt = var['prompt']
-          prompt = "#{prompt} (Default: #{var['default']})" if var['default']
-          prompt = "#{prompt}:"
-
-          while config_info[var['name']].blank?
-            config_info[var['name']] = (var['multiline'] ? ask_editor(prompt) : ask(prompt))
-            if config_info[var['name']].blank?
-              config_info[var['name']] = var['default']
-            end
-          end
-        end
-
-        config_template = ERB.new(File.read(File.join(root_directory, "#{file}.config.erb")))
-
-        File.open(file_name, 'w') do |f|
-          f.puts(config_template.result(binding))
-        end
-      end
     end
 
     def self.assemble_host_vars_from_hash(host_vars_from_yaml)
