@@ -31,6 +31,14 @@ var_files:
         prompt: The password used in basic auth for the coach (remember to set the same password in the Heroku config for the webhook host)
       - name: coach_airbrake_key
         prompt: Airbrake API Key used by Coach
+
+host_vars:
+  coach:
+    - name: redis_host
+      value: 127.0.0.1
+    - name: redis_port
+      value: 65000
+
 regions:
   - region: ap-southeast-1
     environments:
@@ -39,10 +47,6 @@ regions:
           coach:
             - name: webhook_host
               value: https://staging.action.io
-            - name: redis_host
-              value: 127.0.0.1
-            - name: redis_port
-              value: 65000
         hosts:
           - hostname: coach-apse1-staging.action.io
             size: m1.small
@@ -57,10 +61,6 @@ regions:
           coach:
             - name: webhook_host
               value: https://www.action.io
-            - name: redis_host
-              value: 127.0.0.1
-            - name: redis_port
-              value: 65000
         hosts:
           - hostname: coach-apse1.action.io
             size: m1.small
@@ -77,10 +77,6 @@ regions:
           coach:
             - name: webhook_host
               value: https://staging.action.io
-            - name: redis_host
-              value: 127.0.0.1
-            - name: redis_port
-              value: 65000
         hosts:
           - hostname: coach-usw1-staging.action.io
             size: m1.small
@@ -95,10 +91,6 @@ regions:
           coach:
             - name: webhook_host
               value: https://www.action.io
-            - name: redis_host
-              value: 127.0.0.1
-            - name: redis_port
-              value: 65000
         hosts:
           - hostname: coach-usw1.action.io
             size: m1.small
