@@ -1,0 +1,27 @@
+---
+- hosts: ${hosts}
+  user: ${user}
+  sudo: True
+
+  tasks:
+    - name: install monit
+      action: apt pkg=monit state=present
+
+    - name: install main monit config
+      action: template src=../monit/templates/monitrc.j2 dest=/etc/monit/monitrc state=file owner=root group=root mode=0644
+      notify: restart monit
+
+    - name: get hostname
+      action: command /bin/bash -c 'hostname'
+      register: hostname
+  
+    - name: install system monitoring configlet
+      action: template src=../monit/templates/system-monit.j2 dest=/etc/monit/conf.d/system-monit state=file owner=root group=root mode=0644
+      notify: restart monit
+    
+    - name: install disk monitoring configlet
+      action: copy src=../monit/files/disk-space-monit dest=/etc/monit/conf.d/disk-space-monit state=file owner=root group=root mode=0644
+      notify: restart monit
+
+  handlers:
+    - include: ../monit/handlers/handler.yml

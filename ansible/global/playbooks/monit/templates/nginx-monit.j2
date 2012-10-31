@@ -1,0 +1,13 @@
+{% set memlimit = ansible_memtotal_mb * 60 / 100 %}
+
+check process nginx with pidfile /var/run/nginx/nginx.pid
+  start program = "/etc/init.d/nginx start" with timeout 60 seconds
+  stop program  = "/etc/init.d/nginx stop"
+  if cpu > 60% for 2 cycles then alert
+  if cpu > 80% for 5 cycles then restart
+  if totalmem > {{ memlimit }} MB for 5 cycles then restart
+  if loadavg(5min) greater than 10 for 8 cycles then stop
+  if failed host localhost port 80 protocol http 
+     and request {{ healtcheck_url }}
+     then restart
+  if 3 restarts within 5 cycles then timeout

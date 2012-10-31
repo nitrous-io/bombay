@@ -1,0 +1,11 @@
+{% set load_alert_1min = ansible_processor_count * 2 %}
+check system {{ hostname.stdout }}
+  if loadavg (1min) > {{ load_alert_1min }} then alert
+  if loadavg (5min) > {{ ansible_processor_count }} then alert
+  if memory usage > 85% then alert
+
+  # see http://www.linuxjournal.com/article/9001 for percentage versus load average on CPU
+  # TL;DR? percentage is time the CPU is occupied by a process/processes. Too simplistic? Read above.^ 
+  if cpu usage (user) > 70% then alert
+  if cpu usage (system) > 30% then alert
+  if cpu usage (wait) > 20% then alert
