@@ -56,8 +56,6 @@ regions:
             ami: ami-e6d999b4
             host_vars:
               boxer:
-                - name: boxer_id
-                  value: apse1-staging.actionbox.io
                 - name: runtimes
                   value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
             block_devices:
@@ -75,8 +73,6 @@ regions:
             ami: ami-e6d999b4
             host_vars:
               boxer:
-                - name: boxer_id
-                  value: apse1-admin-staging.actionbox.io
                 - name: runtimes
                   value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template', 'rails_with_sudo': 'rails_container_template_sudo' }"
                 - name: admin
@@ -102,8 +98,6 @@ regions:
             ami: ami-e6d999b4
             host_vars:
               boxer:
-                - name: boxer_id
-                  value: apse1.actionbox.io
                 - name: runtimes
                   value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
             block_devices:
@@ -128,8 +122,6 @@ regions:
             ami: ami-977b5dd2
             host_vars:
               boxer:
-                - name: boxer_id
-                  value: usw1-staging.actionbox.io
                 - name: runtimes
                   value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
             block_devices:
@@ -149,8 +141,6 @@ regions:
             ami: ami-977b5dd2
             host_vars:
               boxer:
-                - name: boxer_id
-                  value: usw1.actionbox.io
                 - name: runtimes
                   value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
             block_devices:
