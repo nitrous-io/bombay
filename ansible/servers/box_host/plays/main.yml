@@ -70,11 +70,11 @@
     # Configure S3 Cmd
     - include: ../../../global/tasks/configure_s3cmd.yml
     # Install ruby container
-    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1351549490 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1351761999 s3_bucket=$s3_bucket
     # Install nodejs container
-    - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1351548226 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1351762301 s3_bucket=$s3_bucket
     # Install rails_with_sudo container (only in sudo)
-    - include: ../tasks/install_admin_action_container.yml name=ruby_container_template_sudo version=1351594006 s3_bucket=$s3_bucket
+    - include: ../tasks/install_admin_action_container.yml name=ruby_container_template_sudo version=1351762857 s3_bucket=$s3_bucket
     # Install NVM
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
     # Install Upstart for boxer
