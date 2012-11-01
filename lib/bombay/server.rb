@@ -76,8 +76,8 @@ module Bombay
 
       system command
 
-      #FileUtils.rm_rf(ansible_hosts_file)
-      #FileUtils.rm_rf(ansible_config_file)
+      FileUtils.rm_rf(ansible_hosts_file)
+      FileUtils.rm_rf(ansible_config_file)
     end
 
     def self.build_hosts_file_content(role, servers, region, environment)
