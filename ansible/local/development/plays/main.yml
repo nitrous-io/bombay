@@ -2,6 +2,7 @@
 - hosts: 127.0.0.1
   sudo: True
   gather_facts: False
+  connection: local
   vars_prompt:
     user: "Username you are logged in as"
     aws_access_key: "AWS Access Key"
