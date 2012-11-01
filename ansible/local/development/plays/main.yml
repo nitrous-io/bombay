@@ -3,12 +3,12 @@
   sudo: True
   gather_facts: False
   vars_prompt:
-    user: "Username"
+    user: "Username you are logged in as"
     aws_access_key: "AWS Access Key"
     aws_secret_access_key: "AWS Secret Access Key"
-    workspace: "Project directory name"
-    pg_user: "Postgres username"
-    pg_user_password: "Postgres user password"
+    workspace: "Directory where you want all the source dirs to be installed"
+    pg_user: "Postgres Username"
+    pg_password: "Postgres Password"
   vars:
     env: development
     ruby_version: 1.9.3
@@ -82,7 +82,7 @@
 
     # create postgresql user
     - name: create postgresql user
-      action: shell echo "CREATE ROLE ${pg_user} with CREATEDB LOGIN PASSWORD '${pg_user_password}'" | sudo -u postgres psql -U postgres
+      action: shell echo "CREATE ROLE ${pg_user} with CREATEDB LOGIN PASSWORD '${pg_password}'" | sudo -u postgres psql -U postgres
       notify: restart postgresql
 
     # create actionio_development db in postgresql
@@ -136,7 +136,7 @@
 
     # Copying rainbow database configs
     - name: copy rainbow configs
-      action: template src=../templates/database.coffee.j2 dest=/home/$user/$workspace/rainbow/config/database.coffee pg_user=$pg_user pg_user_password=$pg_user_password owner=$user group=$user mode=0644
+      action: template src=../templates/database.coffee.j2 dest=/home/$user/$workspace/rainbow/config/database.coffee pg_user=$pg_user pg_password=$pg_password owner=$user group=$user mode=0644
 
     # Install node modules
     - name: install node modules for rainbow
@@ -189,7 +189,7 @@
 
     # Copying database configs
     - name: copy database config
-      action: template src=../templates/database.yml.j2 dest=/home/$user/$workspace/action.io/config/database.yml pg_user=$pg_user pg_user_password=$pg_user_password owner=$user group=$user mode=0644
+      action: template src=../templates/database.yml.j2 dest=/home/$user/$workspace/action.io/config/database.yml pg_user=$pg_user pg_password=$pg_password owner=$user group=$user mode=0644
 
   handlers:
     - name: restart nginx
