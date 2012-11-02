@@ -74,7 +74,7 @@ regions:
             host_vars:
               boxer:
                 - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'rails_with_sudo': 'rails_container_template_sudo' }"
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'rails_with_sudo': 'ruby_container_template_sudo' }"
                 - name: admin
                   value: true
             block_devices:
@@ -135,6 +135,10 @@ regions:
                 Ebs.DeleteOnTermination: 'false'
 
       production:
+        host_vars:
+          boxer:
+            - name: redis_mq_host
+              value: coach-usw1.action.io
         hosts:
           - hostname: usw1.actionbox.io
             size: m1.small
