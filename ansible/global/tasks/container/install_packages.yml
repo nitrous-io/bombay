@@ -74,5 +74,6 @@
    - libxt-dev
    - libpng12-0
    - libpng12-dev
+   - libqt4-dev
 
 
