@@ -57,7 +57,7 @@ regions:
             host_vars:
               boxer:
                 - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template' }"
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
@@ -74,7 +74,7 @@ regions:
             host_vars:
               boxer:
                 - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template', 'rails_with_sudo': 'rails_container_template_sudo' }"
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'rails_with_sudo': 'rails_container_template_sudo' }"
                 - name: admin
                   value: true
             block_devices:
@@ -99,7 +99,7 @@ regions:
             host_vars:
               boxer:
                 - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template' }"
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
@@ -123,7 +123,7 @@ regions:
             host_vars:
               boxer:
                 - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template' }"
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-566c3c7a
@@ -142,7 +142,7 @@ regions:
             host_vars:
               boxer:
                 - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'node_container_template' }"
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template' }"
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-566c3c7a
