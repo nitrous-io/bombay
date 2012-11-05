@@ -26,3 +26,5 @@ coach:
 
 dev:
   - 65100 tcp 0.0.0.0/0
+  # ssh ports for boxes
+  - 10000-20000 tcp 0.0.0.0/0
