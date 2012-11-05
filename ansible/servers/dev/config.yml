@@ -41,7 +41,7 @@ regions:
                 Ebs.SnapshotId: snap-1d909139
                 Ebs.VolumeSize: 20
                 Ebs.DeleteOnTermination: 'false'
-        hosts:
+
           - hostname: daniels-box.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
