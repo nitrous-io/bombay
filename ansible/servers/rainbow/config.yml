@@ -102,7 +102,7 @@ regions:
             - name: database_port
               value: 5632
             - name: database_name
-              value: d3q8t99tlthbos
+              value: d9ij1rf0084388
         hosts:
           - hostname: rainbow-usw1.action.io
             size: m1.small
