@@ -1,6 +1,0 @@
-regions:
-  - region: ap-southeast-1
-    environments:
-      development:
-        hosts:
-          - hostname: 127.0.0.1

@@ -14,4 +14,5 @@
     - s3cmd
     - postgresql
     - libxml2-dev
+    - libxslt1-dev
     - libqt4-dev

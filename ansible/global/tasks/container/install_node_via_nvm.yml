@@ -17,7 +17,7 @@
   ignore_errors: True
 
 - name: add nvm.sh in bash_profile
-  action: shell echo "source ~/.nvm/nvm.sh" >> /home/${user}/.bash_profile
+  action: shell echo "source ~/.nvm/nvm.sh" >> /home/${user}/.bash_profile && chown ${user}:${user} /home/${user}/.bash_profile
   only_if: "len('${nvm_in_bash_profile.stdout}') == 0"
 
 - name: apply nvm.sh and set default version

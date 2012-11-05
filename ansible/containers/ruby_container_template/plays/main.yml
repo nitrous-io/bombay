@@ -68,7 +68,7 @@
   tasks:
     - include: ../../../global/tasks/container/install_ruby_via_rvm.yml version=1.9.3-p194 user=$user
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=$user
-    - include: ../../../global/tasks/container/install_gem.yml gem=rails
+    - include: ../../../global/tasks/container/install_gem.yml gem=rails user=$user
 
 - hosts: ruby_container_template
   sudo: True

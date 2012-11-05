@@ -1,0 +1,61 @@
+---
+vars_files:
+  github_private_key:
+    context: global
+    vars:
+      - name: github_key
+        prompt: Replace this line with the private key used by the box to pull from GitHub repos
+        multiline: true
+  s3cfg:
+    context: global
+    vars:
+      - name: aws_access_key_id
+        prompt: AWS Access Key ID (needed to pull from stuff from S3)
+      - name: aws_secret_access_key
+        prompt: AWS Secret Access Key (needed to pull stuff from S3)
+
+regions:
+  - region: ap-southeast-1
+    environments:
+      development:
+        host_vars:
+          dev:
+            - name: pg_user
+              value: action
+            - name: pg_password
+              value: password
+        hosts:
+          - hostname: aruns-box.actionbox.io
+            size: m1.small
+            ami: ami-e6d999b4
+            host_vars:
+              dev:
+                - name: username
+                  value: arun
+                - name: github_username
+                  value: arunthampi
+                - name: github_email
+                  value: arun.thampi@gmail.com
+            block_devices:
+              - DeviceName: /dev/sdf
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 20
+                Ebs.DeleteOnTermination: 'false'
+        hosts:
+          - hostname: daniels-box.actionbox.io
+            size: m1.small
+            ami: ami-e6d999b4
+            host_vars:
+              dev:
+                - name: username
+                  value: daniel
+                - name: github_username
+                  value: dqminh
+                - name: github_email
+                  value: dqminh89@gmail.com
+            block_devices:
+              - DeviceName: /dev/sdf
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 20
+                Ebs.DeleteOnTermination: 'false'
+
