@@ -9,5 +9,5 @@ ACTIONMAILER_ADDRESS=sendgrid-address
 ACTIONMAILER_PORT=587
 RAILS_DOMAIN=action.io
 RAILS_HOST=dev.action.io
-ASSET_HOST=dev.action.io
+ASSET_HOST=dev.action.io:5000
 AES_KEY=kmGFOWQkpNheZedIeZruzHfgCMhX2sc9uhB9gMpjP7ZYErINx4R6Qn9mwjQG1taB5BTj7ywZbOodKW2SuMc43vjvVaRSJcSDxneGc3kSUwdN7kCPgx5SRsGg9OzybjMW
