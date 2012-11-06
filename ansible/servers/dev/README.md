@@ -46,7 +46,7 @@ __ansible_hosts__ should contain
 
 Add the following environment variables to your shell configuration.
 ```
-export ANSIBLE_HOSTS=/home/zan/.ansible_hosts
+export ANSIBLE_HOSTS=$HOME/.ansible_hosts
 export LC_CTYPE=en_US.UTF-8
 ```
 
@@ -79,7 +79,7 @@ bundle install
 That should setup ansible. Next we will start building the box using ansible. Assuming you are on the __bombay__ directory.
 
 ```
-ansible-playbook ansible/servers/development/plays/main.yml
+./bin/bombay build server dev
 ```
 
 That should initiate the playbook to build the environment.

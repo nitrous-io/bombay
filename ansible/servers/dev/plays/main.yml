@@ -92,7 +92,10 @@
     - name: xfs_growfs /dev/xvdf
       action: shell xfs_growfs /dev/xvdf
 
+    # ruby container
     - include: ../../../servers/box_host/tasks/install_action_container.yml name=ruby_container_template version=1350283256 s3_bucket=$s3_bucket
+    # nodejs container
+    - include: ../../../servers/box_host/tasks/install_action_container.yml name=nodejs_container_template version=1351826220 s3_bucket=$s3_bucket
 
     # Install redis
     - include: ../../../global/tasks/install_redis.yml port=$redis_port
