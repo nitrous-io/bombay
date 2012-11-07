@@ -15,13 +15,33 @@
       action: command /bin/bash -c 'hostname'
       register: hostname
   
-    - name: install system monitoring configlet
+    - name: install system monitoring config
       action: template src=../monit/templates/system-monit.j2 dest=/etc/monit/conf.d/system-monit state=file owner=root group=root mode=0644
       notify: restart monit
     
-    - name: install disk monitoring configlet
+    - name: install disk monitoring config
       action: copy src=../monit/files/disk-space-monit dest=/etc/monit/conf.d/disk-space-monit state=file owner=root group=root mode=0644
       notify: restart monit
+
+    - name: check if nginx is installed
+      action: shell /bin/bash -c 'dpkg -l | grep -c nginx'
+      register: has_nginx
+      ignore_errors: True
+
+    - name: install nginx monitoring config
+      action: template src=../monit/templates/nginx-monit.j2 dest=/etc/monit/conf.d/nginx-monit state=file owner=root group=root mode=0644
+      notify: restart monit
+      only_if: "${has_nginx.stdout} == 0"
+    
+    - name: check if haproxy is installed
+      action: shell /bin/bash -c 'dpkg -l | grep -c haproxy'
+      register: has_haproxy
+      ignore_errors: True
+
+    - name: install haproxy  monitoring config
+      action: template src=../monit/templates/haproxy-monit.j2 dest=/etc/monit/conf.d/haproxy-monit state=file owner=root group=root mode=0644
+      notify: restart monit
+      only_if: "${has_haproxy.stdout} == 0"
 
   handlers:
     - include: ../monit/handlers/handler.yml
