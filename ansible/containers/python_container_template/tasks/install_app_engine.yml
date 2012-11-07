@@ -1,0 +1,9 @@
+# This download appengine to user workspace
+---
+- name: download and install appengine to userspace
+  shell: cd $HOME
+         && rm -Rf $HOME/google_appengine
+         && rm -f $HOME/google_appengine_1.7.3.zip
+         && wget http://googleappengine.googlecode.com/files/google_appengine_1.7.3.zip
+         && unzip $HOME/google_appengine_1.7.3.zip
+         && rm $HOME/google_appengine_1.7.3.zip

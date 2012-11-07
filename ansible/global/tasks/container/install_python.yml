@@ -1,0 +1,25 @@
+# Python repositories will be build using custom ppa:
+# https://launchpad.net/~fkrull/+archive/deadsnakes
+# which we should be installed before this step in the playbook, otherwise,
+# some python versions will not be found
+#
+# We will support 2.5, 2.6, 2.7, 3.2 and pypy ( 2.5 and 2.6 are mainly for legacy
+# reason )
+---
+- name: install python
+  apt: pkg=$item
+  with_items:
+    - python2.5
+    - python2.6
+    - python2.7
+    - python3.2
+
+- name: install pypy
+  shell: rm -rf /opt/pypy-1.9
+         && rm -rf /usr/local/bin/pypy
+         && mkdir /opt/pypy-1.9
+         && cd $HOME
+         && wget https://bitbucket.org/pypy/pypy/downloads/pypy-1.9-linux64.tar.bz2
+         && tar -xf pypy-1.9-linux64.tar.bz2
+         && mv pypy-1.9 /opt/pypy-1.9
+         && ln -s /opt/pypy-1.9/bin/pypy /usr/local/bin/pypy
