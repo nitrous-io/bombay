@@ -110,7 +110,7 @@
     # Install ruby via rvm
     - include: ../../../global/tasks/container/install_ruby_via_rvm.yml user=$dev_username version=$ruby_version
 
-    # Install ruby via rvm
+    # Install bundler and foreman
     - include: ../../../global/tasks/container/install_gem.yml user=$dev_username gem=bundler
     - include: ../../../global/tasks/container/install_gem.yml user=$dev_username gem=foreman
 
