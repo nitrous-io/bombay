@@ -1,0 +1,23 @@
+# mem limit is 60%
+{% set memlimit = ansible_memtotal_mb * 60 / 100 %}
+
+# load_alert_5min is double the processor count 
+# stable_load_avg == processor_count
+# I.E, 1 processor and 1.00 1min loadavg equals 100% CPU utilization 
+# Anything higher is a cause for alarm. 180-200% CPU should critical (noticeable slowness).
+
+{% load_alert_5min = ansible_processor_count * 2 %}
+
+check process haproxy with pidfile "/var/run/haproxy.pid"
+  start program = "/etc/init.d/haproxy start"
+  stop program = "/etc/init.d/haproxy stop"
+  # CPU and MEMORY here means the process' usage of resources, not global resource use
+  # loadavg on the other hand, is overall system load
+  if cpu > 60% for 2 cycles then alert
+  if cpu > 70% for 5 cycles then restart
+  if totalmem > {{ memlimit }} MB for 5 cycles then restart
+  if loadavg(5min) greater than {{ load_alert_5min }} for 8 cycles then restart
+  if failed host localhost port 80 protocol http 
+     and request {{ haproxy_healthcheck_url }}
+     then restart
+  if 3 restarts within 5 cycles then timeout
