@@ -23,3 +23,4 @@
          && tar -xf pypy-1.9-linux64.tar.bz2
          && mv pypy-1.9 /opt/pypy-1.9
          && ln -s /opt/pypy-1.9/bin/pypy /usr/local/bin/pypy
+         && rm pypy-1.9.-linux64.tar.bz2
