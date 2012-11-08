@@ -7,3 +7,6 @@
          && wget http://googleappengine.googlecode.com/files/google_appengine_1.7.3.zip
          && unzip $HOME/google_appengine_1.7.3.zip
          && rm $HOME/google_appengine_1.7.3.zip
+
+- name: add .profile with appengine in $PATH
+  template: src=../templates/profile.j2 dest=/home/$user/.profile appengine_path=google_appengine

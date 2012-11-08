@@ -41,12 +41,14 @@
     user: action
 
   tasks:
-    # add python repository
-    - include: ../../../global/tasks/add_repository.yml repo=ppa:fkrull/deadsnakes
     # apt-get update
     - include: ../../../global/tasks/update_apt.yml
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
     - include: ../../../global/tasks/install_ansible_deps.yml
+    # add python repository
+    - include: ../../../global/tasks/add_repository.yml repo=ppa:fkrull/deadsnakes
+    # update apt-cache after adding new repo
+    - include: ../../../global/tasks/update_apt.yml
     # Configure SSH
     - include: ../../../global/tasks/container/configure_sshd_config.yml
     # Remove ubuntu user from the container
