@@ -1,0 +1,9 @@
+# Node.js processes
+- name: check if this has ${node_app} installed 
+  action: shell /bin/bash -c 'ls /var/apps | grep -c ${node_app}'
+  register: has_node_app_installed
+
+- name: install ${node_app}} node.js monitoring config
+  action: template src=../templates/node-app-monit.j2 dest=/etc/monit/conf.d/${node_app}-nodejs-monit state=file owner=root group=root mode=0644
+  notify: restart monit
+  only_if: "${has_node_app_installed.stdout} == 0"

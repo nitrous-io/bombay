@@ -15,7 +15,8 @@
       action: command /bin/bash -c 'hostname'
       register: hostname
   
-    - name: install system monitoring config
+    # covers CPU and system mammary.
+    - name: install global system monitoring config
       action: template src=../monit/templates/system-monit.j2 dest=/etc/monit/conf.d/system-monit state=file owner=root group=root mode=0644
       notify: restart monit
     
@@ -23,16 +24,18 @@
       action: copy src=../monit/files/root-disk-space-monit dest=/etc/monit/conf.d/disk-space-monit state=file owner=root group=root mode=0644
       notify: restart monit
 
+    # nginx
     - name: check if nginx is installed
       action: shell /bin/bash -c 'dpkg -l | grep -c nginx'
       register: has_nginx
       ignore_errors: True
-
+    
     - name: install nginx monitoring config
       action: template src=../monit/templates/nginx-monit.j2 dest=/etc/monit/conf.d/nginx-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "${has_nginx.stdout} == 0"
     
+    # haproxy
     - name: check if haproxy is installed
       action: shell /bin/bash -c 'dpkg -l | grep -c haproxy'
       register: has_haproxy
@@ -42,26 +45,34 @@
       action: template src=../monit/templates/haproxy-monit.j2 dest=/etc/monit/conf.d/haproxy-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "${has_haproxy.stdout} == 0"
-    
-   - name: check if /var/lib/lxc is present
+   
+    # custom disks 
+    - name: check if /var/lib/lxc is present
       action: shell /bin/bash -c 'mount | grep -c /var/lib/lxc'
       register: has_lxc_dir
       ignore_errors: True
     
-   - name: install /var/lib/lxc disk monitoring config
+    - name: install /var/lib/lxc disk monitoring config
       action: template src=../monit/templates/var-lib-lxc-disk-monit.j2 dest=/etc/monit/conf.d/lxc-dir-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "${has_lxc_dir.stdout} == 0"
    
-   - name: check if /var/action is present
+    - name: check if /var/action is present
       action: shell /bin/bash -c 'mount | grep -c /var/action'
       register: has_action_dir
       ignore_errors: True
     
-   - name: install /var/action disk monitoring config
+    - name: install /var/action disk monitoring config
       action: template src=../monit/templates/var-action-disk-monit.j2 dest=/etc/monit/conf.d/action-dir-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "${has_action_dir.stdout} == 0"
+    
+    # node.js apps
+    include: ../tasks/node-monit.yml node_app=rainbow
+    include: ../tasks/node-monit.yml node_app=rainbow
+    include: ../tasks/node-monit.yml node_app=rainbow
+    
+
 
   handlers:
     - include: ../monit/handlers/handler.yml
