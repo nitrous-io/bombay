@@ -19,8 +19,8 @@
       action: template src=../monit/templates/system-monit.j2 dest=/etc/monit/conf.d/system-monit state=file owner=root group=root mode=0644
       notify: restart monit
     
-    - name: install disk monitoring config
-      action: copy src=../monit/files/disk-space-monit dest=/etc/monit/conf.d/disk-space-monit state=file owner=root group=root mode=0644
+    - name: install root disk monitoring config
+      action: copy src=../monit/files/root-disk-space-monit dest=/etc/monit/conf.d/disk-space-monit state=file owner=root group=root mode=0644
       notify: restart monit
 
     - name: check if nginx is installed
@@ -38,10 +38,30 @@
       register: has_haproxy
       ignore_errors: True
 
-    - name: install haproxy  monitoring config
+    - name: install haproxy monitoring config
       action: template src=../monit/templates/haproxy-monit.j2 dest=/etc/monit/conf.d/haproxy-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "${has_haproxy.stdout} == 0"
+    
+   - name: check if /var/lib/lxc is present
+      action: shell /bin/bash -c 'mount | grep -c /var/lib/lxc'
+      register: has_lxc_dir
+      ignore_errors: True
+    
+   - name: install /var/lib/lxc disk monitoring config
+      action: template src=../monit/templates/var-lib-lxc-disk-monit.j2 dest=/etc/monit/conf.d/lxc-dir-monit state=file owner=root group=root mode=0644
+      notify: restart monit
+      only_if: "${has_lxc_dir.stdout} == 0"
+   
+   - name: check if /var/action is present
+      action: shell /bin/bash -c 'mount | grep -c /var/action'
+      register: has_action_dir
+      ignore_errors: True
+    
+   - name: install /var/action disk monitoring config
+      action: template src=../monit/templates/var-action-disk-monit.j2 dest=/etc/monit/conf.d/action-dir-monit state=file owner=root group=root mode=0644
+      notify: restart monit
+      only_if: "${has_action_dir.stdout} == 0"
 
   handlers:
     - include: ../monit/handlers/handler.yml
