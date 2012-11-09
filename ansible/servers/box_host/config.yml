@@ -80,7 +80,7 @@ regions:
             host_vars:
               boxer:
                 - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template' }"
+                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template' }"
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
