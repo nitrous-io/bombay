@@ -1,0 +1,29 @@
+# This assumes that pip has been installed before
+#
+# this will setup
+# - necessary python dev dependencies to compile most C extensions
+# - virtualenv
+# - virtualenvwrapper
+# which is enough to actually start coding in python
+---
+- name: install python dev dependencies
+  apt: pkg=$item
+  with_items:
+    - python-dev
+    - python2.5-dev
+    - python2.6-dev
+    - python2.7-dev
+    - python3.2-dev
+    - libxml2
+
+- name: install setuptools
+  apt: pkg=python-setuptools
+
+- name: install pip
+  easy_install: name=pip
+
+- name: install virtualenv
+  pip: name=$item
+  with_items:
+    - virtualenv
+    - virtualenvwrapper
