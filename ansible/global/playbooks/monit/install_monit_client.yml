@@ -46,7 +46,7 @@
       notify: restart monit
       only_if: "${has_haproxy.stdout} == 0"
    
-    # custom disks 
+    # custom disks - /var/lib/lxc 
     - name: check if /var/lib/lxc is present
       action: shell /bin/bash -c 'mount | grep -c /var/lib/lxc'
       register: has_lxc_dir
@@ -57,6 +57,7 @@
       notify: restart monit
       only_if: "${has_lxc_dir.stdout} == 0"
    
+    # custom disks - /var/action 
     - name: check if /var/action is present
       action: shell /bin/bash -c 'mount | grep -c /var/action'
       register: has_action_dir
@@ -69,10 +70,31 @@
     
     # node.js apps
     include: ../tasks/node-monit.yml node_app=rainbow
-    include: ../tasks/node-monit.yml node_app=rainbow
-    include: ../tasks/node-monit.yml node_app=rainbow
+    include: ../tasks/node-monit.yml node_app=coach
+    include: ../tasks/node-monit.yml node_app=proxee
+    include: ../tasks/node-monit.yml node_app=boxer
+
+    # stunnel check
+    - name: check if stunnel is installed
+      action: shell /bin/bash -c 'dpkg -l | grep -c stunnel'
+      register: has_stunnel
+      ignore_errors: True
+
+    - name: install stunnel monitoring config
+      action: copy src=../monit/files/stunnel-monit dest=/etc/monit/conf.d/stunnel-monit state=file owner=root group=root mode=0644
+      notify: restart monit
+      only_if: "${has_stunnel.stdout} == 0"
+
+    # sshd check
+    - name: check if openssh-server is installed
+      action: shell /bin/bash -c 'dpkg -l | grep -c openssh-server'
+      register: has_sshd
+      ignore_errors: True
+
+    - name: install sshd monitoring config
+      action: copy src=../monit/files/sshd-monit dest=/etc/monit/conf.d/sshd-monit state=file owner=root group=root mode=0644
+      notify: restart monit
+      only_if: "${has_sshd.stdout} == 0"
     
-
-
   handlers:
     - include: ../monit/handlers/handler.yml
