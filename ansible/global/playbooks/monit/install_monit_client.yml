@@ -96,5 +96,16 @@
       notify: restart monit
       only_if: "${has_sshd.stdout} == 0"
     
+    # redis check
+    - name: check if redis-server is installed
+      action: shell /bin/bash -c 'dpkg -l | grep -c redis-server'
+      register: has_redis
+      ignore_errors: True
+
+    - name: install redis monitoring config
+      action: copy src=../monit/templates/redis-monit.j2 dest=/etc/monit/conf.d/redis-monit state=file owner=root group=root mode=0644
+      notify: restart monit
+      only_if: "${has_redis.stdout} == 0"
+    
   handlers:
     - include: ../monit/handlers/handler.yml
