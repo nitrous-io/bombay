@@ -207,7 +207,7 @@ command :update do |c|
   c.action do |args, options|
     unless is_bombay_uptodate?
       git_repo = "#{Bombay::ROOT}/.git"
-      `git --git-dir=#{git_repo} pull --rebase origin master`
+      `git --git-dir=#{git_repo} fetch && git --git-dir=#{git_repo} pull --rebase origin master`
       puts "** Bombay successfully updated"
     else
       puts "** Bombay is uptodate"
