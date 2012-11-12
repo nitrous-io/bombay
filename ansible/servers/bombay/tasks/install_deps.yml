@@ -1,0 +1,18 @@
+---
+- name: Install packages
+  action: apt pkg=$item state=present
+  with_items:
+    - nginx
+    - stunnel4
+    - haproxy
+    - build-essential
+    - git-core
+    - xfsprogs
+    - libpq-dev
+    - lxc
+    - bridge-utils
+    - s3cmd
+    - postgresql
+    - libxml2-dev
+    - libxslt1-dev
+    - libqt4-dev
