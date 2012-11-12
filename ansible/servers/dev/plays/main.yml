@@ -39,6 +39,9 @@
     - name: add gitconfig
       action: template src=../templates/gitconfig.j2 dest=/home/${dev_username}/.gitconfig owner=${dev_username} group=${dev_username} mode=0644
 
+    - name: add s3cfg
+      action: template src=../templates/s3cfg.j2 dest=/home/${dev_username}/.s3cfg owner=${dev_username} group=${dev_username} mode=0644
+
     # Generate and Upload Public Key to GitHub
     - include: ../../../global/tasks/register_github_keys.yml deploy_user=$dev_username
 
