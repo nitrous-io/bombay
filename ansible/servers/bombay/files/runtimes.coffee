@@ -1,0 +1,9 @@
+env = process.env.NODE_ENV
+
+runtimes =
+  runtimes:
+    rails: 'ruby_container_template'
+    nodejs: 'nodejs_container_template'
+    django: 'python_container_template'
+
+module.exports = runtimes

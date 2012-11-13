@@ -1,0 +1,30 @@
+---
+vars_files:
+  github_private_key:
+    context: global
+    vars:
+      - name: github_key
+        prompt: Replace this line with the private key used by the box to pull from GitHub repos
+        multiline: true
+  s3cfg:
+    context: global
+    vars:
+      - name: aws_access_key_id
+        prompt: AWS Access Key ID (needed to pull from stuff from S3)
+      - name: aws_secret_access_key
+        prompt: AWS Secret Access Key (needed to pull stuff from S3)
+
+regions:
+  - region: ap-southeast-1
+    environments:
+      development:
+        hosts:
+          - hostname: bombay.action.io
+            size: m1.small
+            ami: ami-e6d999b4
+            block_devices:
+              - DeviceName: /dev/sdf
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 20
+                Ebs.DeleteOnTermination: 'false'
+

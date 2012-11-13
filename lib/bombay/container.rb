@@ -29,7 +29,7 @@ module Bombay
         "rootfs/home/action/.ssh",
         "rootfs/home/action/.ansible",
         "rootfs/home/action/.cache",
-        "roots/home/action/.bash_history",
+        "rootfs/home/action/.bash_history",
         "rootfs/var/log/*",
         "rootfs/var/cache/apt/archives/*"
       ]
