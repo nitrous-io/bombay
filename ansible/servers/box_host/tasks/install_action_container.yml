@@ -20,3 +20,7 @@
   action: shell rsync -az --delete /tmp/${name} /var/lib/lxc
   only_if: "'${container_version.stdout}' != '${version}'"
 
+# Cleanup to preserve disk space
+- name: remove tmp remnants
+  action: shell rm -rf /tmp/${name}*
+  only_if: "'${container_version.stdout}' != '${version}'"
