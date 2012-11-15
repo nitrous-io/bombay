@@ -1,21 +1,21 @@
 # mem limit is 60%
 {% set memlimit = ansible_memtotal_mb * 60 / 100 %}
 
-# load_alert_5min is double the processor count 
+# load_alert_5min is double the processor count
 # stable_load_avg == processor_count
-# I.E, 1 processor and 1.00 1min loadavg equals 100% CPU utilization 
+# I.E, 1 processor and 1.00 1min loadavg equals 100% CPU utilization
 # Anything higher is a cause for alarm. 180-200% CPU should critical (noticeable slowness).
 
-{% load_alert_5min = ansible_processor_count * 2 %}
+{% set load_alert_5min = ansible_processor_count * 2 %}
 
-check process nginx with pidfile /var/run/nginx/nginx.pid
+check process nginx with pidfile /var/run/nginx.pid
   start program = "/etc/init.d/nginx start" with timeout 60 seconds
   stop program  = "/etc/init.d/nginx stop"
   if cpu > 60% for 2 cycles then alert
   if cpu > 80% for 5 cycles then restart
   if totalmem > {{ memlimit }} MB for 5 cycles then restart
   if loadavg(5min) greater than {{ load_alert_5min }} for 8 cycles then restart
-  if failed host localhost port 80 protocol http 
-     and request {{ healtcheck_url }}
-     then restart
-  if 3 restarts within 5 cycles then timeout
+  #if failed host localhost port 80 protocol http
+     #and request {{ healthcheck_url }}
+     #then restart
+  #if 3 restarts within 5 cycles then timeout
