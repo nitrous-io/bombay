@@ -70,7 +70,7 @@
     # Configure S3 Cmd
     - include: ../../../global/tasks/configure_s3cmd.yml
     # Install ruby container
-    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1352445830 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1352968735 s3_bucket=$s3_bucket
     # Install nodejs container
     - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1351826220 s3_bucket=$s3_bucket
     # Install python container
