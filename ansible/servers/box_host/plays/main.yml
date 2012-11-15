@@ -77,8 +77,6 @@
     - include: ../tasks/install_action_container.yml name=python_container_template version=1352374499 s3_bucket=$s3_bucket
     # Install golang container
     - include: ../tasks/install_action_container.yml name=golang_container_template version=1352711864 s3_bucket=$s3_bucket
-    # Install rails_with_sudo container (only in sudo)
-    - include: ../tasks/install_admin_action_container.yml name=ruby_container_template_sudo version=1351826322 s3_bucket=$s3_bucket
     # Install NVM
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
     # Install Upstart for boxer
