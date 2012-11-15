@@ -119,3 +119,5 @@
     - name: restart server
       action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
 
+- include: ../../../global/playbooks/monit/install_monit_client.yml
+
