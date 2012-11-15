@@ -76,5 +76,5 @@
    - libpng12-dev
    - libqt4-dev
    - unzip
-
+   - unison
 
