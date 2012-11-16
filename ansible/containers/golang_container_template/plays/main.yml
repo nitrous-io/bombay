@@ -69,6 +69,8 @@
     # Install python2.5 because golang appengine requires it
     - name: install python2.5
       apt: pkg=python2.5
+    # Install heroku toolbelt
+    - include: ../../../global/tasks/install_heroku_toolbelt.yml
 
 # Install stuff which needs to be done not as root
 - hosts: golang_container_template

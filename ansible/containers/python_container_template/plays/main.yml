@@ -67,6 +67,8 @@
     - include: ../tasks/install_core_deps.yml
     # Install python packages
     - include: ../tasks/install_packages_python27.yml
+    # Install heroku toolbelt
+    - include: ../../../global/tasks/install_heroku_toolbelt.yml
 
 # Install stuff which needs to be done not as root
 - hosts: python_container_template

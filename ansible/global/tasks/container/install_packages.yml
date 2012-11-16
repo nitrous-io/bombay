@@ -10,7 +10,9 @@
    - libcurl4-openssl-dev
    - libsqlite3-dev
    - libpq-dev
+   - postgresql-client-9.1
    - libmysqlclient-dev
+   - mysql-client
    - imagemagick
    - libmagickwand-dev
    - libmagickcore-dev

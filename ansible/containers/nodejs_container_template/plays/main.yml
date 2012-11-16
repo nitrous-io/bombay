@@ -57,6 +57,8 @@
     - include: ../../../global/tasks/container/install_locales.yml user=$user
     # Sane Security Limits for the user
     - include: ../../../global/tasks/container/install_security_limits.yml user=$user
+    # Install heroku toolbelt
+    - include: ../../../global/tasks/install_heroku_toolbelt.yml
 
 # Install stuff which needs to be done not as root
 - hosts: nodejs_container_template
