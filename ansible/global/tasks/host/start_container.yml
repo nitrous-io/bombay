@@ -6,3 +6,6 @@
 - name: Start the Container
   action: shell lxc-start -n $container_template -d
   only_if: "'${container_status.stdout}'.find('RUNNING') == -1"
+
+- name: Wait for SSH to come up
+  action: shell /bin/bash -c "while ! nc -z ${ip} 22 ; do echo ''; done"
