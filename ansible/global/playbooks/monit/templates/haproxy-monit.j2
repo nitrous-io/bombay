@@ -20,4 +20,3 @@ check process haproxy with pidfile "/var/run/haproxy.pid"
   #if failed host localhost port 80 protocol http
      #and request {{ haproxy_healthcheck_url }}
      #then restart
-  if 3 restarts within 5 cycles then timeout

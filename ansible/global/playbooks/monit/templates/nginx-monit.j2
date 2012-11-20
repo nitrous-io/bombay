@@ -18,4 +18,3 @@ check process nginx with pidfile /var/run/nginx.pid
   #if failed host localhost port 80 protocol http
      #and request {{ healthcheck_url }}
      #then restart
-  #if 3 restarts within 5 cycles then timeout
