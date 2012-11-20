@@ -12,7 +12,7 @@ respawn
 respawn limit 99 5
 
 script
-  echo $$ >> /var/run/{{ app }}.pid
+  echo $$ > /var/run/{{ app }}.pid
   exec sudo su {{ deploy_user }} bash -c 'source /home/{{ deploy_user }}/.nvm/nvm.sh && cd /var/apps/{{ app }}/current && export $(cat .env) && node boot.js'
 end script
 
