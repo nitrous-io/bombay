@@ -41,22 +41,6 @@ def pick_regions_from(servers_by_region)
   picked_regions
 end
 
-def is_bombay_uptodate?
-  git_repo = "#{Bombay::ROOT}/.git"
-
-  local_sha = `git --git-dir=#{git_repo} rev-parse HEAD`.strip
-  remote_sha = `git --git-dir=#{git_repo} rev-parse origin/master`.strip
-
-  local_sha == remote_sha
-end
-
-def bail_if_bombay_is_not_uptodate!
-  unless is_bombay_uptodate?
-    puts "Bombay is not up-to-date. Run `bombay update` before proceeding"
-    exit(1)
-  end
-end
-
 def pick_environment_from(servers_by_region, region)
   environments = servers_by_region[region]
   picked_environment = nil
@@ -79,8 +63,6 @@ command :setup do |c|
   c.example 'Usage', c.syntax
 
   c.action do
-    bail_if_bombay_is_not_uptodate!
-
     puts "Installing ansible dependencies"
     system("sudo apt-get -yy install python-paramiko python-yaml python-jinja2 python-simplejson")
     puts "Downloading ansible #{ANSIBLE_VERSION} from Github..."
@@ -100,8 +82,6 @@ command :build do |c|
   c.example 'Usage', c.syntax
 
   c.action do |args, options|
-    bail_if_bombay_is_not_uptodate!
-
     if args.length != 2
       puts "Usage: #{c.syntax}"
     else
@@ -179,8 +159,6 @@ command :deploy do |c|
   c.example 'Usage', c.syntax
 
   c.action do |args, options|
-    bail_if_bombay_is_not_uptodate!
-
     if args.length != 2
       puts "Usage: #{c.syntax}"
     else
