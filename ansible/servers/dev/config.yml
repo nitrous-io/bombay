@@ -25,6 +25,23 @@ regions:
             - name: pg_password
               value: password
         hosts:
+          - hostname: choonkeats-box.actionbox.io
+            size: m1.small
+            ami: ami-e6d999b4
+            host_vars:
+              dev:
+                - name: username
+                  value: choonkeat
+                - name: github_username
+                  value: choonkeat
+                - name: github_email
+                  value: choonkeat@gmail.com
+            block_devices:
+              - DeviceName: /dev/sdf
+                Ebs.SnapshotId: snap-1d909139
+                Ebs.VolumeSize: 20
+                Ebs.DeleteOnTermination: 'false'
+
           - hostname: aruns-box.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
