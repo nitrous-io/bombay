@@ -36,6 +36,9 @@
     - name: create $dev_username
       action: user name=$dev_username shell=/bin/bash home=/home/${dev_username} groups=admin
 
+    - name: create /var/action
+      action: shell mkdir -p /var/action
+
     - name: add s3cfg
       action: template src=../templates/s3cfg.j2 dest=/home/${dev_username}/.s3cfg owner=${dev_username} group=${dev_username} mode=0644
 
