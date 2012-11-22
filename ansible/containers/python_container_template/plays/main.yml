@@ -77,8 +77,8 @@
   # Install python packages
   - include: ../tasks/install_packages_python27.yml
   - include: ../../../global/tasks/container/install_app_engine.yml appengine_container=google_appengine_1.7.3.zip
-  - name: add .profile with appengine in $PATH
-    template: src=../templates/container/profile.j2 dest=/home/$user/.profile
+  - name: add .profile
+    template: src=../templates/profile.j2 dest=/home/$user/.profile
 
 # Cleanup to be done after the creation of the container
 - hosts: localhost
