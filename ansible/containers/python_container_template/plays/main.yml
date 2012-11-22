@@ -65,6 +65,8 @@
     - include: ../../../global/tasks/container/install_python.yml
     # Install python code dependencies for development
     - include: ../tasks/install_core_deps.yml
+    # Install heroku toolbelt
+    - include: ../../../global/tasks/install_heroku_toolbelt.yml
 
 # Install stuff which needs to be done not as root
 - hosts: python_container_template

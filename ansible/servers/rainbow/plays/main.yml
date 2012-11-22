@@ -65,3 +65,5 @@
     - name: restart stunnel
       action: shell /etc/init.d/stunnel4 restart
 
+- include: ../../../global/playbooks/monit/install_monit_client.yml
+

@@ -1,0 +1,2 @@
+check filesystem lxc_rootfs with path /var/lib/lxc
+  if space usage > 85% then alert

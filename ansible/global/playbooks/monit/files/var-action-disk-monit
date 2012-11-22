@@ -1,0 +1,2 @@
+check filesystem action_rootfs with path /var/action
+  if space usage > 85% then alert
