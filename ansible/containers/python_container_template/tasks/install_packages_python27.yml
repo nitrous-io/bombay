@@ -19,3 +19,7 @@
     - webapp2==2.5.1
     - webob==1.1.1
     - PyYAML==3.10
+
+- name: Remove .pip from userspace
+  command: rm -rf /home/action/.pip
+  ignore_errors: True # when .pip does not exist
