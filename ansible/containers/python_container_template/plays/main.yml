@@ -65,8 +65,6 @@
     - include: ../../../global/tasks/container/install_python.yml
     # Install python code dependencies for development
     - include: ../tasks/install_core_deps.yml
-    # Install python packages
-    - include: ../tasks/install_packages_python27.yml
     # Install heroku toolbelt
     - include: ../../../global/tasks/install_heroku_toolbelt.yml
 
@@ -78,9 +76,11 @@
     user: action
 
   tasks:
+  # Install python packages
+  - include: ../tasks/install_packages_python27.yml
   - include: ../../../global/tasks/container/install_app_engine.yml appengine_container=google_appengine_1.7.3.zip
-  - name: add .profile with appengine in $PATH
-    template: src=../../../global/templates/container/profile_appengine.j2 dest=/home/$user/.profile
+  - name: add .profile
+    template: src=../templates/profile.j2 dest=/home/$user/.profile
 
 # Cleanup to be done after the creation of the container
 - hosts: localhost

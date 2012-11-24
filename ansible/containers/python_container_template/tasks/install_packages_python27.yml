@@ -3,7 +3,7 @@
 # system-python immediately without installing anything
 ---
 - name: install python system package
-  command:  /usr/bin/python /usr/local/bin/pip install ${item}
+  command:  /usr/bin/python /usr/local/bin/pip install --user ${item}
   with_items:
     - Django==1.3.3
     - Fabric==1.4.3
@@ -19,3 +19,9 @@
     - webapp2==2.5.1
     - webob==1.1.1
     - PyYAML==3.10
+
+# make sure to remove .pip remnants from userspace. Ideally this should be
+# clean when you create a new box
+- name: Remove .pip from userspace
+  command: rm -rf /home/action/.pip
+  ignore_errors: True # when .pip does not exist
