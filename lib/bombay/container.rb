@@ -21,7 +21,6 @@ module Bombay
 
     def deploy!
       lxc_container_path = "/var/lib/lxc/#{self.name}"
-      tmp_container_path = "/tmp/#{self.name}"
       version = Time.now.to_i
       packaged_container_name = "#{self.name}_#{version}.tar.gz"
 
@@ -34,26 +33,15 @@ module Bombay
         "rootfs/var/cache/apt/archives/*"
       ]
 
-      if !File.exists?(lxc_container_path)
-        raise ConfigFileMissingError
-      end
+      raise ConfigFileMissingError if !File.exists?(lxc_container_path)
 
-      if File.exists?(tmp_container_path)
-        system "sudo rm -rf #{tmp_container_path}"
-      end
+      delete_from_container.each { |p| system "sudo rm -rf #{lxc_container_path}/#{p}" }
 
-      # Copy the container over
-      system "sudo cp -pr #{lxc_container_path} /tmp/"
+      system "sudo bash -c 'echo #{version} > #{lxc_container_path}/VERSION'"
+      system "cd /var/lib/lxc && sudo tar cpvzf #{packaged_container_name} #{self.name}"
+      system "s3cmd put /var/lib/lxc/#{packaged_container_name} s3://bombay-apse.action.io/#{packaged_container_name}"
 
-      delete_from_container.each do |path|
-        system "sudo rm -rf #{tmp_container_path}/#{path}"
-      end
-
-      system "sudo bash -c 'echo #{version} > #{tmp_container_path}/VERSION'"
-      system "cd /tmp && sudo tar cpvzf #{packaged_container_name} #{self.name}"
-      system "s3cmd put /tmp/#{packaged_container_name} s3://bombay-apse.action.io/#{packaged_container_name}"
-
-      system "sudo rm -rf /tmp/#{self.name}*"
+      system "sudo rm -rf /var/lib/lxc/#{packaged_container_name}*"
       puts "File is available in s3://bombay-apse.action.io/#{packaged_container_name}"
     end
   end
