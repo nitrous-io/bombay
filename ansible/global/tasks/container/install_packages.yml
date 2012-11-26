@@ -1,4 +1,9 @@
 ---
+# Install golang ppa
+- include: ../../../global/tasks/add_repository.yml repo=ppa:ggreer/ag
+# update apt-cache after adding new repo
+- include: ../../../global/tasks/update_apt.yml
+
 - name: Absolute essential packages for the container
   action: apt pkg=$item state=present
   with_items:
@@ -79,4 +84,6 @@
    - libqt4-dev
    - unzip
    - unison
-
+   - ack-grep
+   - traceroute
+   - the-silver-searcher
