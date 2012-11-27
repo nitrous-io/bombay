@@ -1,8 +1,9 @@
 ---
-# Install golang ppa
-- include: ../../../global/tasks/add_repository.yml repo=ppa:ggreer/ag
-# update apt-cache after adding new repo
-- include: ../../../global/tasks/update_apt.yml
+- name: Install apt-repository for silver-searcher
+  action: apt_repository repo=ppa:ggreer/ag
+
+- name: Update repository
+  action: shell apt-get update
 
 - name: Absolute essential packages for the container
   action: apt pkg=$item state=present
