@@ -14,16 +14,16 @@
       action: apt pkg=monit state=present
 
     - name: install main monit config
-      action: template src=../../../global/playbooks/monit/templates/monitrc.j2 dest=/etc/monit/monitrc state=file owner=root group=root mode=0644
+      action: template src=../../../global/plays/monit/templates/monitrc.j2 dest=/etc/monit/monitrc state=file owner=root group=root mode=0644
       notify: restart monit
 
     # covers CPU and system mammary.
     - name: install global system monitoring config
-      action: template src=../../../global/playbooks/monit/templates/system-monit.j2 dest=/etc/monit/conf.d/system-monit state=file owner=root group=root mode=0644
+      action: template src=../../../global/plays/monit/templates/system-monit.j2 dest=/etc/monit/conf.d/system-monit state=file owner=root group=root mode=0644
       notify: restart monit
 
     - name: install root disk monitoring config
-      action: copy src=../../../global/playbooks/monit/files/root-disk-space-monit dest=/etc/monit/conf.d/disk-space-monit state=file owner=root group=root mode=0644
+      action: copy src=../../../global/plays/monit/files/root-disk-space-monit dest=/etc/monit/conf.d/disk-space-monit state=file owner=root group=root mode=0644
       notify: restart monit
 
     # nginx
@@ -33,7 +33,7 @@
       ignore_errors: True
 
     - name: install nginx monitoring config
-      action: template src=../../../global/playbooks/monit/templates/nginx-monit.j2 dest=/etc/monit/conf.d/nginx-monit state=file owner=root group=root mode=0644
+      action: template src=../../../global/plays/monit/templates/nginx-monit.j2 dest=/etc/monit/conf.d/nginx-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "len('${has_nginx.stdout}') != 0"
 
@@ -44,7 +44,7 @@
       ignore_errors: True
 
     - name: install haproxy monitoring config
-      action: template src=../../../global/playbooks/monit/templates/haproxy-monit.j2 dest=/etc/monit/conf.d/haproxy-monit state=file owner=root group=root mode=0644
+      action: template src=../../../global/plays/monit/templates/haproxy-monit.j2 dest=/etc/monit/conf.d/haproxy-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "len('${has_haproxy.stdout}') != 0"
 
@@ -55,7 +55,7 @@
       ignore_errors: True
 
     - name: install /var/lib/lxc disk monitoring config
-      action: template src=../../../global/playbooks/monit/files/var-lib-lxc-disk-monit dest=/etc/monit/conf.d/lxc-dir-monit state=file owner=root group=root mode=0644
+      action: template src=../../../global/plays/monit/files/var-lib-lxc-disk-monit dest=/etc/monit/conf.d/lxc-dir-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "len('${has_lxc_dir.stdout}') != 0"
 
@@ -66,15 +66,15 @@
       ignore_errors: True
 
     - name: install /var/action disk monitoring config
-      action: template src=../../../global/playbooks/monit/files/var-action-disk-monit dest=/etc/monit/conf.d/action-dir-monit state=file owner=root group=root mode=0644
+      action: template src=../../../global/plays/monit/files/var-action-disk-monit dest=/etc/monit/conf.d/action-dir-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "len('${has_action_dir.stdout}') != 0"
 
     # node.js apps
-    - include: ../../../global/playbooks/monit/tasks/node-monit.yml node_app=rainbow
-    - include: ../../../global/playbooks/monit/tasks/node-monit.yml node_app=coach
-    - include: ../../../global/playbooks/monit/tasks/node-monit.yml node_app=proxee
-    - include: ../../../global/playbooks/monit/tasks/node-monit.yml node_app=boxer
+    - include: ../../../global/plays/monit/tasks/node-monit.yml node_app=rainbow
+    - include: ../../../global/plays/monit/tasks/node-monit.yml node_app=coach
+    - include: ../../../global/plays/monit/tasks/node-monit.yml node_app=proxee
+    - include: ../../../global/plays/monit/tasks/node-monit.yml node_app=boxer
 
     # stunnel check
     - name: check if stunnel is installed
@@ -83,7 +83,7 @@
       ignore_errors: True
 
     - name: install stunnel monitoring config
-      action: copy src=../../../global/playbooks/monit/files/stunnel-monit dest=/etc/monit/conf.d/stunnel-monit state=file owner=root group=root mode=0644
+      action: copy src=../../../global/plays/monit/files/stunnel-monit dest=/etc/monit/conf.d/stunnel-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "len('${has_stunnel.stdout}') != 0"
 
@@ -94,7 +94,7 @@
       ignore_errors: True
 
     - name: install sshd monitoring config
-      action: copy src=../../../global/playbooks/monit/files/sshd-monit dest=/etc/monit/conf.d/sshd-monit state=file owner=root group=root mode=0644
+      action: copy src=../../../global/plays/monit/files/sshd-monit dest=/etc/monit/conf.d/sshd-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "len('${has_sshd.stdout}') != 0"
 
@@ -105,9 +105,9 @@
       ignore_errors: True
 
     - name: install redis monitoring config
-      action: template src=../../../global/playbooks/monit/templates/redis-monit.j2 dest=/etc/monit/conf.d/redis-monit state=file owner=root group=root mode=0644
+      action: template src=../../../global/plays/monit/templates/redis-monit.j2 dest=/etc/monit/conf.d/redis-monit state=file owner=root group=root mode=0644
       notify: restart monit
       only_if: "len('${has_redis.stdout}') != 0"
 
   handlers:
-    - include: ../../../global/playbooks/monit/handlers/handler.yml
+    - include: ../../../global/plays/monit/handlers/handler.yml
