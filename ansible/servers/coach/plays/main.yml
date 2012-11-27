@@ -71,4 +71,4 @@
     - name: restart redis
       action: shell /etc/init.d/redis-server restart
 
-- include: ../../../global/playbooks/monit/install_monit_client.yml
+- include: ../../../global/plays/monit/install_monit_client.yml
