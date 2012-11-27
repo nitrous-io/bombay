@@ -70,13 +70,13 @@
     # Configure S3 Cmd
     - include: ../../../global/tasks/configure_s3cmd.yml
     # Install ruby container
-    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1353971028 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1353987451 s3_bucket=$s3_bucket
     # Install nodejs container
-    - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1353971419 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1353995398 s3_bucket=$s3_bucket
     # Install python container
-    - include: ../tasks/install_action_container.yml name=python_container_template version=1353976063 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_container.yml name=python_container_template version=1353988799 s3_bucket=$s3_bucket
     # Install golang container
-    - include: ../tasks/install_action_container.yml name=golang_container_template version=1353971468 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_container.yml name=golang_container_template version=1353996298 s3_bucket=$s3_bucket
     # Install NVM
     - include: ../../../global/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
     # Install Upstart for boxer
