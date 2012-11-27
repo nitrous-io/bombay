@@ -2,19 +2,20 @@ require 'fileutils'
 
 module Bombay
   class Container
-    attr_accessor :name
+    attr_accessor :name, :playbook_name
 
-    def initialize(name)
+    def initialize(name, playbook_name)
       self.name = name
+      self.playbook_name = name
     end
 
     def build!
-      if !File.exists?(File.join(Bombay::ROOT, "ansible", "containers", name, "plays", "main.yml"))
+      if !File.exists?(File.join(Bombay::ROOT, "ansible", "containers", name, "plays", "#{self.playbook_name}.yml"))
         raise Bombay::ConfigFileMissingError
       end
 
       ENV['ANSIBLE_CONFIG'] = "#{Bombay::ROOT}/ansible/config/ansible.container.cfg"
-      system "ansible-playbook #{Bombay::ROOT}/ansible/containers/#{self.name}/plays/main.yml " +
+      system "ansible-playbook #{Bombay::ROOT}/ansible/containers/#{self.name}/plays/#{self.playbook_name}.yml " +
              "-i #{Bombay::ROOT}/ansible/config/hosts.containers " +
              "--private-key=#{Dir.home}/.ansible/bombay"
     end

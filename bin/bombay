@@ -76,20 +76,21 @@ command :setup do |c|
 end
 
 command :build do |c|
-  c.syntax = "bombay build server|container name"
+  c.syntax = "bombay build server|container name <playbook>"
   c.summary = "Build containers and/or servers"
   c.description = c.summary
   c.example 'Usage', c.syntax
 
   c.action do |args, options|
-    if args.length != 2
+    if args.length < 2
       puts "Usage: #{c.syntax}"
     else
-      type, name = args
+      type, name, playbook_name = args
+      playbook_name ||= "main"
 
       if type == 'server'
-        if !File.exists?(File.join(Bombay::ROOT, "ansible", "servers", name, "plays", "main.yml"))
-          puts "** Error: Could not find a play for server #{name} in ansible/servers"
+	if !File.exists?(File.join(Bombay::ROOT, "ansible", "servers", name, "plays", "#{playbook_name}.yml"))
+	  puts "** Error: Could not find a play named: #{playbook_name}.yml for server #{name} in ansible/servers"
           exit(1)
         end
 
@@ -127,21 +128,21 @@ command :build do |c|
 
           # run ansible playbooks
           begin
-            Bombay::Server.build!(servers, region, environment)
+	    Bombay::Server.build!(servers, region, environment, playbook_name)
           rescue Bombay::PrivateKeyDoesNotExistError => e
             puts "** Error: Private Key file for #{region} does not exist at #{e.message}"
           end
         end
       elsif type == 'container'
         begin
-          Bombay::Container.new(name).build!
+	  Bombay::Container.new(name, playbook_name).build!
         rescue Bombay::ConfigFileMissingError
           puts "** Error: Couldn't find container #{args[1]}"
           exit(1)
         end
       elsif type == 'local'
         begin
-          Bombay::Local.new(name).build!
+	  Bombay::Local.new(name, playbook_name).build!
         rescue Bombay::ConfigFileMissingError
           puts "** Error: Couldn't find name: #{name}"
         end

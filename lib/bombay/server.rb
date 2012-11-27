@@ -38,7 +38,7 @@ module Bombay
       create_instance! unless exists?
     end
 
-    def self.build!(servers, region, environment)
+    def self.build!(servers, region, environment, playbook_name)
       keypair_file_path = File.join(Dir.home, '.ec2', "#{region}-keypair.pem")
       # Used by the ERB binding
       ssh_port = Bombay::Server::SSH_PORT
@@ -69,7 +69,7 @@ module Bombay
       setup_vars_files!(role, environment)
 
       command = "cd #{Bombay::ROOT}/ansible && " +
-        "ansible-playbook servers/#{role}/plays/main.yml " +
+	"ansible-playbook servers/#{role}/plays/#{playbook_name}.yml " +
         "-e \"env=#{environment} region=#{region}\" " +
         "-i #{ansible_hosts_file} " +
         "--private-key=#{keypair_file_path}"
