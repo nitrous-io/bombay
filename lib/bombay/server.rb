@@ -69,7 +69,7 @@ module Bombay
       setup_vars_files!(role, environment)
 
       command = "cd #{Bombay::ROOT}/ansible && " +
-	"ansible-playbook servers/#{role}/plays/#{playbook_name}.yml " +
+        "ansible-playbook servers/#{role}/plays/#{playbook_name}.yml " +
         "-e \"env=#{environment} region=#{region}\" " +
         "-i #{ansible_hosts_file} " +
         "--private-key=#{keypair_file_path}"
