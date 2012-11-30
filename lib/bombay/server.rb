@@ -3,12 +3,17 @@ require 'erb'
 
 module Bombay
   class Server
-    attr_accessor :hostname, :role, :region, :size, :ip, :ami, :block_devices, :host_vars
+    attr_accessor :hostname, :role, :region, :size,
+                  :ip, :ami, :block_devices, :host_vars, :compute
 
     SSH_PORT = 65100
 
     def initialize(opts = {})
       opts.each { |k,v| self.send("#{k}=", v) if self.respond_to?("#{k}=") }
+      self.compute = Fog::Compute.new(provider: 'AWS',
+                                      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+                                      aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+                                      region: self.region)
     end
 
     def exists?
@@ -36,6 +41,28 @@ module Bombay
 
       # Check if AWS instance with that domain exists
       create_instance! unless exists?
+    end
+
+    def restart!
+      instance = find_instance
+      if instance.nil?
+        puts "Could not find server #{self.hostname} in #{self.region}"
+      else
+        # Save this, so that we can reattach it once we are done, stopping and starting
+        ip = instance.public_ip_address
+        instance.stop
+        puts "Stopping, IP: #{ip}"
+        instance.wait_for { print "."; state == 'stopped' }
+        puts "Stopped\nStarting"
+        instance.start
+        instance.wait_for { print "."; ready? }
+
+        self.compute.associate_address(instance.id, ip)
+        print "\nWaiting for sshd"
+        print(".") until tcp_test_ssh(instance.dns_name, SSH_PORT) {
+          puts("Done")
+        }
+      end
     end
 
     def self.build!(servers, region, environment, playbook_name)
@@ -207,21 +234,12 @@ module Bombay
     end
 
     def create_elastic_ip!
-      compute = Fog::Compute.new(provider: 'AWS',
-                                 aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-                                 aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-                                 region: region)
-      result = compute.allocate_address
+      result = self.compute.allocate_address
       self.ip = result.body['publicIp']
     end
 
     def create_instance!
-      compute = Fog::Compute.new(provider: 'AWS',
-                                 aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-                                 aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-                                 region: self.region)
-
-      if compute.security_groups.get(self.role).nil?
+      if self.compute.security_groups.get(self.role).nil?
         raise Bombay::AwsSecurityGroupMissingError
       end
 
@@ -260,11 +278,7 @@ module Bombay
     end
 
     def find_instance
-      compute = Fog::Compute.new(provider: 'AWS',
-                                 aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-                                 aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-                                 region: self.region)
-      servers = compute.servers.all('tag:Name' => self.hostname)
+      servers = self.compute.servers.all('tag:Name' => self.hostname)
       servers.select { |s| s.state == 'running' }.first
     end
 

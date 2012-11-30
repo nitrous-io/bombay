@@ -177,19 +177,28 @@ command :deploy do |c|
   end
 end
 
-command :update do |c|
-  c.syntax = "bombay update"
-  c.summary = "Updates bombay from the action-io repository"
+command :restart do |c|
+  c.syntax = "bombay restart server region name [--size new-size]"
+  c.summary = "Stop & Start a server and in the meantime also change size"
+  c.option '--size size', String, 'Choose a new size for your instance'
   c.description = c.summary
   c.example 'Usage', c.syntax
 
   c.action do |args, options|
-    unless is_bombay_uptodate?
-      git_repo = "#{Bombay::ROOT}/.git"
-      `git --git-dir=#{git_repo} fetch && git --git-dir=#{git_repo} pull --rebase origin master`
-      puts "** Bombay successfully updated"
+    if args.length != 3
+      puts "Usage: #{c.syntax}"
     else
-      puts "** Bombay is uptodate"
+      if args[0] != 'server'
+        puts "Usage: #{c.syntax}"
+      else
+        set_aws_credentials!
+        begin
+          Bombay::Server.new(region: args[1], hostname: args[2], size: options.size).restart!
+        rescue Bombay::ConfigFileMissingError
+          puts "Couldn't find server #{args[1]}"
+          exit(1)
+        end
+      end
     end
   end
 end
