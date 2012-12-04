@@ -1,7 +1,6 @@
 {% set load_alert_5min = ansible_processor_count * 2 %}
 
 check system {{ hostname.stdout }}
-  if loadavg (1min) > {{ ansible_processor_count }} then alert
   if loadavg (5min) > {{ load_alert_5min }} then alert
   if memory usage > 85% then alert
 
