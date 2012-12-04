@@ -15,6 +15,7 @@
     deploy_user: action
     node_version: v0.8.11
     s3_bucket: bombay-apse.action.io
+    redis_port: 65000
 
   tasks:
     - name: mkdir /var/lib/lxc
@@ -30,7 +31,38 @@
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
     - include: ../../../global/tasks/install_ansible_deps.yml
     # Setup Bridge Network
-    - include: ../../../global/tasks/host/setup_bridge_network.yml
+    - name: Update /etc/network/interfaces
+      # Paths are relative to the containers/${container_template}/plays directory
+      action: template src=../../../global/templates/host/network_config.j2 dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
+
+    - include: ../../../global/tasks/host/ifup_bridge_network.yml bridge=$item
+      with_items:
+        - br-lxc
+        - br-lxc-253
+        - br-lxc-252
+        - br-lxc-251
+        - br-lxc-250
+        - br-lxc-249
+        - br-lxc-248
+        - br-lxc-247
+        - br-lxc-246
+        - br-lxc-245
+        - br-lxc-244
+
+    - include: ../../../global/tasks/host/setup_iptables_for_bridge_interface.yml
+      with_items:
+        - 254
+        - 253
+        - 252
+        - 251
+        - 250
+        - 249
+        - 248
+        - 247
+        - 246
+        - 245
+        - 244
+
     # apt-get update
     - include: ../../../global/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
@@ -66,7 +98,7 @@
     # Set limits for the user
     - include: ../../../global/tasks/set_limits.yml user=$deploy_user attribute=nofile value=65536
     # Install Redis Server
-    - include: ../../../global/tasks/install_redis.yml port=$boxer_redis_store_port
+    - include: ../../../global/tasks/install_redis_with_resources.yml redis_port=$redis_port
     # Configure S3 Cmd
     - include: ../../../global/tasks/configure_s3cmd.yml
     # Install ruby container
@@ -83,8 +115,6 @@
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_1 deploy_user=$deploy_user node_version=$node_version
     # Install Upstart for proxee
     - include: ../../../global/tasks/install_upstart_for_app.yml app=$app_2 deploy_user=$deploy_user node_version=$node_version
-    # Initialize Redis
-    - include: ../tasks/setup_redis_init_script.yml
     # Install cap script which does the whole capistrano deploy for boxer
     - include: ../../../global/tasks/install_cap.yml
     # Install a script which does upstart restarts
@@ -111,7 +141,7 @@
       action: shell /etc/init.d/redis-server restart
       notify: initialize redis
     - name: initialize redis
-      action: shell /tmp/initialize_redis.sh $boxer_redis_port
+      action: shell /tmp/initialize_redis.sh $redis_port
       notify: restart server
       # restart server after the very first provisioning, so that iptables etc. will be setup correctly
     - name: restart server

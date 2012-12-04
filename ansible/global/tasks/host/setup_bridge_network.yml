@@ -1,15 +1,25 @@
 ---
 - name: Update /etc/network/interfaces
   # Paths are relative to the containers/${container_template}/plays directory
-  action: template src=../../../global/templates/host/network_config dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
+  action: template src=../../../global/templates/host/network_config.j2 dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
 
 - name: Check if br-lxc is up
   action: shell /sbin/ifconfig br-lxc | head -1
   register: ifconfig_br_lxc
 
-- name: Bring up the br-lxc network interface
-  action: command /sbin/ifup br-lxc
-  only_if: "len('${ifconfig_br_lxc.stdout}') == 0"
+- include: ../../../global/tasks/host/ifup_bridge_network.yml bridge=$item
+  with_items:
+    - br-lxc
+    - br-lxc-253
+    - br-lxc-252
+    - br-lxc-251
+    - br-lxc-250
+    - br-lxc-249
+    - br-lxc-248
+    - br-lxc-247
+    - br-lxc-246
+    - br-lxc-245
+    - br-lxc-244
 
 - name: Get the iptables rule for the bridge network
   action: shell (/sbin/iptables -t nat --list | /bin/grep 192-168-254-0) || /sbin/iptables -t nat -A POSTROUTING -o eth0 -s 192.168.254.0/24 -j MASQUERADE

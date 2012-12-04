@@ -1,0 +1,9 @@
+---
+- name: Get the iptables rule for the bridge network 192.168.${item}.0
+  action: shell (/sbin/iptables -t nat --list | /bin/grep 192-168-${item}-0) || /sbin/iptables -t nat -A POSTROUTING -o eth0 -s 192.168.${item}.0/24 -j MASQUERADE
+  ignore_errors: True
+
+- name: Save the iptables rule for the bridge network 192.168.${item}.0
+  action: shell (cat /var/action/iptables.rules | /bin/grep 192-168-${item}-0) || /sbin/iptables-save > /var/action/iptables.rules
+  ignore_errors: True
+

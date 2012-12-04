@@ -1,0 +1,9 @@
+---
+- name: Check if $bridge item is up
+  action: shell /sbin/ifconfig $bridge | head -1
+  register: ifconfig_bridge
+
+- name: Bring up the $bridge network interface
+  action: command /sbin/ifup $bridge
+  only_if: "len('${ifconfig_bridge.stdout}') == 0"
+
