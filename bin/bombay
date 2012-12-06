@@ -140,14 +140,6 @@ command :build do |c|
           puts "** Error: Couldn't find container #{args[1]}"
           exit(1)
         end
-      elsif type == 'local'
-        begin
-          Bombay::Local.new(name, playbook_name).build!
-        rescue Bombay::ConfigFileMissingError
-          puts "** Error: Couldn't find name: #{name}"
-        end
-      else
-        puts "Usage: #{c.syntax}"
       end
     end
   end
