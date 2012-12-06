@@ -1,6 +1,0 @@
----
-- name: install upstart
-  action: pkg upstart state=present
-
-  name: install upstart script in /etc/init
-  action: template src=../../../global/templates/upstart.conf.j2 dest=/etc/init/${app}.conf app=$app deploy_user=$deploy_user node_version=$node_version

@@ -6,17 +6,20 @@ module Bombay
 
     def initialize(name, playbook_name)
       self.name = name
-      self.playbook_name = name
+      self.playbook_name = playbook_name
     end
 
     def build!
-      if !File.exists?(File.join(Bombay::ROOT, "ansible", "containers", name, "plays", "#{self.playbook_name}.yml"))
+      path = File.join(Bombay::ROOT, "ansible", name, "plays", "#{self.playbook_name}.yml")
+      puts path
+      if !File.exists?(path)
+        puts "OMG Cannot find leh"
         raise Bombay::ConfigFileMissingError
       end
 
-      ENV['ANSIBLE_CONFIG'] = "#{Bombay::ROOT}/ansible/config/ansible.container.cfg"
-      system "ansible-playbook #{Bombay::ROOT}/ansible/containers/#{self.name}/plays/#{self.playbook_name}.yml " +
-             "-i #{Bombay::ROOT}/ansible/config/hosts.containers " +
+      ENV['ANSIBLE_CONFIG'] = "#{Bombay::ROOT}/config/ansible.container.cfg"
+      system "ansible-playbook #{Bombay::ROOT}/ansible/#{self.name}/plays/#{self.playbook_name}.yml " +
+             "-i #{Bombay::ROOT}/config/hosts.containers " +
              "--private-key=#{Dir.home}/.ansible/bombay"
     end
 

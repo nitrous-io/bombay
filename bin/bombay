@@ -89,7 +89,7 @@ command :build do |c|
       playbook_name ||= "main"
 
       if type == 'server'
-        if !File.exists?(File.join(Bombay::ROOT, "ansible", "servers", name, "plays", "#{playbook_name}.yml"))
+        if !File.exists?(File.join(Bombay::ROOT, "ansible", name, "plays", "#{playbook_name}.yml"))
           puts "** Error: Could not find a play named: #{playbook_name}.yml for server #{name} in ansible/servers"
           exit(1)
         end

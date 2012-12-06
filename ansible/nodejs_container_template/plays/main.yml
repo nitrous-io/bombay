@@ -1,0 +1,93 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: False
+  gather_facts: False
+  tasks:
+    - include: ../../shared/tasks/host/setup_bombay_ssh_keys.yml
+
+- hosts: localhost
+  connection: local
+  sudo: True
+  gather_facts: False
+  vars:
+    container_template: nodejs_container_template
+    ip: 192.168.254.253
+    gateway: 192.168.254.1
+    user: action
+  tasks:
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../shared/tasks/install_ansible_deps.yml
+    # apt-get update
+    - include: ../../shared/tasks/update_apt.yml
+    # Install Dependencies (via apt-get)
+    - include: ../../shared/tasks/host/install_deps.yml
+    # Setup Bridge Network
+    - name: Update /etc/network/interfaces
+      # Paths are relative to the containers/${container_template}/plays directory
+      action: template src=../../shared/templates/host/network_config.j2 dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
+    - include: ../../shared/tasks/host/ifup_bridge_network.yml bridge=$item
+      with_items:
+        - br-lxc
+    - include: ../../shared/tasks/host/setup_iptables_for_bridge_interface.yml
+      with_items:
+        - 254
+    # Create LXC container with the name
+    - include: ../../shared/tasks/host/create_lxc_container.yml container_template=$container_template
+    # Setup keys so that we can run ansible commands in the container
+    - include: ../../shared/tasks/host/setup_networking_for_container.yml ip=$ip container_template=$container_template gateway=$gateway
+    # Add action to the password-less sudoers file
+    - include: ../../shared/tasks/add_user_to_sudoers.yml container_template=$container_template user=$user
+    # Start the container if it isn't started
+    - include: ../../shared/tasks/host/start_container.yml container_template=$container_template
+
+# Install stuff which needs to be done as root
+- hosts: nodejs_container_template
+  sudo: True
+  gather_facts: False
+  vars:
+    user: action
+
+  tasks:
+    # apt-get update
+    - include: ../../shared/tasks/update_apt.yml
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../shared/tasks/install_ansible_deps.yml
+    # Configure SSH
+    - include: ../../shared/tasks/container/configure_sshd_config.yml
+    # Remove ubuntu user from the container
+    - include: ../../shared/tasks/container/remove_ubuntu_user.yml
+    # Add MOTD
+    - include: ../../shared/tasks/container/configure_motd.yml
+    # Install all the necessary packages for this container
+    - include: ../../shared/tasks/container/install_packages_via_apt.yml
+    # Install all the necessary packages for this container
+    - include: ../../shared/tasks/container/install_packages_via_deb.yml
+    # Install locales
+    - include: ../../shared/tasks/container/install_locales.yml user=$user
+    # Sane Security Limits for the user
+    - include: ../../shared/tasks/container/install_security_limits.yml user=$user
+    # Install heroku toolbelt
+    - include: ../../shared/tasks/install_heroku_toolbelt.yml
+
+# Install stuff which needs to be done not as root
+- hosts: nodejs_container_template
+  sudo: False
+  gather_facts: False
+  vars:
+    user: action
+
+  tasks:
+    - include: ../../shared/tasks/container/install_node_via_nvm.yml version=v0.8.11 user=$user
+
+# Cleanup to be done after the creation of the container
+- hosts: localhost
+  connection: local
+  sudo: True
+  gather_facts: False
+  vars:
+    container_template: nodejs_container_template
+  tasks:
+    # remove action from the sudoers file
+    - include: ../../shared/tasks/remove_user_from_sudoers.yml container_template=$container_template
+

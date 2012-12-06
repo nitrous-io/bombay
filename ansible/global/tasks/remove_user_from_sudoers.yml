@@ -1,3 +1,0 @@
----
-- name: remove action from the sudoers file
-  action: copy dest=/var/lib/lxc/${container_template}/rootfs/etc/sudoers src=../../../global/files/container/sudoers_without_user mode=0440 owner=root group=root

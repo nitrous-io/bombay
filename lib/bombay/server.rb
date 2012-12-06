@@ -96,7 +96,7 @@ module Bombay
       setup_vars_files!(role, environment)
 
       command = "cd #{Bombay::ROOT}/ansible && " +
-        "ansible-playbook servers/#{role}/plays/#{playbook_name}.yml " +
+        "ansible-playbook #{role}/plays/#{playbook_name}.yml " +
         "-e \"env=#{environment} region=#{region}\" " +
         "-i #{ansible_hosts_file} " +
         "--private-key=#{keypair_file_path}"
@@ -112,7 +112,7 @@ module Bombay
     end
 
     def self.initialize_role(role)
-      config_file_path = File.join(Bombay::ROOT, 'ansible', 'servers', role, 'config.yml')
+      config_file_path = File.join(Bombay::ROOT, 'ansible', role, 'config.yml')
       raise ConfigFileMissingError unless File.exists?(config_file_path)
       region_to_server_map =  {}
       yaml = YAML.load(File.read(config_file_path))
@@ -148,7 +148,7 @@ module Bombay
     end
 
     def self.setup_vars_files!(role, environment)
-      config_yml = YAML.load(File.read(File.join(Bombay::ROOT, 'ansible', 'servers', role, 'config.yml')))
+      config_yml = YAML.load(File.read(File.join(Bombay::ROOT, 'ansible', role, 'config.yml')))
 
       vars_files = config_yml['vars_files'] || {}
 

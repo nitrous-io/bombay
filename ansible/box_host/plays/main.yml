@@ -1,0 +1,151 @@
+---
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+  vars_files:
+    - ../../vars_files/github_private_key.yml
+    - ../../vars_files/s3cfg.yml
+    - ../../vars_files/boxer_airbrake_key.${env}.yml
+    - ../../vars_files/proxee_airbrake_key.${env}.yml
+  vars:
+    app_1: boxer
+    app_2: proxee
+    app_directory_1: /var/apps/$app_1
+    app_directory_2: /var/apps/$app_2
+    deploy_user: action
+    node_version: v0.8.11
+    s3_bucket: bombay-apse.action.io
+    redis_port: 65000
+
+  tasks:
+    - name: mkdir /var/lib/lxc
+      action: shell mkdir -p /var/lib/lxc
+    - name: mount /dev/xvdf
+      action: mount name=/var/lib/lxc src=/dev/xvdf fstype=xfs opts=defaults,nouuid,prjquota,comment=cloudconfig state=mounted
+    - name: mkdir /var/action
+      action: shell mkdir -p /var/action
+    - name: mount /dev/xvdg
+      action: mount name=/var/action src=/dev/xvdg fstype=xfs opts=defaults,nouuid,comment=cloudconfig state=mounted
+    # Set the hostname
+    - include: ../../shared/tasks/set_hostname.yml
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../shared/tasks/install_ansible_deps.yml
+    # Setup Bridge Network
+    - name: Update /etc/network/interfaces
+      # Paths are relative to the containers/${container_template}/plays directory
+      action: template src=../../shared/templates/host/network_config.j2 dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
+
+    - include: ../../shared/tasks/host/ifup_bridge_network.yml bridge=$item
+      with_items:
+        - br-lxc
+        - br-lxc-253
+        - br-lxc-252
+        - br-lxc-251
+        - br-lxc-250
+        - br-lxc-249
+        - br-lxc-248
+        - br-lxc-247
+        - br-lxc-246
+        - br-lxc-245
+        - br-lxc-244
+
+    - include: ../../shared/tasks/host/setup_iptables_for_bridge_interface.yml
+      with_items:
+        - 254
+        - 253
+        - 252
+        - 251
+        - 250
+        - 249
+        - 248
+        - 247
+        - 246
+        - 245
+        - 244
+
+    # apt-get update
+    - include: ../../shared/tasks/update_apt.yml
+    # Install Dependencies (via apt-get)
+    - include: ../tasks/install_deps.yml
+    # Grow the /dev/sdf partition
+    - name: xfs_growfs /dev/xvdf
+      action: shell xfs_growfs /dev/xvdf
+    # Grow the /dev/sdg partition
+    - name: xfs_growfs /dev/xvdg
+      action: shell xfs_growfs /dev/xvdg
+    # Install sudoers
+    - include: ../../shared/tasks/install_sudoers.yml file=../files/box_host_sudoers
+    # Install pam.d/common-session which sets limits for non-interactive sessions
+    - name: install common-session in /etc/init.d/
+      action: copy src=../files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
+    # Create Deploy User
+    - include: ../../shared/tasks/create_deploy_user.yml deploy_user=$deploy_user
+    # Create Capistrano Layout for $app_directory_1
+    - include: ../../shared/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_1 deploy_user=$deploy_user
+    # Setup .env for boxer
+    - name: setup env for boxer
+      action: template src=../templates/boxer_env.j2 dest=$app_directory_1/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+    # Setup runtimes.coffee for boxer
+    - name: setup runtimes.coffee for boxer
+      action: template src=../templates/boxer_runtimes.j2 dest=$app_directory_1/shared/config/runtimes.coffee owner=$deploy_user group=$deploy_user mode=0660
+    # Create Capistrano Layout for $app_directory_2}
+    - include: ../../shared/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_2 deploy_user=$deploy_user
+    # Setup .env for proxee
+    - name: setup env for proxee
+      action: template src=../templates/proxee_env.j2 dest=$app_directory_2/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+    # Generate and Upload Public Key to GitHub
+    - include: ../../shared/tasks/register_github_keys.yml deploy_user=$deploy_user
+    # Set limits for the user
+    - include: ../../shared/tasks/set_limits.yml user=$deploy_user attribute=nofile value=65536
+    # Install Redis Server
+    - include: ../../shared/tasks/install_redis_with_resources.yml redis_port=$redis_port
+    # Configure S3 Cmd
+    - include: ../../shared/tasks/configure_s3cmd.yml
+    # Install ruby container
+    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1353987451 s3_bucket=$s3_bucket
+    # Install nodejs container
+    - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1353995398 s3_bucket=$s3_bucket
+    # Install python container
+    - include: ../tasks/install_action_container.yml name=python_container_template version=1353988799 s3_bucket=$s3_bucket
+    # Install golang container
+    - include: ../tasks/install_action_container.yml name=golang_container_template version=1353996298 s3_bucket=$s3_bucket
+    # Install NVM
+    - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
+    # Install Upstart for boxer
+    - include: ../../shared/tasks/install_upstart_for_app.yml app=$app_1 deploy_user=$deploy_user node_version=$node_version
+    # Install Upstart for proxee
+    - include: ../../shared/tasks/install_upstart_for_app.yml app=$app_2 deploy_user=$deploy_user node_version=$node_version
+    # Install cap script which does the whole capistrano deploy for boxer
+    - include: ../../shared/tasks/install_cap.yml
+    # Install a script which does upstart restarts
+    - include: ../../shared/tasks/install_upstart_node.yml
+    # Deploy boxer using capistrano technique
+    - name: deploy boxer
+      action: shell su $deploy_user -c '/usr/local/bin/cap ${app_1}'
+    - name: copy over stuff needed by boxer
+      action: shell su $deploy_user -c "cp /var/apps/${app_1}/shared/config/.env /var/apps/${app_1}/current/ && cp /var/apps/${app_1}/shared/config/runtimes.coffee /var/apps/${app_1}/current/config/"
+    - name: set root permissions on boxer scripts
+      action: shell bash -c "chown -R root:root /var/apps/${app_1}/current/scripts/* && chmod 0500 /var/apps/${app_1}/current/scripts/*"
+    - name: restart app
+      action: shell /usr/local/bin/upstart_node ${app_1}
+    # Deploy proxee using capistrano technique
+    - name: deploy proxee
+      action: shell su $deploy_user -c '/usr/local/bin/cap ${app_2}'
+    - name: copy over stuff needed by proxee
+      action: shell su $deploy_user -c "cp /var/apps/${app_2}/shared/config/.env /var/apps/${app_2}/current/"
+    - name: restart app
+      action: shell /usr/local/bin/upstart_node ${app_2}
+
+  handlers:
+    - name: restart redis
+      action: shell /etc/init.d/redis-server restart
+      notify: initialize redis
+    - name: initialize redis
+      action: shell /tmp/initialize_redis.sh $redis_port
+      notify: restart server
+      # restart server after the very first provisioning, so that iptables etc. will be setup correctly
+    - name: restart server
+      action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
+
+- include: ../../shared/plays/monit/install_monit_client.yml
+

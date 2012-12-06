@@ -1,0 +1,5 @@
+---
+- name: Copy the sudoers file to $container_template so that the action user will have password-less sudo privileges
+  # Paths are relative to the containers/${container_template}/plays directory
+  action: template src=../../shared/templates/container/sudoers_with_user dest=/var/lib/lxc/$container_template/rootfs/etc/sudoers owner=root group=root mode=0440
+

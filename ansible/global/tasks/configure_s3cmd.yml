@@ -1,3 +1,0 @@
----
-- name: configure s3cmd
-  action: template src=../../../global/templates/s3cfg.j2 dest=/home/ubuntu/.s3cfg owner=ubuntu group=ubuntu mode=0600

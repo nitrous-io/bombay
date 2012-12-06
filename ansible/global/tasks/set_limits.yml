@@ -1,3 +1,0 @@
----
-- name: set limits
-  action: template src=../../../global/templates/limits.conf.j2 dest=/etc/security/limits.conf owner=root group=root mode=0644 user=$user attribute=$attribute value=$value

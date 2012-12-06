@@ -67,7 +67,7 @@ module Bombay
     end
 
     def self.get_all_for(region)
-      security_groups_yml = YAML.load(File.read(File.join(Bombay::ROOT, 'ansible', 'config', 'security_groups.yml')))
+      security_groups_yml = YAML.load(File.read(File.join(Bombay::ROOT, 'config', 'security_groups.yml')))
       security_groups = {}
 
       security_groups_yml.each do |name, lines|

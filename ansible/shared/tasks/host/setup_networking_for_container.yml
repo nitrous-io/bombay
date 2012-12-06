@@ -1,0 +1,17 @@
+---
+- name: Setup Networking for the container
+  # Paths are relative to the containers/${container_template}/plays directory
+  action: template src=../../shared/templates/container/network_config dest=/var/lib/lxc/$container_template/rootfs/etc/network/interfaces
+
+- name: Create an action user in the $container_template box
+  action: shell chroot /var/lib/lxc/$container_template/rootfs useradd action -m -s /bin/bash creates=/var/lib/lxc/$container_template/rootfs/home/action
+
+- name: Create an .ssh/authorized_keys file for the action user
+  action: shell chroot /var/lib/lxc/$container_template/rootfs su action -c "mkdir /home/action/.ssh" creates=/var/lib/lxc/$container_template/rootfs/home/action/.ssh
+
+- name: Copy the public key to the action user's authorized_keys file
+  action: shell cat $HOME/.ansible/bombay.pub >> /var/lib/lxc/$container_template/rootfs/home/action/.ssh/authorized_keys creates=/var/lib/lxc/$container_template/rootfs/home/action/.ssh/authorized_keys
+
+- name: Set the right permissions for the user's authorized_keys file
+  action: shell chroot /var/lib/lxc/$container_template/rootfs chown action:action /home/action/.ssh/authorized_keys
+

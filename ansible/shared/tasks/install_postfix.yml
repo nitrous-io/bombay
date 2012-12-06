@@ -1,0 +1,9 @@
+---
+- name: install postfix
+  action: shell dpkg -s postfix || DEBIAN_FRONTEND=noninteractive apt-get -yy install postfix
+
+- name: configure postfix
+  action: template src=../../../shared/templates/postfix_main.cf.j2 dest=/etc/postfix/main.cf owner=root group=root mode=0644 inventory_hostname=$inventory_hostname
+
+- name: reload postfix
+  action: shell /etc/init.d/postfix reload

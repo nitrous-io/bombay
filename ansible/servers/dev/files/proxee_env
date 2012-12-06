@@ -1,5 +1,0 @@
-export REDIS_HOST=127.0.0.1
-export REDIS_PORT=6379
-export PROXEE_START_PORT=4100
-export PROXEE_END_PORT=4100
-export NODE_ENV=development

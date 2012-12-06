@@ -1,0 +1,6 @@
+---
+- name: Configure SSHD config to support multiple authorized_key locations
+  # Paths are relative to the containers/${container_template}/plays directory
+  action: copy dest=/etc/ssh/sshd_config src=../../shared/files/container/sshd_config
+
+

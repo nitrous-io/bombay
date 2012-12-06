@@ -1,4 +1,0 @@
-# This requires add-apt-repository
----
-- name: add $repo
-  apt_repository: repo=$repo
