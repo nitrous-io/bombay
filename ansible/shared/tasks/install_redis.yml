@@ -4,5 +4,5 @@
 - name: install /var/action/redis
   action: shell mkdir -p /var/action/redis && chown -R redis:redis /var/action/redis
 - name: configure redis
-  action: template src=../../shared/templates/redis_2_2.conf.j2 dest=/etc/redis/redis.conf owner=redis group=redis mode=0660 port=$port
+  action: template src=../../shared/templates/redis_2_2.conf.j2 dest=/etc/redis/redis.conf owner=redis group=redis mode=0660
   notify: restart redis
