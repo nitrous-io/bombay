@@ -11,9 +11,8 @@ module Bombay
 
     def build!
       path = File.join(Bombay::ROOT, "ansible", name, "plays", "#{self.playbook_name}.yml")
-      puts path
+
       if !File.exists?(path)
-        puts "OMG Cannot find leh"
         raise Bombay::ConfigFileMissingError
       end
 
