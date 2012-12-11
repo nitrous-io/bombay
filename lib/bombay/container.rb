@@ -1,5 +1,3 @@
-require 'fileutils'
-
 module Bombay
   class Container
     attr_accessor :name, :playbook_name
@@ -11,10 +9,6 @@ module Bombay
 
     def build!
       path = File.join(Bombay::ROOT, "ansible", name, "plays", "#{self.playbook_name}.yml")
-
-      if !File.exists?(path)
-        raise Bombay::ConfigFileMissingError
-      end
 
       ENV['ANSIBLE_CONFIG'] = "#{Bombay::ROOT}/config/ansible.container.cfg"
       system "ansible-playbook #{Bombay::ROOT}/ansible/#{self.name}/plays/#{self.playbook_name}.yml " +

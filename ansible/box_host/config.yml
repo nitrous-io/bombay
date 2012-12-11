@@ -1,11 +1,12 @@
 ---
-vars_files:
+sensitive_vars:
   github_private_key:
     context: global
     vars:
       - name: github_key
         prompt: Replace this line with the private key used by the box to pull from GitHub repos
         multiline: true
+
   s3cfg:
     context: global
     vars:
@@ -13,51 +14,40 @@ vars_files:
         prompt: AWS Access Key ID (needed to pull from stuff from S3)
       - name: aws_secret_access_key
         prompt: AWS Secret Access Key (needed to pull stuff from S3)
+
   boxer_airbrake_key:
     context: environment
     vars:
       - name: boxer_airbrake_key
         prompt: Airbrake API Key for Boxer
+
   proxee_airbrake_key:
     context: environment
     vars:
       - name: proxee_airbrake_key
         prompt: Airbrake API Key for Proxee
 
-host_vars:
-  boxer:
-    - name: redis_store_host
-      value: 127.0.0.1
-    - name: redis_store_port
-      value: 65000
-    - name: redis_mq_port
-      value: 65000
-  proxee:
-    - name: redis_store_host
-      value: 127.0.0.1
-    - name: redis_store_port
-      value: 65000
-    - name: start_port
-      value: 3000
-    - name: end_port
-      value: 9000
+server_vars:
+  boxer_redis_store_host: 127.0.0.1
+  boxer_redis_store_port: 65000
+  boxer_redis_mq_port: 65000
+  proxee_redis_store_host: 127.0.0.1
+  proxee_redis_store_port: 65000
+  proxee_start_port: 3000
+  proxee_end_port: 9000
 
 regions:
   - region: ap-southeast-1
     environments:
       staging:
-        host_vars:
-          boxer:
-            - name: redis_mq_host
-              value: coach-apse1-staging.action.io
-        hosts:
+        server_vars:
+          boxer_redis_mq_host: coach-apse1-staging.action.io
+        servers:
           - hostname: apse1-staging.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
-            host_vars:
-              boxer:
-                - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+            server_vars:
+              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
@@ -69,18 +59,14 @@ regions:
                 Ebs.DeleteOnTermination: 'false'
 
       production:
-        host_vars:
-          boxer:
-            - name: redis_mq_host
-              value: coach-apse1.action.io
-        hosts:
+        server_vars:
+          boxer_redis_mq_host: coach-apse1.action.io
+        servers:
           - hostname: apse1.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
-            host_vars:
-              boxer:
-                - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+            server_vars:
+              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
@@ -90,21 +76,18 @@ regions:
                 Ebs.SnapshotId: snap-1d909139
                 Ebs.VolumeSize: 8
                 Ebs.DeleteOnTermination: 'false'
+
   - region: us-west-1
     environments:
       staging:
-        host_vars:
-          boxer:
-            - name: redis_mq_host
-              value: coach-usw1-staging.action.io
-        hosts:
+        server_vars:
+          boxer_redis_mq_host: coach-usw1-staging.action.io
+        servers:
           - hostname: usw1-staging.actionbox.io
             size: m1.small
             ami: ami-977b5dd2
-            host_vars:
-              boxer:
-                - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+            server_vars:
+              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-566c3c7a
@@ -116,18 +99,14 @@ regions:
                 Ebs.DeleteOnTermination: 'false'
 
       production:
-        host_vars:
-          boxer:
-            - name: redis_mq_host
-              value: coach-usw1.action.io
-        hosts:
+        server_vars:
+          boxer_redis_mq_host: coach-usw1.action.io
+        servers:
           - hostname: usw1.actionbox.io
             size: m1.small
             ami: ami-977b5dd2
-            host_vars:
-              boxer:
-                - name: runtimes
-                  value: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+            server_vars:
+              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-566c3c7a

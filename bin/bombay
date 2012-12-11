@@ -7,54 +7,8 @@ require 'rubygems'
 require 'commander/import'
 require 'bombay'
 
-require 'yaml'
-
-ANSIBLE_VERSION = '0.9'.freeze
-
 program :version, Bombay::VERSION
 program :description, 'bombay - anything is possible with bombay'
-
-def set_aws_credentials!
-  unless Bombay::AwsAuthenticator.load_credentials!
-    access_key = ask "AWS Access Key ID: "
-    secret_key = password "AWS Secret Key: "
-
-    Bombay::AwsAuthenticator.set_credentials!(access_key, secret_key)
-  end
-end
-
-def pick_regions_from(servers_by_region)
-  picked_regions = []
-  picked_region = nil
-
-  if servers_by_region.count > 1
-    while servers_by_region[picked_region].nil?
-      picked_region = ask "Pick a region from #{servers_by_region.keys.join(',')} (or type 'all' to build in all regions): "
-      return servers_by_region.keys if picked_region == 'all'
-    end
-
-    picked_regions << picked_region
-  else
-    picked_regions << servers_by_region.keys.first
-  end
-
-  picked_regions
-end
-
-def pick_environment_from(servers_by_region, region)
-  environments = servers_by_region[region]
-  picked_environment = nil
-
-  if environments.count > 1
-    while environments[picked_environment].blank?
-      picked_environment = ask "Pick an environment from #{environments.keys.join(',')} in region #{region}: "
-    end
-  else
-    picked_environment = environments.keys.first
-  end
-
-  picked_environment
-end
 
 command :setup do |c|
   c.syntax = 'bombay setup'
@@ -62,17 +16,7 @@ command :setup do |c|
   c.description = 'Setups all the requirements for bombay to work (ansible, etc.)'
   c.example 'Usage', c.syntax
 
-  c.action do
-    puts "Installing ansible dependencies"
-    system("sudo apt-get -yy install python-paramiko python-yaml python-jinja2 python-simplejson")
-    puts "Downloading ansible #{ANSIBLE_VERSION} from Github..."
-    system("wget https://github.com/downloads/ansible/ansible/ansible-#{ANSIBLE_VERSION}.tar.gz --output-document=/tmp/ansible-#{ANSIBLE_VERSION}.tar.gz --quiet")
-    puts "Expanding ansible #{ANSIBLE_VERSION}"
-    system("tar -zxvf /tmp/ansible-#{ANSIBLE_VERSION}.tar.gz --directory=/tmp")
-    puts "Setting up ansible #{ANSIBLE_VERSION}..."
-    install_status = system("cd /tmp/ansible-#{ANSIBLE_VERSION} && sudo python setup.py install")
-    puts install_status ? "** Done **" : "** Failed **"
-  end
+  c.action { Bombay::Ansibler.setup }
 end
 
 command :build do |c|
@@ -84,113 +28,31 @@ command :build do |c|
   c.action do |args, options|
     if args.length < 2
       puts "Usage: #{c.syntax}"
-    else
-      type, name, playbook_name = args
-      playbook_name ||= "main"
-
-      if type == 'server'
-        if !File.exists?(File.join(Bombay::ROOT, "ansible", name, "plays", "#{playbook_name}.yml"))
-          puts "** Error: Could not find a play named: #{playbook_name}.yml for server #{name} in ansible/servers"
-          exit(1)
-        end
-
-        set_aws_credentials!
-        # Check for server config in servers/#{name}/config.yml
-        servers_by_region = Bombay::Server.initialize_role(name)
-
-        # Prompt for region
-        regions = pick_regions_from(servers_by_region)
-        puts "** Picked Region(s): #{regions.join(',')}\n"
-        environment = nil
-
-        regions.each do |region|
-          # Prompt for environment
-          if environment.nil?
-            environment = pick_environment_from(servers_by_region, region)
-            puts "** Picked Environment: #{environment}\n"
-          end
-
-          servers = servers_by_region[region][environment]
-
-          begin
-            Bombay::SecurityGroup.get_all_for(region).each { |sg| sg.create! }
-            # Check if server exists in AWS in that region
-            # If not, provision, once provisioned,
-            servers.each { |s| s.provision! unless s.exists? }
-          rescue Fog::Service::Error => e
-            if e.to_s =~ /AuthFailure/
-              puts "** Error: Your AWS Credentials are invalid, please try again."
-              Bombay::AwsAuthenticator.clear_credentials!
-            else
-              raise e
-            end
-          end
-
-          # run ansible playbooks
-          begin
-            Bombay::Server.build!(servers, region, environment, playbook_name)
-          rescue Bombay::PrivateKeyDoesNotExistError => e
-            puts "** Error: Private Key file for #{region} does not exist at #{e.message}"
-          end
-        end
-      elsif type == 'container'
-        begin
-          Bombay::Container.new(name, playbook_name).build!
-        rescue Bombay::ConfigFileMissingError
-          puts "** Error: Couldn't find container #{args[1]}"
-          exit(1)
-        end
-      end
+      exit 1
     end
-  end
-end
 
-command :deploy do |c|
-  c.syntax = "bombay deploy container name --region region"
-  c.summary = "Deploy container to an S3 bucket in a region"
-  c.description = c.summary
-  c.example 'Usage', c.syntax
+    type, role, playbook = args
+    playbook ||= "main"
 
-  c.action do |args, options|
-    if args.length != 2
-      puts "Usage: #{c.syntax}"
-    else
-      if args[0] != 'container'
-        puts "Usage: #{c.syntax}"
-      else
-        begin
-          Bombay::Container.new(args[1]).deploy!
-        rescue Bombay::ConfigFileMissingError
-          puts "** Error: Couldn't find container #{args[1]}"
-          exit(1)
-        end
+    case type
+    when 'server'
+      server_collection = Bombay::ServerCollection.parse(role)
+      # Prompt for region
+      server_collection.set_regions!
+      # Prompt for environment
+      server_collection.set_environment!
+      # Provision all servers that you need
+      server_collection.provision
+      # Iterate through all regions and build for each one
+      server_collection.regions.each do |region|
+        server_collection.current_region = region
+        server_collection.cache_sensitive_vars!
+        server_collection.build(playbook)
       end
-    end
-  end
-end
 
-command :restart do |c|
-  c.syntax = "bombay restart server region name [--size new-size]"
-  c.summary = "Stop & Start a server and in the meantime also change size"
-  c.option '--size size', String, 'Choose a new size for your instance'
-  c.description = c.summary
-  c.example 'Usage', c.syntax
-
-  c.action do |args, options|
-    if args.length != 3
-      puts "Usage: #{c.syntax}"
-    else
-      if args[0] != 'server'
-        puts "Usage: #{c.syntax}"
-      else
-        set_aws_credentials!
-        begin
-          Bombay::Server.new(region: args[1], hostname: args[2], size: options.size).restart!
-        rescue Bombay::ConfigFileMissingError
-          puts "Couldn't find server #{args[1]}"
-          exit(1)
-        end
-      end
+    when 'container'
+      container = Bombay::Container.new(role, playbook)
+      options.deploy ? container.deploy! : container.build!
     end
   end
 end

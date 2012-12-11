@@ -1,8 +1,0 @@
----
-- hosts: BOMBAY_SERVER_TEMPLATE
-  sudo: True
-  gather_facts: False
-  tasks:
-    # Set the hostname
-    - include: ../../../global/tasks/set_hostname.yml
-

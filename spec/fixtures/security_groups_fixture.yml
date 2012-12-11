@@ -1,0 +1,18 @@
+# format is:  port-range<tab>protocol<tab>source
+# if you want to allow all sources, then specify the source to be 0.0.0.0/0
+sg_1:
+  #SSL
+  - 443 tcp 0.0.0.0/0
+  # SSH
+  - 65100 tcp 0.0.0.0/0
+
+sg_1_1:
+  - 80 tcp 0.0.0.0/0
+
+sg_2:
+  # http ports for servers
+  - 3000-9000 tcp 0.0.0.0/0
+  # ssh ports for boxes
+  - 10000-20000 tcp 0.0.0.0/0
+  # ssh
+  - 65100 tcp role_1,role_1_1

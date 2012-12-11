@@ -12,10 +12,14 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{bombay is the server/container creation tool for action.io}
   gem.homepage      = "https://www.action.io"
 
-  gem.add_dependency  "fog",            "~> 1.6.0"
+  gem.add_dependency  "fog",            "~> 1.8.0"
   gem.add_dependency  "domainatrix",    "~> 0.0.11"
   gem.add_dependency  "commander",      "~> 4.1.2"
   gem.add_dependency  "activesupport",  "~> 3.2.8"
+  gem.add_dependency  "ipaddress",      "~> 0.8.0"
+
+  gem.add_development_dependency  "rspec",  "~> 2.12.0"
+  gem.add_development_dependency  "fakefs", "~> 0.4.2"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
