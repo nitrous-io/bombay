@@ -21,6 +21,11 @@
     - include: ../../shared/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
+    # Install pam.d/common-session which sets limits for non-interactive sessions
+    - name: install common-session in /etc/init.d/
+      action: copy src=../../shared/files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
+    # Set limits for the user
+    - include: ../../shared/tasks/set_limits.yml user=$deploy_user attribute=nofile value=65536
     # Install sudoers
     - include: ../../shared/tasks/install_sudoers.yml file=../files/rainbow_sudoers
     # Create Deploy User
