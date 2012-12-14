@@ -1,5 +1,5 @@
 ---
-vars_files:
+sensitive_vars:
   github_private_key:
     context: global
     vars:
@@ -32,22 +32,18 @@ vars_files:
       - name: coach_airbrake_key
         prompt: Airbrake API Key used by Coach
 
-host_vars:
-  coach:
-    - name: redis_host
-      value: 127.0.0.1
-    - name: redis_port
-      value: 65000
+server_vars:
+  coach_redis_host: 127.0.0.1
+  coach_redis_port: 65000
 
 regions:
   - region: ap-southeast-1
     environments:
+
       staging:
-        host_vars:
-          coach:
-            - name: webhook_host
-              value: https://staging.action.io
-        hosts:
+        server_vars:
+          coach_webhook_host: https://staging.action.io
+        servers:
           - hostname: coach-apse1-staging.action.io
             size: m1.small
             ami: ami-e6d999b4
@@ -56,12 +52,11 @@ regions:
                 Ebs.SnapshotId: snap-1d909139
                 Ebs.VolumeSize: 8
                 Ebs.DeleteOnTermination: 'false'
+
       production:
-        host_vars:
-          coach:
-            - name: webhook_host
-              value: https://www.action.io
-        hosts:
+        server_vars:
+          coach_webhook_host: https://www.action.io
+        servers:
           - hostname: coach-apse1.action.io
             size: m1.small
             ami: ami-e6d999b4
@@ -70,14 +65,14 @@ regions:
                 Ebs.SnapshotId: snap-1d909139
                 Ebs.VolumeSize: 8
                 Ebs.DeleteOnTermination: 'false'
+
   - region: us-west-1
     environments:
+
       staging:
-        host_vars:
-          coach:
-            - name: webhook_host
-              value: https://staging.action.io
-        hosts:
+        server_vars:
+          coach_webhook_host: https://staging.action.io
+        servers:
           - hostname: coach-usw1-staging.action.io
             size: m1.small
             ami: ami-977b5dd2
@@ -86,12 +81,11 @@ regions:
                 Ebs.SnapshotId: snap-566c3c7a
                 Ebs.VolumeSize: 8
                 Ebs.DeleteOnTermination: 'false'
+
       production:
-        host_vars:
-          coach:
-            - name: webhook_host
-              value: https://www.action.io
-        hosts:
+        server_vars:
+          coach_webhook_host: https://www.action.io
+        servers:
           - hostname: coach-usw1.action.io
             size: m1.small
             ami: ami-977b5dd2
