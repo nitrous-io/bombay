@@ -26,7 +26,7 @@ iface br-lxc inet static
     bridge_ports none
     bridge_stp off
 
-{% for i in range(244, 254) %}
+{% for i in [244, 245, 246, 247, 248, 249, 250, 251, 252, 253] %}
 
 auto br-lxc-{{ i }}
 iface br-lxc-{{ i }} inet static
