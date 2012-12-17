@@ -22,14 +22,15 @@
       ignore_errors: True
 
     # haproxy
-    - name: check if nginx is installed
+    - name: check if haproxy is installed
       action: shell /bin/bash -c 'dpkg -l | grep haproxy'
-      register: has_proxy
+      register: has_haproxy
       ignore_errors: True
 
     - name: install dependencies to build diamond
       apt: pkg=$item
       with_items:
+        - python-dev
         - python-setuptools
         - build-essential
         - pbuilder
@@ -48,6 +49,7 @@
         - requests
         - redis
         - urllib3
+        - psutil
 
     - name: install diamond
       git: repo=git://github.com/BrightcoveOS/Diamond.git dest=/tmp/Diamond version=$diamond_version
