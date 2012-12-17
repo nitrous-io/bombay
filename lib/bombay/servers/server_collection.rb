@@ -37,7 +37,13 @@ module Bombay
 
       ansible_config = ERB.new(File.read(ansible_server_template_path))
 
-      run_playbook("#{self.role}/plays/#{playbook}.yml",
+      playbook = if File.exists? File.join(Bombay::ROOT, 'ansible', self.role, 'plays', "#{playbook}.yml")
+                   "#{self.role}/plays/#{playbook}.yml"
+                 elsif File.exists? File.join(Bombay::ROOT, 'ansible', 'shared', 'plays', "#{playbook}.yml")
+                   "shared/plays/#{playbook}.yml"
+                 end
+
+      run_playbook(playbook,
                    keypair,
                    ansible_hosts,
                    ansible_config.result(binding),
