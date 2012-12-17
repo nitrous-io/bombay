@@ -33,8 +33,8 @@ sensitive_vars:
         prompt: Airbrake API Key used by Coach
 
 server_vars:
-  coach_redis_host: 127.0.0.1
-  coach_redis_port: 65000
+  local_redis_host: 127.0.0.1
+  local_redis_port: 65000
 
 regions:
   - region: ap-southeast-1

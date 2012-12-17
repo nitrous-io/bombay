@@ -148,4 +148,5 @@
       action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
 
 - include: ../../shared/plays/monit/install_monit_client.yml
+- include: ../../shared/plays/diamond/install_diamond.yml
 

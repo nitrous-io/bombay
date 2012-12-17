@@ -71,4 +71,5 @@
       action: shell /etc/init.d/stunnel4 restart
 
 - include: ../../shared/plays/monit/install_monit_client.yml
+- include: ../../shared/plays/diamond/install_diamond.yml
 

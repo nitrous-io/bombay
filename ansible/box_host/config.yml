@@ -27,12 +27,18 @@ sensitive_vars:
       - name: proxee_airbrake_key
         prompt: Airbrake API Key for Proxee
 
+  diamond:
+    context: environment
+    vars:
+      - name: librato_email
+        prompt: Email address for the Librato Account you want to send stats to
+      - name: librato_api_key
+        prompt: API Key for the Librato Account you want to send stats to
+
 server_vars:
-  boxer_redis_store_host: 127.0.0.1
-  boxer_redis_store_port: 65000
-  boxer_redis_mq_port: 65000
-  proxee_redis_store_host: 127.0.0.1
-  proxee_redis_store_port: 65000
+  local_redis_host: 127.0.0.1
+  local_redis_port: 65000
+  redis_mq_port: 65000
   proxee_start_port: 3000
   proxee_end_port: 9000
 
@@ -41,7 +47,7 @@ regions:
     environments:
       staging:
         server_vars:
-          boxer_redis_mq_host: coach-apse1-staging.action.io
+          redis_mq_host: coach-apse1-staging.action.io
         servers:
           - hostname: apse1-staging.actionbox.io
             size: m1.small
@@ -60,7 +66,7 @@ regions:
 
       production:
         server_vars:
-          boxer_redis_mq_host: coach-apse1.action.io
+          redis_mq_host: coach-apse1.action.io
         servers:
           - hostname: apse1.actionbox.io
             size: m1.small
@@ -81,7 +87,7 @@ regions:
     environments:
       staging:
         server_vars:
-          boxer_redis_mq_host: coach-usw1-staging.action.io
+          redis_mq_host: coach-usw1-staging.action.io
         servers:
           - hostname: usw1-staging.actionbox.io
             size: m1.small
@@ -100,7 +106,7 @@ regions:
 
       production:
         server_vars:
-          boxer_redis_mq_host: coach-usw1.action.io
+          redis_mq_host: coach-usw1.action.io
         servers:
           - hostname: usw1.actionbox.io
             size: m1.small

@@ -72,3 +72,5 @@
       action: shell /etc/init.d/redis-server restart
 
 - include: ../../shared/plays/monit/install_monit_client.yml
+- include: ../../shared/plays/diamond/install_diamond.yml
+
