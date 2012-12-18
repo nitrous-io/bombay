@@ -3,7 +3,7 @@
   sudo: True
 
   vars:
-    diamond_version: ee7ed5acbb646d0f2dfbc567e573b7b616f4ca5c
+    diamond_version: 2dabf7e1f9fff3af48d9507cddc9a17e4a02857d
 
   vars_files:
     - ../../../vars_files/diamond.${env}.yml
@@ -52,7 +52,7 @@
         - psutil
 
     - name: install diamond
-      git: repo=git://github.com/BrightcoveOS/Diamond.git dest=/tmp/Diamond version=$diamond_version
+      git: repo=git://github.com/arunthampi/Diamond.git dest=/tmp/Diamond version=$diamond_version
 
     - name: build diamond
       action: shell bash -c "cd /tmp/Diamond && make builddeb"
