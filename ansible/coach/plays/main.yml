@@ -44,6 +44,7 @@
       action: shell /etc/init.d/redis-server restart
 
 - include: deploy.yml
+- include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install_monit_client.yml
 - include: ../../shared/plays/diamond/install_diamond.yml
 

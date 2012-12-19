@@ -99,5 +99,6 @@
       action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
 
 - include: deploy.yml
+- include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install_monit_client.yml
 - include: ../../shared/plays/diamond/install_diamond.yml

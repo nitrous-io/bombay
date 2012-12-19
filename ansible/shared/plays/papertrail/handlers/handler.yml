@@ -1,0 +1,7 @@
+---
+- name: restart rsyslog
+  action: service name=rsyslog state=restarted
+
+- name: restart remote_syslog
+  action: service name=remote_syslog state=restarted
+

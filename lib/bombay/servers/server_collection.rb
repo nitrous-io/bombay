@@ -47,7 +47,7 @@ module Bombay
                    keypair,
                    ansible_hosts,
                    ansible_config.result(binding),
-                   { env: environment, region: current_region })
+                   { env: environment, region: current_region, role: self.role })
     end
 
     def cache_sensitive_vars!
