@@ -1,9 +1,9 @@
 ---
 - name: create main app directory
-  action: file path=$app_directory owner=$deploy_user group=$deploy_user state=directory mode=0770
+  file: path=$app_directory owner=$deploy_user group=$deploy_user state=directory mode=0770
 
 - name: create capistrano subdirectories
-  action: file path=$app_directory/$item owner=$deploy_user group=$deploy_user state=directory mode=0770
+  file: path=$app_directory/$item owner=$deploy_user group=$deploy_user state=directory mode=0770
   with_items:
    - releases
    - shared
@@ -11,3 +11,13 @@
    - shared/log
    - shared/pids
    - shared/config
+
+- name: change ownership to $deploy_user
+  shell: chown -R $deploy_user:$deploy_user $app_directory/$item
+  with_items:
+    - releases
+    - shared
+    - shared/system
+    - shared/log
+    - shared/pids
+    - shared/config

@@ -2,16 +2,11 @@
 - hosts: rainbow
   sudo: True
   gather_facts: False
+
   vars_files:
-    - ../../vars_files/github_private_key.yml
     - ../../vars_files/stunnel_key.yml
     - ../../vars_files/stunnel_pem.yml
-    - ../../vars_files/rainbow.${env}.yml
-  vars:
-    - app: rainbow
-    - app_directory: /var/apps/${app}
-    - deploy_user: action
-    - node_version: v0.8.11
+
   tasks:
     # Set the hostname
     - include: ../../shared/tasks/set_hostname.yml
@@ -25,20 +20,7 @@
     - name: install common-session in /etc/init.d/
       action: copy src=../../shared/files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
     # Set limits for the user
-    - include: ../../shared/tasks/set_limits.yml user=$deploy_user attribute=nofile value=65536
-    # Install sudoers
-    - include: ../../shared/tasks/install_sudoers.yml file=../files/rainbow_sudoers
-    # Create Deploy User
-    - include: ../../shared/tasks/create_deploy_user.yml deploy_user=$deploy_user
-    # Create Capistrano Layout for $app_directory
-    - include: ../../shared/tasks/create_capistrano_app_layout.yml app_directory=$app_directory deploy_user=$deploy_user
-    # Setup .env
-    - name: setup env
-      action: template src=../templates/env.j2 dest=$app_directory/shared/config/.env owner=$deploy_user group=$deploy_user mode=0600
-    - name: setup database.coffee
-      action: template src=../templates/database.coffee.j2 dest=$app_directory/shared/config/database.coffee owner=$deploy_user group=$deploy_user mode=0600
-    # Generate and Upload Public Key to GitHub
-    - include: ../../shared/tasks/register_github_keys.yml deploy_user=$deploy_user
+    - include: ../../shared/tasks/set_limits.yml
     # Setup nginx
     - name: setup nginx
       action: copy src=../files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
@@ -47,21 +29,7 @@
     - include: ../tasks/install_haproxy.yml
     # Setup stunnel
     - include: ../../shared/tasks/install_stunnel.yml
-    # Install NVM
-    - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
-    # Install Upstart
-    - include: ../../shared/tasks/install_upstart_for_app.yml app=$app deploy_user=$deploy_user node_version=$node_version
-    # Install cap script which does the whole capistrano deploy for boxer
-    - include: ../../shared/tasks/install_cap.yml
-    # Install a script which does upstart restarts
-    - include: ../../shared/tasks/install_upstart_node.yml
-    # Deploy boxer using capistrano technique
-    - name: deploy rainbow
-      action: shell su $deploy_user -c '/usr/local/bin/cap ${app}'
-    - name: copy over stuff needed by rainbow
-      action: shell su $deploy_user -c "cp /var/apps/${app}/shared/config/.env /var/apps/${app}/current/ && cp /var/apps/$app/shared/config/database.coffee /var/apps/$app/current/config/"
-    - name: restart rainbow
-      action: shell /usr/local/bin/upstart_node ${app}
+
   handlers:
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
@@ -70,6 +38,7 @@
     - name: restart stunnel
       action: shell /etc/init.d/stunnel4 restart
 
+- include: deploy.yml
 - include: ../../shared/plays/monit/install_monit_client.yml
 - include: ../../shared/plays/diamond/install_diamond.yml
 

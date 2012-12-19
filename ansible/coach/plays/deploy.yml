@@ -1,0 +1,46 @@
+---
+- hosts: all
+  sudo: True
+  gather_facts: False
+
+  vars_files:
+    - ../../vars_files/github_private_key.yml
+    - ../../vars_files/coach.${env}.yml
+
+  vars:
+    app: coach
+    deploy_user: app_runner
+    app_directory: /var/apps/${app}
+    node_version: v0.8.11
+
+  tasks:
+    # Create Deploy User
+    - include: ../../shared/tasks/create_deploy_user.yml
+    # Add lines to security limits.conf
+    - include: ../../shared/tasks/add_line_to_limits_conf.yml line=$item
+      with_items:
+        - "app_runner           -       nofile         65536"
+    # Install sudoers
+    - include: ../../shared/tasks/install_sudoers.yml file=../files/coach_sudoers
+    # Install Node via NVM
+    - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
+    # Generate and Upload Public Key to GitHub
+    - include: ../../shared/tasks/register_github_keys.yml
+    # Install Upstart for coach
+    - include: ../../shared/tasks/install_upstart_for_app.yml
+    # Install cap script which does the whole capistrano deploy for boxer
+    - include: ../../shared/tasks/install_cap.yml
+    # Install a script which does upstart restarts
+    - include: ../../shared/tasks/install_upstart_node.yml
+    # Create Capistrano Layout for $app_directory_1
+    - include: ../../shared/tasks/create_capistrano_app_layout.yml
+    # Setup .env
+    - name: setup env
+      action: template src=../templates/env.j2 dest=$app_directory/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+    # Deploy coach using capistrano technique
+    - name: deploy coach
+      action: shell su $deploy_user -c '/usr/local/bin/cap ${app}'
+    - name: copy over stuff needed by coach
+      action: shell su $deploy_user -c "cp /var/apps/${app}/shared/config/.env /var/apps/${app}/current/"
+    - name: restart coach
+      action: shell /usr/local/bin/upstart_node ${app}
