@@ -8,8 +8,6 @@ files:
 - /var/apps/coach/shared/log/coach.log
   {% endif %}
 
-hostname: {{ inventory_hostname }}
-
 destination:
   host: logs.papertrailapp.com
   port: {{ papertrail_port }}
