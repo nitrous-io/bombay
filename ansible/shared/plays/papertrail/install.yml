@@ -29,7 +29,7 @@
       copy: src=files/remote_syslog.init.d dest=/etc/init.d/remote_syslog owner=root group=root mode=0755
 
     - name: make remote_syslog gem restart on boot
-      shell: update-rc.d remote_syslog
+      shell: update-rc.d remote_syslog defaults
       ignore_errors: True
 
     - name: install remote_syslog gem config
