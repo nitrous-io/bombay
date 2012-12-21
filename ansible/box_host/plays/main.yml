@@ -34,7 +34,7 @@
 
     - include: ../../shared/tasks/host/ifup_bridge_network.yml bridge=$item
       with_items:
-        - br-lxc
+        - br-lxc-254
         - br-lxc-253
         - br-lxc-252
         - br-lxc-251
