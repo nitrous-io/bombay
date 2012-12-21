@@ -28,6 +28,10 @@
     - name: install remote_syslog init.d script
       copy: src=files/remote_syslog.init.d dest=/etc/init.d/remote_syslog owner=root group=root mode=0755
 
+    - name: make remote_syslog gem restart on boot
+      shell: update-rc.d remote_syslog
+      ignore_errors: True
+
     - name: install remote_syslog gem config
       template: src=templates/log_files.yml.j2 dest=/etc/log_files.yml owner=root group=root mode=0644
       notify: restart remote_syslog
@@ -35,7 +39,6 @@
     - name: install papertrail config
       template: src=templates/rsyslog.conf.j2 dest=/etc/rsyslog.conf owner=root group=root mode=0644
       notify: restart rsyslog
-
 
   handlers:
     - include: handlers/handler.yml
