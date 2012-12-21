@@ -1,0 +1,25 @@
+---
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: mkdir /var/lib/lxc
+      action: shell mkdir -p /var/lib/lxc
+
+    - name: mount /dev/xvdf
+      action: mount name=/var/lib/lxc src=/dev/xvdf fstype=xfs opts=defaults,nouuid,prjquota,comment=cloudconfig state=mounted
+
+    - name: mkdir /var/action
+      action: shell mkdir -p /var/action
+
+    - name: mount /dev/xvdg
+      action: mount name=/var/action src=/dev/xvdg fstype=xfs opts=defaults,nouuid,comment=cloudconfig state=mounted
+
+    # Grow the /dev/sdf partition
+    - name: xfs_growfs /dev/xvdf
+      action: shell xfs_growfs /dev/xvdf
+    # Grow the /dev/sdg partition
+    - name: xfs_growfs /dev/xvdg
+      action: shell xfs_growfs /dev/xvdg
+

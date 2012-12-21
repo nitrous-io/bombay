@@ -1,3 +1,6 @@
+- include: setup_partitions.yml
+- include: setup_networking.yml
+
 ---
 - hosts: box_host
   sudo: True
@@ -9,66 +12,14 @@
     s3_bucket: bombay-apse.action.io
 
   tasks:
-    - name: mkdir /var/lib/lxc
-      action: shell mkdir -p /var/lib/lxc
-
-    - name: mount /dev/xvdf
-      action: mount name=/var/lib/lxc src=/dev/xvdf fstype=xfs opts=defaults,nouuid,prjquota,comment=cloudconfig state=mounted
-
-    - name: mkdir /var/action
-      action: shell mkdir -p /var/action
-
-    - name: mount /dev/xvdg
-      action: mount name=/var/action src=/dev/xvdg fstype=xfs opts=defaults,nouuid,comment=cloudconfig state=mounted
-
     # Set the hostname
     - include: ../../shared/tasks/set_hostname.yml
-
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
     - include: ../../shared/tasks/install_ansible_deps.yml
-
-    # Setup Bridge Network
-    - name: Update /etc/network/interfaces
-      # Paths are relative to the containers/${container_template}/plays directory
-      action: template src=../../shared/templates/host/network_config.j2 dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
-
-    - include: ../../shared/tasks/host/ifup_bridge_network.yml bridge=$item
-      with_items:
-        - br-lxc-254
-        - br-lxc-253
-        - br-lxc-252
-        - br-lxc-251
-        - br-lxc-250
-        - br-lxc-249
-        - br-lxc-248
-        - br-lxc-247
-        - br-lxc-246
-        - br-lxc-245
-        - br-lxc-244
-
-    - include: ../../shared/tasks/host/setup_iptables_for_bridge_interface.yml
-      with_items:
-        - 254
-        - 253
-        - 252
-        - 251
-        - 250
-        - 249
-        - 248
-        - 247
-        - 246
-        - 245
-        - 244
     # apt-get update
     - include: ../../shared/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
-    # Grow the /dev/sdf partition
-    - name: xfs_growfs /dev/xvdf
-      action: shell xfs_growfs /dev/xvdf
-    # Grow the /dev/sdg partition
-    - name: xfs_growfs /dev/xvdg
-      action: shell xfs_growfs /dev/xvdg
     # Install pam.d/common-session which sets limits for non-interactive sessions
     - name: install common-session in /etc/init.d/
       action: copy src=../../shared/files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644

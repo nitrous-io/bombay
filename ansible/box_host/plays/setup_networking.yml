@@ -1,0 +1,25 @@
+---
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    # Setup Bridge Network
+    - name: Update /etc/network/interfaces
+      # Paths are relative to the containers/${container_template}/plays directory
+      action: template src=../../shared/templates/host/network_config.j2 dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
+
+    - include: ../../shared/tasks/host/ifup_bridge_network.yml subnet=$item
+      with_items:
+        - 254
+        - 253
+        - 252
+        - 251
+        - 250
+        - 249
+        - 248
+        - 247
+        - 246
+        - 245
+        - 244
+
