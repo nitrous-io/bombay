@@ -1,5 +1,5 @@
 ---
-vars_files:
+sensitive_vars:
   github_private_key:
     context: global
     vars:
@@ -14,28 +14,22 @@ vars_files:
       - name: aws_secret_access_key
         prompt: AWS Secret Access Key (needed to pull stuff from S3)
 
+server_vars:
+  pg_user: action
+  pg_password: password
+
 regions:
   - region: ap-southeast-1
     environments:
       development:
-        host_vars:
-          dev:
-            - name: pg_user
-              value: action
-            - name: pg_password
-              value: password
-        hosts:
+        servers:
           - hostname: choonkeats-box.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
-            host_vars:
-              dev:
-                - name: username
-                  value: choonkeat
-                - name: github_username
-                  value: choonkeat
-                - name: github_email
-                  value: choonkeat@gmail.com
+            server_vars:
+              username: choonkeat
+              github_username: choonkeat
+              github_email: choonkeat@gmail.com
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
@@ -45,14 +39,10 @@ regions:
           - hostname: aruns-box.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
-            host_vars:
-              dev:
-                - name: username
-                  value: arun
-                - name: github_username
-                  value: arunthampi
-                - name: github_email
-                  value: arun.thampi@gmail.com
+            server_vars:
+              username: arun
+              github_username: arunthampi
+              github_email: arun.thampi@gmail.com
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
@@ -62,14 +52,10 @@ regions:
           - hostname: daniels-box.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
-            host_vars:
-              dev:
-                - name: username
-                  value: daniel
-                - name: github_username
-                  value: dqminh
-                - name: github_email
-                  value: dqminh89@gmail.com
+            server_vars:
+              username: daniel
+              github_username: dqminh 
+              github_email: dqminh89@gmail.com
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
@@ -79,14 +65,10 @@ regions:
           - hostname: petes-box.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
-            host_vars:
-              dev:
-                - name: username
-                  value: pete
-                - name: github_username
-                  value: raingrove
-                - name: github_email
-                  value: raingrove@gmail.com
+            server_vars:
+              username: pete
+              github_username: raingrove
+              github_email: raingrove@gmail.com
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
@@ -96,14 +78,10 @@ regions:
           - hostname: ajs-box.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
-            host_vars:
-              dev:
-                - name: username
-                  value: aj
-                - name: github_username
-                  value: ajsolimine
-                - name: github_email
-                  value: ajsolimine@gmail.com
+            server_vars:
+              username: aj
+              github_username: ajsolimine
+              github_email: ajsolimine@gmail.com
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
@@ -113,14 +91,10 @@ regions:
           - hostname: zans-box.actionbox.io
             size: m1.small
             ami: ami-e6d999b4
-            host_vars:
-              dev:
-                - name: username
-                  value: zan
-                - name: github_username
-                  value: liangzan
-                - name: github_email
-                  value: liangzan@gmail.com
+            server_vars:
+              username: zan
+              github_username: liangzan
+              github_email: liangzan@gmail.com
             block_devices:
               - DeviceName: /dev/sdf
                 Ebs.SnapshotId: snap-1d909139
