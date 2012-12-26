@@ -103,12 +103,7 @@
     - include: ../../../servers/box_host/tasks/install_action_container.yml name=python_container_template version=1352374499 s3_bucket=$s3_bucket
 
     # Install redis
-    - include: ../../../global/tasks/install_redis.yml port=$redis_port
-
-    # Initialize Redis
-    - include: ../../../servers/box_host/tasks/setup_redis_init_script.yml
-    - name: run the init script
-      action: shell /tmp/initialize_redis.sh $redis_port
+    - include: ../../shared/plays/redis/tasks/task.yml redis_port=$redis_port
 
     # Install ruby via rvm
     - include: ../../../global/tasks/container/install_ruby_via_rvm.yml user=$dev_username version=$ruby_version
@@ -223,12 +218,11 @@
         - /home/${dev_username}/.ssh/config
 
   handlers:
+    - include: ../../shared/plays/redis/handlers/handler.yml
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
     - name: restart stunnel
       action: shell /etc/init.d/stunnel4 restart
-    - name: restart redis
-      action: shell /etc/init.d/redis-server restart
     - name: restart haproxy
       action: shell /etc/init.d/haproxy restart
     - name: restart postgresql
