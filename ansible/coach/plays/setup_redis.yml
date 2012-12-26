@@ -1,0 +1,10 @@
+---
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - include: ../../shared/plays/redis/tasks/task.yml redis_port=$local_redis_port
+
+  handlers:
+    - include: ../../shared/plays/redis/handlers/handler.yml
