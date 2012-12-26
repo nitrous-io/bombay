@@ -26,7 +26,7 @@
     # Set limits for the user
     - include: ../../shared/tasks/set_limits.yml
     # Install Redis Server
-    - include: ../../shared/tasks/install_redis_with_resources.yml redis_port=$local_redis_port
+    - include: ../../shared/plays/redis/tasks/task.yml redis_port=$local_redis_port
     # Configure S3 Cmd
     - include: ../../shared/tasks/configure_s3cmd.yml
     # Install ruby container
@@ -39,13 +39,16 @@
     - include: ../tasks/install_action_container.yml name=golang_container_template version=1353996298 s3_bucket=$s3_bucket
 
   handlers:
+    # TODO: because this can notify restart server task, it could not be
+    # replaced with shared/plays/redis/handlers/handler.yml. Can we do
+    # something about this ?
     - name: restart redis
       action: shell /etc/init.d/redis-server restart
       notify: initialize redis
     - name: initialize redis
       action: shell /tmp/initialize_redis.sh $local_redis_port
       notify: restart server
-      # restart server after the very first provisioning, so that iptables etc. will be setup correctly
+    # restart server after the very first provisioning, so that iptables etc. will be setup correctly
     - name: restart server
       action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
 

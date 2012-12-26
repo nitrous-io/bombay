@@ -34,14 +34,13 @@
     # Setup stunnel
     - include: ../../shared/tasks/install_stunnel.yml
     # Install redis
-    - include: ../../shared/tasks/install_redis.yml port=$local_redis_port
+    - include: ../../shared/plays/redis/tasks/task.yml redis_port=$local_redis_port
   handlers:
+    - include: ../../shared/plays/redis/handlers/handler.yml
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
     - name: restart stunnel
       action: shell /etc/init.d/stunnel4 restart
-    - name: restart redis
-      action: shell /etc/init.d/redis-server restart
 
 - include: deploy.yml
 - include: ../../shared/plays/papertrail/install.yml
