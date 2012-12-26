@@ -1,4 +1,0 @@
----
-- name: upload the populate available_ips script
-  action: copy src=../files/initialize_redis.sh dest=/tmp/initialize_redis.sh owner=root group=root mode=0700
-
