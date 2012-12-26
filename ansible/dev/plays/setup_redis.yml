@@ -6,12 +6,7 @@
     redis_port: 6379
 
   tasks:
-    - include: ../../shared/tasks/update_apt.yml
-    - include: ../../shared/tasks/install_redis_with_resources.yml redis_port=$redis_port
+    - include: ../../shared/plays/redis/tasks/task.yml redis_port=$redis_port
 
   handlers:
-    - name: restart redis
-      action: shell /etc/init.d/redis-server restart
-      notify: initialize redis
-    - name: initialize redis
-      action: shell /tmp/initialize_redis.sh $redis_port
+    - include: ../../shared/plays/redis/handlers/handler.yml

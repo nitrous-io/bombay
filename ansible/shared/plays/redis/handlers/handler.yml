@@ -1,0 +1,6 @@
+---
+- name: restart redis
+  action: shell /etc/init.d/redis-server restart
+  notify: initialize redis
+- name: initialize redis
+  action: shell /tmp/initialize_redis.sh $redis_port
