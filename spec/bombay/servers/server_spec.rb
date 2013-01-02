@@ -241,7 +241,7 @@ describe Bombay::Server do
       context "DNS entry for the server exists" do
         before do
           @elastic_ip = compute(server.region).addresses.create
-          @record = @zone.records.create(value: "ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com",
+          @record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
                                          name: 'example.action.io',
                                          type: 'CNAME')
           Fog::DNS::AWS::Records.any_instance.stub(:get) { @record }

@@ -61,7 +61,9 @@ module Bombay
         record = zone.records.get(self.hostname)
 
         if record
-          cname = record.value
+          cname = record.value.first
+          return unless cname
+
           cname_matcher = cname.match(/ec2-(\d+)-(\d+)-(\d+)-(\d+)\./)
 
           if cname_matcher && cname_matcher.size == 5
