@@ -82,17 +82,13 @@ module Bombay
         # If the DNS record exists, that means that DNS entry exists
         # for an elastic IP which has been released
         if (record = zone.records.get(self.hostname))
-          record.destroy
-          record.value = domain_name
-          record.save
+          change_dns_value(record, domain_name)
 
           # If this is an actionbox.io URL, then update the DNS value there
           # as well
           if self.hostname =~ /actionbox\.io/
-            record = zone.records.get("*.#{self.hostname}")
-            if record
-              record.value = domain_name
-              record.save
+            if (record = zone.records.get("*.#{self.hostname}"))
+              change_dns_value(record, domain_name)
             end
           end
         else
@@ -131,7 +127,7 @@ module Bombay
       }
 
       if self.block_devices && !self.block_devices.to_a.empty?
-        server_def[:block_device_mapping] = self.block_devices
+        server_def[:block_device_mapping] = self.block_devices.to_hash
       end
 
       server = compute.servers.create(server_def)
@@ -147,6 +143,12 @@ module Bombay
       end
 
       server.reload
+    end
+
+    def change_dns_value(record, value)
+      record.destroy
+      record.value = value
+      record.save
     end
   end
 end

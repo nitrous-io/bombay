@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Bombay::Server do
   let!(:server) do
-    Bombay::Server.new(hostname: 'example.action.io',
+    Bombay::Server.new(hostname: 'example.actionbox.io',
                        role: 'example',
                        region: 'ap-southeast-1',
                        environment: 'development',
@@ -185,7 +185,7 @@ describe Bombay::Server do
     before do
       create_security_group_for(server.region, server.role)
       create_keypair_for(server.region)
-      @zone = create_dns_zone("action.io")
+      @zone = create_dns_zone("actionbox.io")
     end
 
     context "server already exists and is not terminated" do
@@ -241,15 +241,20 @@ describe Bombay::Server do
       context "DNS entry for the server exists" do
         before do
           @elastic_ip = compute(server.region).addresses.create
-          @record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
-                                         name: 'example.action.io',
-                                         type: 'CNAME')
-          Fog::DNS::AWS::Records.any_instance.stub(:get) { @record }
+          @main_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
+                                              name: 'example.actionbox.io',
+                                              type: 'CNAME')
+          @wildcard_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
+                                                  name: '*.example.actionbox.io',
+                                                  type: 'CNAME')
+
+          Fog::DNS::AWS::Records.any_instance.stub(:get).and_return(@main_record, @wildcard_record)
         end
 
         after do
           @elastic_ip.destroy if @elastic_ip
-          @record.destroy if @record
+          @main_record.destroy if @main_record
+          @wildcard_record.destroy if @wildcard_record
         end
 
         context "Elastic IP associated with the DNS entry does not exist" do
@@ -261,7 +266,8 @@ describe Bombay::Server do
           it "should create an instance with the public_ip which is different from the one which exists in the DNS records" do
             cloud_instance = server.provision
             new_ip = compute(server.region).addresses.first
-            @record.reload.value.should == "ec2-#{new_ip.public_ip.gsub(/\./, '-')}.#{server.region}.compute.amazonaws.com"
+            @main_record.reload.value.should == "ec2-#{new_ip.public_ip.gsub(/\./, '-')}.#{server.region}.compute.amazonaws.com"
+            @wildcard_record.reload.value.should == "ec2-#{new_ip.public_ip.gsub(/\./, '-')}.#{server.region}.compute.amazonaws.com"
 
             cloud_instance.tags[:Name].should == server.hostname
             cloud_instance.tags[:ip].should == new_ip.public_ip
