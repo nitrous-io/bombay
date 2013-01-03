@@ -249,6 +249,17 @@ describe Bombay::ServerCollection do
           servers[0].ami.should == 'ami-deadbeef'
           servers[0].environment.should == 'development'
           servers[0].vars.should == { "nagios_http_port" => 80, "nagios_https_port" => 443, "nagios_user" => "user_development", "nagios_password" => "password_development", "nagios_email" => "nagios-apse-1@nagios.com" }
+          block_devices = servers[0].block_devices.to_a
+
+          block_devices[0].name.should == '/dev/sdf'
+          block_devices[0].snapshot_id.should == 'snap-deadbeef'
+          block_devices[0].size.should == 20
+          block_devices[0].delete_on_termination.should == 'false'
+
+          block_devices[1].name.should == '/dev/sdg'
+          block_devices[1].snapshot_id.should == 'snap-deadbeef'
+          block_devices[1].size.should == 40
+          block_devices[1].delete_on_termination.should == 'false'
 
           servers[1].hostname.should == 'nagios-server-apse2.action.io'
           servers[1].size.should == 'm1.large'
@@ -257,12 +268,20 @@ describe Bombay::ServerCollection do
           servers[1].environment.should == 'development'
           servers[1].vars.should == { "nagios_http_port" => 80, "nagios_https_port" => 443, "nagios_user" => "user_development", "nagios_password" => "password_development", "nagios_email" => "nagios-apse-2@nagios.com" }
 
+          block_devices = servers[1].block_devices.to_a
+
+          block_devices[0].name.should == '/dev/sdf'
+          block_devices[0].snapshot_id.should == 'snap-1d909139'
+          block_devices[0].size.should == 20
+          block_devices[0].delete_on_termination.should == 'false'
+
           servers[2].hostname.should == 'nagios-server-usw1.action.io'
           servers[2].size.should == 'm1.small'
           servers[2].region.should == 'us-west-1'
           servers[2].ami.should == 'ami-deadbeef'
           servers[2].environment.should == 'production'
           servers[2].vars.should == { "nagios_http_port" => 80, "nagios_https_port" => 443, "nagios_user" => "user_production", "nagios_password" => "password_production", "nagios_email" => "nagios-usw-1@nagios.com" }
+          servers[2].block_devices.to_a.should be_empty
 
           sensitive_vars = server_collection.sensitive_vars
           sensitive_vars['github_private_key']['context'].should == 'global'

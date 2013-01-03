@@ -55,14 +55,14 @@ regions:
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
             block_devices:
-              - DeviceName: /dev/sdf
-                Ebs.SnapshotId: snap-1d909139
-                Ebs.VolumeSize: 40
-                Ebs.DeleteOnTermination: 'false'
-              - DeviceName: /dev/sdg
-                Ebs.SnapshotId: snap-1d909139
-                Ebs.VolumeSize: 8
-                Ebs.DeleteOnTermination: 'false'
+              - name: /dev/sdf
+                snapshot_id: snap-1d909139
+                size: 40
+                delete_on_termination: 'false'
+              - name: /dev/sdg
+                snapshot_id: snap-1d909139
+                size: 8
+                delete_on_termination: 'false'
 
       production:
         server_vars:
@@ -74,14 +74,14 @@ regions:
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
             block_devices:
-              - DeviceName: /dev/sdf
-                Ebs.SnapshotId: snap-1d909139
-                Ebs.VolumeSize: 40
-                Ebs.DeleteOnTermination: 'false'
-              - DeviceName: /dev/sdg
-                Ebs.SnapshotId: snap-1d909139
-                Ebs.VolumeSize: 8
-                Ebs.DeleteOnTermination: 'false'
+              - name: /dev/sdf
+                snapshot_id: snap-1d909139
+                volume_size: 40
+                delete_on_termination: 'false'
+              - name: /dev/sdg
+                snapshot_id: snap-1d909139
+                volume_size: 8
+                delete_on_termination: 'false'
 
   - region: us-west-1
     environments:
@@ -95,14 +95,14 @@ regions:
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
             block_devices:
-              - DeviceName: /dev/sdf
-                Ebs.SnapshotId: snap-566c3c7a
-                Ebs.VolumeSize: 40
-                Ebs.DeleteOnTermination: 'false'
-              - DeviceName: /dev/sdg
-                Ebs.SnapshotId: snap-566c3c7a
-                Ebs.VolumeSize: 8
-                Ebs.DeleteOnTermination: 'false'
+              - name: /dev/sdf
+                snapshot_id: snap-566c3c7a
+                volume_size: 40
+                delete_on_termination: 'false'
+              - name: /dev/sdg
+                snapshot_id: snap-566c3c7a
+                volume_size: 8
+                delete_on_termination: 'false'
 
       production:
         server_vars:
@@ -114,11 +114,11 @@ regions:
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
             block_devices:
-              - DeviceName: /dev/sdf
-                Ebs.SnapshotId: snap-566c3c7a
-                Ebs.VolumeSize: 40
-                Ebs.DeleteOnTermination: 'false'
-              - DeviceName: /dev/sdg
-                Ebs.SnapshotId: snap-566c3c7a
-                Ebs.VolumeSize: 8
-                Ebs.DeleteOnTermination: 'false'
+              - name: /dev/sdf
+                snapshot_id: snap-566c3c7a
+                volume_size: 40
+                delete_on_termination: 'false'
+              - name: /dev/sdg
+                snapshot_id: snap-566c3c7a
+                volume_size: 8
+                delete_on_termination: 'false'
