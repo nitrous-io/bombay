@@ -134,11 +134,11 @@ module Bombay
 
       if server
         server.wait_for { print "."; ready? }
-        say "#{self.hostname} provisioned, associating ip address..."
+        say "\n#{self.hostname} provisioned, associating ip address..."
         compute.associate_address(server.id, self.ip)
         say "waiting for boot..."
         print(".") until tcp_test_ssh {
-          puts("Done")
+          say("\nDone")
         }
       end
 
