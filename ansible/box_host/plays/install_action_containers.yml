@@ -1,0 +1,14 @@
+---
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+  tasks:
+    # Install ruby container
+    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1353987451 s3_bucket=$s3_bucket
+    # Install nodejs container
+    - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1353995398 s3_bucket=$s3_bucket
+    # Install python container
+    - include: ../tasks/install_action_container.yml name=python_container_template version=1353988799 s3_bucket=$s3_bucket
+    # Install golang container
+    - include: ../tasks/install_action_container.yml name=golang_container_template version=1353996298 s3_bucket=$s3_bucket
+

@@ -64,6 +64,10 @@
       action: template src=../../../shared/plays/diamond/templates/diamond.conf.j2 dest=/etc/diamond/diamond.conf mode=0644 owner=root group=root
       notify: restart diamond
 
+    - name: copy /etc/init/diamond.conf
+      action: template src=../../../shared/plays/diamond/templates/init_diamond.conf.j2 dest=/etc/init/diamond.conf mode=0644 owner=root group=root
+      notify: restart diamond
+
     # Install Default Collectors
     - name: install cpu collector
       copy: src=../../../shared/plays/diamond/files/CPUCollector.conf dest=/etc/diamond/collectors/CPUCollector.conf mode=0644 owner=root group=root

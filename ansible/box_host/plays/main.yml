@@ -1,16 +1,7 @@
-- include: setup_partitions.yml
-- include: setup_networking.yml
-
 ---
 - hosts: box_host
   sudo: True
   gather_facts: False
-  vars_files:
-    - ../../vars_files/s3cfg.yml
-
-  vars:
-    s3_bucket: bombay-apse.action.io
-
   tasks:
     # Set the hostname
     - include: ../../shared/tasks/set_hostname.yml
@@ -20,9 +11,24 @@
     - include: ../../shared/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
+
+- include: setup_partitions.yml
+- include: setup_networking.yml
+
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+  vars_files:
+    - ../../vars_files/s3cfg.yml
+
+  vars:
+    s3_bucket: bombay-apse.action.io
+    redis_port: $local_redis_port
+
+  tasks:
     # Install pam.d/common-session which sets limits for non-interactive sessions
     - name: install common-session in /etc/init.d/
-      action: copy src=../../shared/files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
+      copy: src=../../shared/files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
     # Set limits for the user
     - include: ../../shared/tasks/set_limits.yml
     # Install Redis Server
@@ -39,20 +45,23 @@
     - include: ../tasks/install_action_container.yml name=golang_container_template version=1353996298 s3_bucket=$s3_bucket
 
   handlers:
-    # TODO: because this can notify restart server task, it could not be
-    # replaced with shared/plays/redis/handlers/handler.yml. Can we do
-    # something about this ?
-    - name: restart redis
-      action: shell /etc/init.d/redis-server restart
-      notify: initialize redis
-    - name: initialize redis
-      action: shell /tmp/initialize_redis.sh $local_redis_port
-      notify: restart server
-    # restart server after the very first provisioning, so that iptables etc. will be setup correctly
-    - name: restart server
-      action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
+    - include: ../../shared/plays/redis/handlers/handler.yml
 
 - include: deploy.yml
 - include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install_monit_client.yml
 - include: ../../shared/plays/diamond/install_diamond.yml
+
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+  tasks:
+    - name: restart box host
+      shell: echo ''
+      notify: restart server
+
+  handlers:
+    # restart server after the very first provisioning, so that iptables etc. will be setup correctly
+    - name: restart server
+      action: shell bash -c "test -f /root/.bootstrapped || (touch /root/.bootstrapped && reboot)"
+
