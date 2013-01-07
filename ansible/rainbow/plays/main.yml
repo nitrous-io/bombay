@@ -3,10 +3,6 @@
   sudo: True
   gather_facts: False
 
-  vars_files:
-    - ../../vars_files/stunnel_key.yml
-    - ../../vars_files/stunnel_pem.yml
-
   tasks:
     # Set the hostname
     - include: ../../shared/tasks/set_hostname.yml
@@ -27,17 +23,14 @@
       notify: restart nginx
     # Setup haproxy
     - include: ../tasks/install_haproxy.yml
-    # Setup stunnel
-    - include: ../../shared/tasks/install_stunnel.yml
 
   handlers:
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
     - name: restart haproxy
       action: shell /etc/init.d/haproxy restart
-    - name: restart stunnel
-      action: shell /etc/init.d/stunnel4 restart
 
+- include: setup_stunnel.yml
 - include: deploy.yml
 - include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install_monit_client.yml

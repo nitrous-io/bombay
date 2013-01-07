@@ -1,0 +1,25 @@
+---
+- name: setup /etc/stunnel/{certs,keys} directory
+  file: path=/etc/stunnel/$item state=directory owner=stunnel4 group=stunnel4 mode=0770
+  with_items:
+   - certs
+   - keys
+
+- name: create chroot directory
+  command: mkdir -p /var/run/stunnel
+
+- name: setup proper ownership of the chroot directory
+  command: chown stunnel4:stunnel4 /var/run/stunnel
+
+- name: move stunnel.pem to /etc/stunnel/certs directory
+  template: src=../../shared/templates/stunnel_pem.j2 dest=/etc/stunnel/certs/stunnel.pem owner=stunnel4 group=stunnel4 mode=0660
+
+- name: move stunnel.key to /etc/stunnel/certs directory
+  template: src=../../shared/templates/stunnel_key.j2 dest=/etc/stunnel/keys/stunnel.key owner=stunnel4 group=stunnel4 mode=0660
+
+- name: setup stunnel.conf the way we want
+  copy: src=../../shared/files/stunnel.conf dest=/etc/stunnel/stunnel.conf owner=stunnel4 group=stunnel4 mode=0660
+
+- name: setup stunnel to be enabled
+  copy: src=../../shared/files/default_stunnel4 dest=/etc/default/stunnel4 owner=stunnel4 group=stunnel4 mode=0660
+  notify: restart stunnel

@@ -1,0 +1,3 @@
+---
+- name: restart stunnel
+  shell: killall stunnel4 && /etc/init.d/stunnel4 start

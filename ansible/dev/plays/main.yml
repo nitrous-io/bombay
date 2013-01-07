@@ -2,86 +2,68 @@
 - hosts: dev
   sudo: True
   gather_facts: False
+  tasks:
+    # apt-get update
+    - include: ../../shared/tasks/update_apt.yml
+    # Set the hostname
+    - include: ../../shared/tasks/set_hostname.yml
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../shared/tasks/install_ansible_deps.yml
+    # Install Dependencies (via apt-get)
+    - include: ../tasks/install_deps.yml
+
+- include: setup_stunnel.yml
+- include: setup_networking.yml
+- include: setup_redis.yml
+
+- hosts: dev
+  sudo: True
+  gather_facts: False
   vars_files:
-    - ../../../vars_files/github_private_key.yml
-    - ../../../vars_files/s3cfg.yml
+    - ../../vars_files/github_private_key.yml
+    - ../../vars_files/s3cfg.yml
+
   vars:
     env: development
     ruby_version: 1.9.3-p194
     node_version: v0.8.12
-    redis_port: 6379
     s3_bucket: bombay-apse.action.io
     gateway: 192.168.254.1
 
   tasks:
-    # apt-get update
-    - include: ../../../global/tasks/update_apt.yml
-
-    # Set the hostname
-    - include: ../../../global/tasks/set_hostname.yml
-
     # Configure S3 Cmd
-    - include: ../../../global/tasks/configure_s3cmd.yml
-
-    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
-    - include: ../../../global/tasks/install_ansible_deps.yml
-
-    # Install Dependencies (via apt-get)
-    - include: ../tasks/install_deps.yml
+    - include: ../../shared/tasks/configure_s3cmd.yml
 
     # Install sudoers with passwd less rights for admins
-    - include: ../../../global/tasks/install_sudoers.yml file=../files/dev_sudoers
+    - include: ../../shared/tasks/install_sudoers.yml file=../files/dev_sudoers
 
     # Create the user
-    - name: create $dev_username
-      action: user name=$dev_username shell=/bin/bash home=/home/${dev_username} groups=admin
+    - name: create $username
+      action: user name=$username shell=/bin/bash home=/home/${username} groups=admin
 
     - name: create /var/action
       action: shell mkdir -p /var/action
 
     - name: add s3cfg
-      action: template src=../templates/s3cfg.j2 dest=/home/${dev_username}/.s3cfg owner=${dev_username} group=${dev_username} mode=0644
+      action: template src=../templates/s3cfg.j2 dest=/home/${username}/.s3cfg owner=${username} group=${username} mode=0644
 
     # Generate and Upload Public Key to GitHub
-    - include: ../../../global/tasks/register_github_keys.yml deploy_user=$dev_username
+    - include: ../../shared/tasks/register_github_keys.yml deploy_user=$username
 
     # Setup nginx
     - name: setup nginx
       action: copy src=../files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
       notify: restart nginx
 
-    # Setup stunnel
-    - name: setup /etc/stunnel/{certs,keys} directory
-      action: file path=/etc/stunnel/$item state=directory owner=root group=root mode=0770
-      with_items:
-       - certs
-       - keys
-
-    - name: move stunnel.pem to /etc/stunnel/certs directory
-      action: copy src=../files/stunnel.pem dest=/etc/stunnel/certs/stunnel.pem owner=root group=root mode=0660
-
-    - name: move stunnel.key to /etc/stunnel/certs directory
-      action: copy src=../files/stunnel.key dest=/etc/stunnel/keys/stunnel.key owner=root group=root mode=0660
-
-    - name: setup stunnel.conf the way we want
-      action: copy src=../files/stunnel.conf dest=/etc/stunnel/stunnel.conf owner=root group=root mode=0660
-
-    - name: setup stunnel to be enabled
-      action: copy src=../../../global/files/default_stunnel4 dest=/etc/default/stunnel4 owner=root group=root mode=0660
-      notify: restart stunnel
-
     # Setup haproxy
-    - include: ../../../servers/rainbow/tasks/install_haproxy.yml
-
-    # Setup Bridge Network
-    - include: ../../../global/tasks/host/setup_bridge_network.yml gateway=$gateway
+    - include: ../../rainbow/tasks/install_haproxy.yml
 
     # Install pam.d/common-session which sets limits for non-interactive sessions
     - name: install common-session in /etc/init.d/
       action: copy src=../files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
 
     # Set limits for the user
-    - include: ../../../global/tasks/set_limits.yml user=$dev_username attribute=nofile value=65536
+    - include: ../../shared/tasks/set_limits.yml user=$username attribute=nofile value=65536
 
     # Install container
     - name: mkdir /var/lib/lxc
@@ -96,24 +78,21 @@
       action: shell xfs_growfs /dev/xvdf
 
     # ruby container
-    - include: ../../../servers/box_host/tasks/install_action_container.yml name=ruby_container_template version=1350283256 s3_bucket=$s3_bucket
+    - include: ../../box_host/tasks/install_action_container.yml name=ruby_container_template version=1350283256 s3_bucket=$s3_bucket
     # nodejs container
-    - include: ../../../servers/box_host/tasks/install_action_container.yml name=nodejs_container_template version=1351826220 s3_bucket=$s3_bucket
+    - include: ../../box_host/tasks/install_action_container.yml name=nodejs_container_template version=1351826220 s3_bucket=$s3_bucket
     # python container
-    - include: ../../../servers/box_host/tasks/install_action_container.yml name=python_container_template version=1352374499 s3_bucket=$s3_bucket
-
-    # Install redis
-    - include: ../../shared/plays/redis/tasks/task.yml redis_port=$redis_port
+    - include: ../../box_host/tasks/install_action_container.yml name=python_container_template version=1352374499 s3_bucket=$s3_bucket
 
     # Install ruby via rvm
-    - include: ../../../global/tasks/container/install_ruby_via_rvm.yml user=$dev_username version=$ruby_version
+    - include: ../../shared/tasks/container/install_ruby_via_rvm.yml user=$username version=$ruby_version
 
     # Install bundler and foreman
-    - include: ../../../global/tasks/container/install_gem.yml user=$dev_username gem=bundler
-    - include: ../../../global/tasks/container/install_gem.yml user=$dev_username gem=foreman
+    - include: ../../shared/tasks/container/install_gem.yml user=$username gem=bundler
+    - include: ../../shared/tasks/container/install_gem.yml user=$username gem=foreman
 
     # Install node with nvm
-    - include: ../../../global/tasks/container/install_node_via_nvm.yml user=$dev_username version=$node_version
+    - include: ../../shared/tasks/container/install_node_via_nvm.yml user=$username version=$node_version
 
     # Copy postgresql config
     - name: copy postgresql config
@@ -121,12 +100,12 @@
 
     # create postgresql user
     - name: create postgresql user
-      action: shell echo "CREATE ROLE ${dev_pg_user} with CREATEDB LOGIN PASSWORD '${dev_pg_password}'" | sudo -u postgres psql -U postgres
+      action: shell echo "CREATE ROLE ${pg_user} with CREATEDB LOGIN PASSWORD '${pg_password}'" | sudo -u postgres psql -U postgres
       notify: restart postgresql
 
     # create actionio_development db in postgresql
     - name: create {actionio_development,actionio_test,actionio_production} db
-      action: shell sudo -u postgres createdb -U postgres -O ${dev_pg_user} -E utf8 $item
+      action: shell sudo -u postgres createdb -U postgres -O ${pg_user} -E utf8 $item
       with_items:
        - actionio_development
        - actionio_test
@@ -135,11 +114,11 @@
 
     # Create project directory
     - name: create project directories
-      action: shell su $dev_username -c "mkdir -p /home/$dev_username/workspace"
+      action: shell su $username -c "mkdir -p /home/$username/workspace"
 
     # Clone boxer
     - name: git clone boxer
-      action: shell su $dev_username -c "git clone --recursive git@github.com:action-io/boxer.git /home/$dev_username/workspace/boxer/" creates=/home/$dev_username/workspace/boxer
+      action: shell su $username -c "git clone --recursive git@github.com:action-io/boxer.git /home/$username/workspace/boxer/" creates=/home/$username/workspace/boxer
 
     # Install the boxer_id
     - name: get the public ip
@@ -148,81 +127,78 @@
 
     # Copying boxer env config
     - name: copy boxer env config
-      action: template src=../templates/boxer_env.j2 dest=/home/$dev_username/workspace/boxer/.env owner=$dev_username group=$dev_username mode=0644
+      action: template src=../templates/boxer_env.j2 dest=/home/$username/workspace/boxer/.env owner=$username group=$username mode=0644
 
     # Copying boxer runtimes config
     - name: copy boxer runtimes config
-      action: template src=../files/runtimes.coffee dest=/home/$dev_username/workspace/boxer/config/runtimes.coffee owner=$dev_username group=$dev_username mode=0644
+      action: template src=../files/runtimes.coffee dest=/home/$username/workspace/boxer/config/runtimes.coffee owner=$username group=$username mode=0644
 
     # Install node modules
     - name: install node modules for boxer
-      action: shell su $dev_username -c "/home/$dev_username/.nvm/$node_version/bin/npm install" chdir=/home/$dev_username/workspace/boxer
+      action: shell su $username -c "/home/$username/.nvm/$node_version/bin/npm install" chdir=/home/$username/workspace/boxer
 
     # Clone rainbow
     - name: git clone --recursive rainbow
-      action: shell su $dev_username -c "git clone --recursive git@github.com:action-io/rainbow.git /home/$dev_username/workspace/rainbow/" creates=/home/$dev_username/workspace/rainbow
+      action: shell su $username -c "git clone --recursive git@github.com:action-io/rainbow.git /home/$username/workspace/rainbow/" creates=/home/$username/workspace/rainbow
 
     # Copying rainbow env configs
     - name: copy rainbow configs
-      action: copy src=../files/rainbow_env dest=/home/$dev_username/workspace/rainbow/.env owner=$dev_username group=$dev_username mode=0644
+      action: copy src=../files/rainbow_env dest=/home/$username/workspace/rainbow/.env owner=$username group=$username mode=0644
 
     # Copying rainbow database configs
     - name: copy rainbow configs
-      action: template src=../templates/database.coffee.j2 dest=/home/$dev_username/workspace/rainbow/config/database.coffee owner=$dev_username group=$dev_username mode=0644
+      action: template src=../templates/database.coffee.j2 dest=/home/$username/workspace/rainbow/config/database.coffee owner=$username group=$username mode=0644
 
     # Install node modules
     - name: install node modules for rainbow
-      action: shell su $dev_username -c "/home/$dev_username/.nvm/$node_version/bin/npm install" chdir=/home/$dev_username/workspace/rainbow
+      action: shell su $username -c "/home/$username/.nvm/$node_version/bin/npm install" chdir=/home/$username/workspace/rainbow
 
     # Clone coach
     - name: git clone --recursive coach
-      action: shell su $dev_username -c "git clone --recursive git@github.com:action-io/coach.git /home/$dev_username/workspace/coach/" creates=/home/$dev_username/workspace/coach
+      action: shell su $username -c "git clone --recursive git@github.com:action-io/coach.git /home/$username/workspace/coach/" creates=/home/$username/workspace/coach
 
     # Copying coach configs
     - name: copy coach configs
-      action: copy src=../files/coach_env dest=/home/$dev_username/workspace/coach/.env owner=$dev_username group=$dev_username mode=0644
+      action: copy src=../files/coach_env dest=/home/$username/workspace/coach/.env owner=$username group=$username mode=0644
 
     # Install node modules
     - name: install node modules for coach
-      action: shell su $dev_username -c "/home/$dev_username/.nvm/$node_version/bin/npm install" chdir=/home/$dev_username/workspace/coach
+      action: shell su $username -c "/home/$username/.nvm/$node_version/bin/npm install" chdir=/home/$username/workspace/coach
 
     # Clone proxee
     - name: git clone --recursive proxee
-      action: shell su $dev_username -c "git clone --recursive git@github.com:action-io/proxee.git /home/$dev_username/workspace/proxee/" creates=/home/$dev_username/workspace/proxee
+      action: shell su $username -c "git clone --recursive git@github.com:action-io/proxee.git /home/$username/workspace/proxee/" creates=/home/$username/workspace/proxee
 
     # Copying proxee configs
     - name: copy proxee configs
-      action: copy src=../files/proxee_env dest=/home/$dev_username/workspace/proxee/.env owner=$dev_username group=$dev_username mode=0644
+      action: copy src=../files/proxee_env dest=/home/$username/workspace/proxee/.env owner=$username group=$username mode=0644
 
     # Install node modules
     - name: install node modules for proxee
-      action: shell su $dev_username -c "/home/$dev_username/.nvm/$node_version/bin/npm install" chdir=/home/$dev_username/workspace/proxee
+      action: shell su $username -c "/home/$username/.nvm/$node_version/bin/npm install" chdir=/home/$username/workspace/proxee
 
     # Clone action.io
     - name: git clone --recursive action.io
-      action: shell su $dev_username -c "git clone --recursive git@github.com:action-io/action.io.git /home/$dev_username/workspace/action.io/" creates=/home/$dev_username/workspace/action.io
+      action: shell su $username -c "git clone --recursive git@github.com:action-io/action.io.git /home/$username/workspace/action.io/" creates=/home/$username/workspace/action.io
 
     # Copying env configs
     - name: copy env config
-      action: copy src=../files/actionio_env dest=/home/$dev_username/workspace/action.io/.env owner=$dev_username group=$dev_username mode=0644
+      action: copy src=../files/actionio_env dest=/home/$username/workspace/action.io/.env owner=$username group=$username mode=0644
 
     # Copying database configs
     - name: copy database config
-      action: template src=../templates/database.yml.j2 dest=/home/$dev_username/workspace/action.io/config/database.yml owner=$dev_username group=$dev_username mode=0644
+      action: template src=../templates/database.yml.j2 dest=/home/$username/workspace/action.io/config/database.yml owner=$username group=$username mode=0644
 
     # Remove remnants of the github_action_deployer
     - name: remove remnants of temp files
       action: file path=$item state=absent
       with_items:
-        - /home/${dev_username}/.ssh/gh_action_deployer
-        - /home/${dev_username}/.ssh/config
+        - /home/${username}/.ssh/gh_action_deployer
+        - /home/${username}/.ssh/config
 
   handlers:
-    - include: ../../shared/plays/redis/handlers/handler.yml
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
-    - name: restart stunnel
-      action: shell /etc/init.d/stunnel4 restart
     - name: restart haproxy
       action: shell /etc/init.d/haproxy restart
     - name: restart postgresql
