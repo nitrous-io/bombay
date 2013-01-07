@@ -1,17 +1,4 @@
----
-- hosts: box_host
-  sudo: True
-  gather_facts: False
-  tasks:
-    # Set the hostname
-    - include: ../../shared/tasks/set_hostname.yml
-    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
-    - include: ../../shared/tasks/install_ansible_deps.yml
-    # apt-get update
-    - include: ../../shared/tasks/update_apt.yml
-    # Install Dependencies (via apt-get)
-    - include: ../tasks/install_deps.yml
-
+- include: pre_flight.yml
 - include: setup_partitions.yml
 - include: setup_networking.yml
 
