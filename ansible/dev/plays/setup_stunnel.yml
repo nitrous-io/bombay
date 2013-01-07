@@ -9,6 +9,9 @@
 
   tasks:
     - include: ../../shared/plays/stunnel/tasks/task.yml
+    - name: specific setup for stunnel ports in dev
+      copy: src=../files/stunnel.conf dest=/etc/stunnel/stunnel.conf owner=stunnel4 group=stunnel4 mode=0660
+      notify: restart stunnel
 
   handlers:
     - include: ../../shared/plays/stunnel/handlers/handler.yml
