@@ -2,9 +2,6 @@
 - hosts: coach
   sudo: True
   gather_facts: False
-  vars_files:
-    - ../../vars_files/stunnel_key.yml
-    - ../../vars_files/stunnel_pem.yml
 
   tasks:
     - name: mkdir /var/action
@@ -31,17 +28,14 @@
     - name: setup nginx
       action: copy src=../files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
       notify: restart nginx
-    # Setup stunnel
-    - include: ../../shared/tasks/install_stunnel.yml
     # Install redis
     - include: ../../shared/plays/redis/tasks/task.yml redis_port=$local_redis_port
   handlers:
     - include: ../../shared/plays/redis/handlers/handler.yml
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
-    - name: restart stunnel
-      action: shell /etc/init.d/stunnel4 restart
 
+- include: setup_stunnel.yml
 - include: deploy.yml
 - include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install_monit_client.yml

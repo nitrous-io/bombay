@@ -1,0 +1,14 @@
+---
+- hosts: rainbow
+  sudo: True
+  gather_facts: False
+
+  vars_files:
+    - ../../vars_files/stunnel_key.yml
+    - ../../vars_files/stunnel_pem.yml
+
+  tasks:
+    - include: ../../shared/plays/stunnel/tasks/task.yml
+
+  handlers:
+    - include: ../../shared/plays/stunnel/handlers/handler.yml
