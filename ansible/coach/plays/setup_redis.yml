@@ -1,5 +1,5 @@
 ---
-- hosts: box_host
+- hosts: coach
   sudo: True
   gather_facts: False
 

@@ -4,13 +4,6 @@
   gather_facts: False
 
   tasks:
-    - name: mkdir /var/action
-      action: shell mkdir -p /var/action
-    - name: mount /dev/xvdg
-      action: mount name=/var/action src=/dev/xvdg fstype=xfs opts=defaults,nouuid,comment=cloudconfig state=mounted
-    # Grow the /dev/sdg partition
-    - name: xfs_growfs /dev/xvdg
-      action: shell xfs_growfs /dev/xvdg
     # Set the hostname
     - include: ../../shared/tasks/set_hostname.yml
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
@@ -19,6 +12,13 @@
     - include: ../../shared/tasks/update_apt.yml
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
+    - name: mkdir /var/action
+      action: shell mkdir -p /var/action
+    - name: mount /dev/xvdg
+      action: mount name=/var/action src=/dev/xvdg fstype=xfs opts=defaults,nouuid,comment=cloudconfig state=mounted
+    # Grow the /dev/sdg partition
+    - name: xfs_growfs /dev/xvdg
+      action: shell xfs_growfs /dev/xvdg
     # Install pam.d/common-session which sets limits for non-interactive sessions
     - name: install common-session in /etc/init.d/
       action: copy src=../../shared/files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
@@ -30,6 +30,7 @@
       notify: restart nginx
     # Install redis
     - include: ../../shared/plays/redis/tasks/task.yml redis_port=$local_redis_port
+
   handlers:
     - include: ../../shared/plays/redis/handlers/handler.yml
     - name: restart nginx
