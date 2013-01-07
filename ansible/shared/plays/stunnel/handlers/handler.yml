@@ -1,0 +1,3 @@
+---
+- name: restart stunnel
+  shell: /etc/init.d/stunnel4 restart
