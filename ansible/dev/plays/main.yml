@@ -2,9 +2,26 @@
 - hosts: dev
   sudo: True
   gather_facts: False
+  tasks:
+    # apt-get update
+    - include: ../../shared/tasks/update_apt.yml
+    # Set the hostname
+    - include: ../../shared/tasks/set_hostname.yml
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../shared/tasks/install_ansible_deps.yml
+    # Install Dependencies (via apt-get)
+    - include: ../tasks/install_deps.yml
+
+- include: setup_stunnel.yml
+- include: setup_networking.yml
+
+- hosts: dev
+  sudo: True
+  gather_facts: False
   vars_files:
-    - ../../../vars_files/github_private_key.yml
-    - ../../../vars_files/s3cfg.yml
+    - ../../vars_files/github_private_key.yml
+    - ../../vars_files/s3cfg.yml
+
   vars:
     env: development
     ruby_version: 1.9.3-p194
@@ -14,20 +31,8 @@
     gateway: 192.168.254.1
 
   tasks:
-    # apt-get update
-    - include: ../../shared/tasks/update_apt.yml
-
-    # Set the hostname
-    - include: ../../shared/tasks/set_hostname.yml
-
     # Configure S3 Cmd
     - include: ../../shared/tasks/configure_s3cmd.yml
-
-    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
-    - include: ../../shared/tasks/install_ansible_deps.yml
-
-    # Install Dependencies (via apt-get)
-    - include: ../tasks/install_deps.yml
 
     # Install sudoers with passwd less rights for admins
     - include: ../../shared/tasks/install_sudoers.yml file=../files/dev_sudoers
@@ -50,31 +55,8 @@
       action: copy src=../files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
       notify: restart nginx
 
-    # Setup stunnel
-    - name: setup /etc/stunnel/{certs,keys} directory
-      action: file path=/etc/stunnel/$item state=directory owner=root group=root mode=0770
-      with_items:
-       - certs
-       - keys
-
-    - name: move stunnel.pem to /etc/stunnel/certs directory
-      action: copy src=../files/stunnel.pem dest=/etc/stunnel/certs/stunnel.pem owner=root group=root mode=0660
-
-    - name: move stunnel.key to /etc/stunnel/certs directory
-      action: copy src=../files/stunnel.key dest=/etc/stunnel/keys/stunnel.key owner=root group=root mode=0660
-
-    - name: setup stunnel.conf the way we want
-      action: copy src=../files/stunnel.conf dest=/etc/stunnel/stunnel.conf owner=root group=root mode=0660
-
-    - name: setup stunnel to be enabled
-      action: copy src=../../shared/files/default_stunnel4 dest=/etc/default/stunnel4 owner=root group=root mode=0660
-      notify: restart stunnel
-
     # Setup haproxy
-    - include: ../../../servers/rainbow/tasks/install_haproxy.yml
-
-    # Setup Bridge Network
-    - include: ../../shared/tasks/host/setup_bridge_network.yml gateway=$gateway
+    - include: ../../rainbow/tasks/install_haproxy.yml
 
     # Install pam.d/common-session which sets limits for non-interactive sessions
     - name: install common-session in /etc/init.d/
@@ -96,11 +78,11 @@
       action: shell xfs_growfs /dev/xvdf
 
     # ruby container
-    - include: ../../../servers/box_host/tasks/install_action_container.yml name=ruby_container_template version=1350283256 s3_bucket=$s3_bucket
+    - include: ../../box_host/tasks/install_action_container.yml name=ruby_container_template version=1350283256 s3_bucket=$s3_bucket
     # nodejs container
-    - include: ../../../servers/box_host/tasks/install_action_container.yml name=nodejs_container_template version=1351826220 s3_bucket=$s3_bucket
+    - include: ../../box_host/tasks/install_action_container.yml name=nodejs_container_template version=1351826220 s3_bucket=$s3_bucket
     # python container
-    - include: ../../../servers/box_host/tasks/install_action_container.yml name=python_container_template version=1352374499 s3_bucket=$s3_bucket
+    - include: ../../box_host/tasks/install_action_container.yml name=python_container_template version=1352374499 s3_bucket=$s3_bucket
 
     # Install redis
     - include: ../../shared/plays/redis/tasks/task.yml redis_port=$redis_port
@@ -221,8 +203,6 @@
     - include: ../../shared/plays/redis/handlers/handler.yml
     - name: restart nginx
       action: shell /etc/init.d/nginx restart
-    - name: restart stunnel
-      action: shell /etc/init.d/stunnel4 restart
     - name: restart haproxy
       action: shell /etc/init.d/haproxy restart
     - name: restart postgresql
