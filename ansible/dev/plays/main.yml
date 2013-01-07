@@ -15,22 +15,22 @@
 
   tasks:
     # apt-get update
-    - include: ../../../global/tasks/update_apt.yml
+    - include: ../../shared/tasks/update_apt.yml
 
     # Set the hostname
-    - include: ../../../global/tasks/set_hostname.yml
+    - include: ../../shared/tasks/set_hostname.yml
 
     # Configure S3 Cmd
-    - include: ../../../global/tasks/configure_s3cmd.yml
+    - include: ../../shared/tasks/configure_s3cmd.yml
 
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
-    - include: ../../../global/tasks/install_ansible_deps.yml
+    - include: ../../shared/tasks/install_ansible_deps.yml
 
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
 
     # Install sudoers with passwd less rights for admins
-    - include: ../../../global/tasks/install_sudoers.yml file=../files/dev_sudoers
+    - include: ../../shared/tasks/install_sudoers.yml file=../files/dev_sudoers
 
     # Create the user
     - name: create $dev_username
@@ -43,7 +43,7 @@
       action: template src=../templates/s3cfg.j2 dest=/home/${dev_username}/.s3cfg owner=${dev_username} group=${dev_username} mode=0644
 
     # Generate and Upload Public Key to GitHub
-    - include: ../../../global/tasks/register_github_keys.yml deploy_user=$dev_username
+    - include: ../../shared/tasks/register_github_keys.yml deploy_user=$dev_username
 
     # Setup nginx
     - name: setup nginx
@@ -67,21 +67,21 @@
       action: copy src=../files/stunnel.conf dest=/etc/stunnel/stunnel.conf owner=root group=root mode=0660
 
     - name: setup stunnel to be enabled
-      action: copy src=../../../global/files/default_stunnel4 dest=/etc/default/stunnel4 owner=root group=root mode=0660
+      action: copy src=../../shared/files/default_stunnel4 dest=/etc/default/stunnel4 owner=root group=root mode=0660
       notify: restart stunnel
 
     # Setup haproxy
     - include: ../../../servers/rainbow/tasks/install_haproxy.yml
 
     # Setup Bridge Network
-    - include: ../../../global/tasks/host/setup_bridge_network.yml gateway=$gateway
+    - include: ../../shared/tasks/host/setup_bridge_network.yml gateway=$gateway
 
     # Install pam.d/common-session which sets limits for non-interactive sessions
     - name: install common-session in /etc/init.d/
       action: copy src=../files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
 
     # Set limits for the user
-    - include: ../../../global/tasks/set_limits.yml user=$dev_username attribute=nofile value=65536
+    - include: ../../shared/tasks/set_limits.yml user=$dev_username attribute=nofile value=65536
 
     # Install container
     - name: mkdir /var/lib/lxc
@@ -106,14 +106,14 @@
     - include: ../../shared/plays/redis/tasks/task.yml redis_port=$redis_port
 
     # Install ruby via rvm
-    - include: ../../../global/tasks/container/install_ruby_via_rvm.yml user=$dev_username version=$ruby_version
+    - include: ../../shared/tasks/container/install_ruby_via_rvm.yml user=$dev_username version=$ruby_version
 
     # Install bundler and foreman
-    - include: ../../../global/tasks/container/install_gem.yml user=$dev_username gem=bundler
-    - include: ../../../global/tasks/container/install_gem.yml user=$dev_username gem=foreman
+    - include: ../../shared/tasks/container/install_gem.yml user=$dev_username gem=bundler
+    - include: ../../shared/tasks/container/install_gem.yml user=$dev_username gem=foreman
 
     # Install node with nvm
-    - include: ../../../global/tasks/container/install_node_via_nvm.yml user=$dev_username version=$node_version
+    - include: ../../shared/tasks/container/install_node_via_nvm.yml user=$dev_username version=$node_version
 
     # Copy postgresql config
     - name: copy postgresql config
