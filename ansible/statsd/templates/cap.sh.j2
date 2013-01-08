@@ -25,7 +25,10 @@ chmod -R g+w /var/apps/${app}/releases/${timestamp}
 rm -rf ${latest_release}/log ${latest_release}/node_modules && ln -s ${shared_path}/log ${latest_release}/log && mkdir ${latest_release}/node_modules
 
 # run npm
-cd ${latest_release} && npm install node-gyp && npm install && npm install statsd-librato-backend && npm prune
+cd ${latest_release} && npm install node-gyp && npm install && npm prune
+
+# install additional packages
+cd ${latest_release} && npm install statsd-librato-backend
 
 # Symlink to current
 rm -f /var/apps/${app}/current && ln -s /var/apps/${app}/releases/${timestamp} /var/apps/${app}/current
