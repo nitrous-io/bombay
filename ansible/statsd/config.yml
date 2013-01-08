@@ -1,0 +1,23 @@
+---
+sensitive_vars:
+  librato_email:
+    context: global
+    vars:
+      - name: librato_email
+        prompt: Replace this line with the librato account's email
+        multiline: false
+  librato_token:
+    context: global
+    vars:
+      - name: librato_token
+        prompt: Replace this line with the librato account's token
+        multiline: false
+
+regions:
+  - region: ap-southeast-1
+    environments:
+      production:
+        servers:
+          - hostname: statsd-apse1.action.io
+            size: m1.small
+            ami: ami-e6d999b4
