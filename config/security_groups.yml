@@ -32,7 +32,12 @@ dev:
 bombay:
   - 65100 tcp 0.0.0.0/0
 
+# for heroku security group, refers to
+# https://devcenter.heroku.com/articles/dynos#connecting-to-external-services
 statsd:
   - 65100 tcp 0.0.0.0/0
-  - 9125 udp 0.0.0.0/0
-  - 9126 tcp 0.0.0.0/0
+  - 9125 udp box_host
+  - 9125 udp coach
+  - 9125 udp rainbow
+  - 9125 udp dev
+  - 9125 udp 098166147350:default

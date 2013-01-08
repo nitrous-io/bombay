@@ -23,6 +23,15 @@ class Fog::Compute::AWS::SecurityGroup < Fog::Model
                            owner_id: self.owner_id,
                            ip_protocol: rule.protocol)
     end
+  # somehow running authorize_port_range for a security group that has format
+  # user:group multiple times will fail. This catches that and just print out
+  # the exception but will continue
+  rescue Fog::Compute::AWS::Error => e
+    if e.to_s.match /InvalidPermission.Duplicate/
+      p "Ignoring #{e}"
+    else
+      raise e
+    end
   end
 
   def bombay_rules
