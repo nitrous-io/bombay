@@ -3,6 +3,10 @@
   sudo: True
   gather_facts: False
 
+  vars_files:
+    - ../../vars_files/librato_email.yml
+    - ../../vars_files/librato_token.yml
+
   vars:
     app: statsd
     deploy_user: app_runner
