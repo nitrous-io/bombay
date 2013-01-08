@@ -45,5 +45,5 @@
     # Install a script which does upstart restarts
     - include: ../../shared/tasks/install_upstart_node.yml
     # Restart statsd
-    - name: restart rainbow
+    - name: restart statsd
       action: shell /usr/local/bin/upstart_node ${app}
