@@ -13,6 +13,14 @@ sensitive_vars:
         prompt: Replace this line with the librato account's token
         multiline: false
 
+  diamond:
+    context: environment
+    vars:
+      - name: librato_email
+        prompt: Email address for the Librato Account you want to send stats to
+      - name: librato_api_key
+        prompt: API Key for the Librato Account you want to send stats to
+
 regions:
   - region: ap-southeast-1
     environments:
