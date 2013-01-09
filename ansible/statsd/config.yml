@@ -46,9 +46,9 @@ regions:
         servers:
           - hostname: statsd-use1-staging.action.io
             size: m1.small
-            ami: ami-e6d999b4
+            ami: ami-8b4dc4e2
       production:
         servers:
           - hostname: statsd-use1.action.io
             size: m1.small
-            ami: ami-e6d999b4
+            ami: ami-8b4dc4e2
