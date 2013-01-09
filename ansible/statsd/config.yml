@@ -33,12 +33,12 @@ regions:
         servers:
           - hostname: statsd-usw1-staging.action.io
             size: m1.small
-            ami: ami-e6d999b4
+            ami: ami-977b5dd2
       production:
         servers:
           - hostname: statsd-usw1.action.io
             size: m1.small
-            ami: ami-e6d999b4
+            ami: ami-977b5dd2
 
   - region: us-east-1
     environments:
