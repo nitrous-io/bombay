@@ -47,7 +47,7 @@ module Bombay
 
         if @ip.nil?
           say "creating elastic ip and dns record..."
-          create_elastic_ip! && create_dns_record!
+          create_elastic_ip!
           say "IP: #{@ip}"
         end
 
@@ -76,9 +76,8 @@ module Bombay
       end
     end
 
-    def create_dns_record!
+    def create_dns_record(domain_name)
       if (zone = zone_from(self.hostname)).present?
-        domain_name = "ec2-#{self.ip.gsub(/\./, '-')}.#{self.region}.compute.amazonaws.com"
         # If the DNS record exists, that means that DNS entry exists
         # for an elastic IP which has been released
         if (record = zone.records.get(self.hostname))
@@ -94,14 +93,16 @@ module Bombay
         else
           record = zone.records.create(value: domain_name,
                                        name: self.hostname,
-                                       type: 'CNAME')
+                                       type: 'CNAME',
+                                       ttl: 60)
 
           # Box Hosts need wildcard domain too because we allow
           # users to access individual boxes
           if self.hostname =~ /actionbox\.io$/
             zone.records.create(value: domain_name,
                                 name: "*.#{self.hostname}",
-                                type: 'CNAME')
+                                type: 'CNAME',
+                                ttl: 60)
           end
         end
       end
@@ -136,6 +137,9 @@ module Bombay
         server.wait_for { print "."; ready? }
         say "\n#{self.hostname} provisioned, associating ip address..."
         compute.associate_address(server.id, self.ip)
+        server.reload
+        create_dns_record(server.dns_name)
+
         say "waiting for boot..."
         print(".") until tcp_test_ssh {
           say("\nDone")

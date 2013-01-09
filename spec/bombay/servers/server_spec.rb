@@ -266,8 +266,8 @@ describe Bombay::Server do
           it "should create an instance with the public_ip which is different from the one which exists in the DNS records" do
             cloud_instance = server.provision
             new_ip = compute(server.region).addresses.first
-            @main_record.reload.value.should == "ec2-#{new_ip.public_ip.gsub(/\./, '-')}.#{server.region}.compute.amazonaws.com"
-            @wildcard_record.reload.value.should == "ec2-#{new_ip.public_ip.gsub(/\./, '-')}.#{server.region}.compute.amazonaws.com"
+            @main_record.reload.value.should == cloud_instance.dns_name
+            @wildcard_record.reload.value.should == cloud_instance.dns_name
 
             cloud_instance.tags[:Name].should == server.hostname
             cloud_instance.tags[:ip].should == new_ip.public_ip

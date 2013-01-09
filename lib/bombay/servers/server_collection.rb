@@ -75,10 +75,13 @@ module Bombay
     end
 
     def provision
-      regions = @servers.map(&:region).uniq.sort
+      @regions.each do |r|
+        Bombay::SecurityGroupCollection.parse(r).provision
+      end
 
-      regions.each { |r| Bombay::SecurityGroupCollection.parse(r).provision }
-      @servers.each { |s| s.provision }
+      @servers.select do |s|
+        s.environment == @environment && @regions.include?(s.region)
+      end.each { |s| s.provision }
     end
 
     def set_environment!
