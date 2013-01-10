@@ -2,4 +2,3 @@ check process sshd with pidfile "/var/run/sshd.pid"
   start program = "/etc/init.d/ssh start"
   stop program = "/etc/init.d/ssh stop"
   if failed port 65100 protocol ssh then restart
-  if 3 restarts within 5 cycles then timeout
