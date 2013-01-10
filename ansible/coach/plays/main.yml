@@ -40,5 +40,5 @@
 - include: deploy.yml
 - include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install.yml
-- include: ../../shared/plays/diamond/install_diamond.yml
+- include: ../../shared/plays/diamond/install.yml
 
