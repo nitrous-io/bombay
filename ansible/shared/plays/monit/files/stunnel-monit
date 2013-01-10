@@ -1,4 +1,4 @@
-check process stunnel with pidfile "/var/run/stunnel.pid"
+check process stunnel with pidfile "/var/run/stunnel4/stunnel.pid"
   start program = "/etc/init.d/stunnel4 start"
   stop program = "/etc/init.d/stunnel4 stop"
   if failed host localhost port 443 type TCPSSL then restart
