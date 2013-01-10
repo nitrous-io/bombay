@@ -32,3 +32,14 @@ dev:
 bombay:
   - 65100 tcp 0.0.0.0/0
 
+
+statsd:
+  - 65100 tcp 0.0.0.0/0
+  - 9125 udp box_host
+  - 9125 udp coach
+  - 9125 udp rainbow
+  - 9125 udp dev
+  # The following rule is for heroku, so heroku app can send request to statsd
+  # server. Refers to the article below for more information
+  # https://devcenter.heroku.com/articles/dynos#connecting-to-external-services
+  - 9125 udp 098166147350:default

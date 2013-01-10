@@ -1,0 +1,26 @@
+description "{{ app }}"
+author      "{{ deploy_user }}"
+
+start on runlevel [2345]
+stop on runlevel [!2345]
+
+# Redirect stdout/stderr to /var/log/upstart/<job>.log
+console log
+
+# Automatically Respawn:
+respawn
+respawn limit 99 5
+
+script
+  echo $$ > /var/run/{{ app }}.pid
+  exec sudo su {{ deploy_user }} bash -c 'source /home/{{ deploy_user }}/.nvm/nvm.sh && cd /var/apps/{{ app }}/current && node stats.js localConfig.js 2>&1'
+end script
+
+pre-start script
+  echo "[`date -u +%Y-%m-%dT%T.%3NZ`] (sys) Starting {{ app }}" >> /var/log/{{ app }}.log
+end script
+
+pre-stop script
+  rm /var/run/{{ app }}.pid
+  echo "[`date -u +%Y-%m-%dT%T.%3NZ`] (sys) Stopping {{ app }}" >> /var/log/{{ app }}.log
+end script
