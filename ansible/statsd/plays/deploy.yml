@@ -21,8 +21,6 @@
     - include: ../../shared/tasks/add_line_to_limits_conf.yml line=$item
       with_items:
         - "app_runner           -       nofile         65536"
-    # Install sudoers
-    - include: ../../shared/tasks/install_sudoers.yml file=../files/statsd_sudoers
     # Install Node via NVM
     - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
     # Install capp script
