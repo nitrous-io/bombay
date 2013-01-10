@@ -1,3 +1,4 @@
 ---
 - name: restart stunnel
-  shell: /etc/init.d/stunnel4 restart
+  shell: bash -c "while ! nc -z localhost 443; do /etc/init.d/stunnel4 restart; done"
+

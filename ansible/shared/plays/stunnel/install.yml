@@ -1,0 +1,35 @@
+---
+- hosts: all
+  sudo: True
+  gather_facts: False
+
+  vars_files:
+    - ../../../vars_files/stunnel_key.yml
+    - ../../../vars_files/stunnel_pem.yml
+
+  tasks:
+    - name: install stunnel
+      apt: pkg=stunnel4 state=present
+
+    - name: setup /etc/stunnel/{certs,keys} directory
+      file: path=/etc/stunnel/$item state=directory owner=stunnel4 group=stunnel4 mode=0770
+      with_items:
+       - certs
+       - keys
+
+    - name: move stunnel.pem to /etc/stunnel/certs directory
+      template: src=../../../shared/plays/stunnel/templates/stunnel_pem.j2 dest=/etc/stunnel/certs/stunnel.pem owner=stunnel4 group=stunnel4 mode=0660
+
+    - name: move stunnel.key to /etc/stunnel/certs directory
+      template: src=../../../shared/plays/stunnel/templates/stunnel_key.j2 dest=/etc/stunnel/keys/stunnel.key owner=stunnel4 group=stunnel4 mode=0660
+
+    - name: setup stunnel.conf the way we want
+      copy: src=../../../shared/plays/stunnel/files/stunnel.conf dest=/etc/stunnel/stunnel.conf owner=stunnel4 group=stunnel4 mode=0660
+
+    - name: setup stunnel to be enabled
+      copy: src=../../../shared/plays/stunnel/files/default_stunnel4 dest=/etc/default/stunnel4 owner=stunnel4 group=stunnel4 mode=0660
+      notify: restart stunnel
+
+  handlers:
+    - include: ../../../shared/plays/stunnel/handlers/handler.yml
+

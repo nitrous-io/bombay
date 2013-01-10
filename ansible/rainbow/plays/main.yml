@@ -30,7 +30,7 @@
     - name: restart haproxy
       action: shell /etc/init.d/haproxy restart
 
-- include: setup_stunnel.yml
+- include: ../../shared/plays/stunnel/install.yml
 - include: deploy.yml
 - include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install_monit_client.yml

@@ -3,7 +3,6 @@
   action: apt pkg=$item state=present
   with_items:
     - nginx
-    - stunnel4
     - build-essential
     - git-core
     - xfsprogs
