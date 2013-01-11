@@ -18,8 +18,6 @@
       copy: src=../../shared/files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
     # Set limits for the user
     - include: ../../shared/tasks/set_limits.yml
-    # Install Redis Server
-    - include: ../../shared/plays/redis/tasks/task.yml redis_port=$local_redis_port
     # Configure S3 Cmd
     - include: ../../shared/tasks/configure_s3cmd.yml
     # Install ruby container
@@ -31,9 +29,7 @@
     # Install golang container
     - include: ../tasks/install_action_container.yml name=golang_container_template version=1353996298 s3_bucket=$s3_bucket
 
-  handlers:
-    - include: ../../shared/plays/redis/handlers/handler.yml
-
+- include: ../../shared/plays/redis/install.yml
 - include: deploy.yml
 - include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install.yml

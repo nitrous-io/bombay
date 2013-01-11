@@ -28,8 +28,6 @@
     - name: setup nginx
       action: copy src=../files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
       notify: restart nginx
-    # Install redis
-    - include: ../../shared/plays/redis/tasks/task.yml redis_port=$local_redis_port
 
   handlers:
     - include: ../../shared/plays/redis/handlers/handler.yml
@@ -37,6 +35,7 @@
       action: shell /etc/init.d/nginx restart
 
 - include: ../../shared/plays/stunnel/install.yml
+- include: ../../shared/plays/redis/install.yml
 - include: deploy.yml
 - include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install.yml
