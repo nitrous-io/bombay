@@ -126,3 +126,18 @@ regions:
                 size: 8
                 delete_on_termination: 'false'
 
+  - region: ap-southeast-2
+    environments:
+      production:
+        server_vars:
+          coach_webhook_host: https://www.action.io
+        servers:
+          - hostname: coach-apse2.action.io
+            size: m1.small
+            ami: ami-b6ff698c
+            block_devices:
+              - name: /dev/sdg
+                snapshot_id: snap-a649df96
+                size: 8
+                delete_on_termination: 'false'
+

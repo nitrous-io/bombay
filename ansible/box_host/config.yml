@@ -167,3 +167,24 @@ regions:
                 size: 8
                 delete_on_termination: 'false'
 
+  - region: ap-southeast-2
+    environments:
+      production:
+        server_vars:
+          redis_mq_host: coach-apse2.action.io
+        servers:
+          - hostname: apse2.actionbox.io
+            size: m1.small
+            ami: ami-b6ff698c
+            server_vars:
+              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+            block_devices:
+              - name: /dev/sdf
+                snapshot_id: snap-a649df96
+                size: 40
+                delete_on_termination: 'false'
+              - name: /dev/sdg
+                snapshot_id: snap-a649df96
+                size: 8
+                delete_on_termination: 'false'
+
