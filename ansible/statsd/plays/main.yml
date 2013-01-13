@@ -19,5 +19,5 @@
     - include: ../../shared/tasks/set_limits.yml
 
 - include: deploy.yml
-- include: ../../shared/plays/diamond/install_diamond.yml
+- include: ../../shared/plays/diamond/install.yml
 
