@@ -13,8 +13,6 @@ check process nginx with pidfile /var/run/nginx.pid
   stop program  = "/etc/init.d/nginx stop"
   if cpu > 60% for 2 cycles then alert
   if cpu > 80% for 5 cycles then restart
-  if totalmem > {{ memlimit }} MB for 5 cycles then restart
-  if loadavg(5min) greater than {{ load_alert_5min }} for 8 cycles then restart
   #if failed host localhost port 80 protocol http
      #and request {{ healthcheck_url }}
      #then restart

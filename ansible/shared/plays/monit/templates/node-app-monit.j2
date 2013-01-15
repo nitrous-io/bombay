@@ -15,5 +15,3 @@ check process {{ node_app }} with pidfile "/var/run/{{ node_app }}.pid"
   # loadavg on the other hand, is overall system load
   if cpu > 60% for 2 cycles then alert
   if cpu > 70% for 5 cycles then restart
-  if totalmem > {{ memlimit }} MB for 5 cycles then restart
-  if loadavg(5min) greater than {{ load_alert_5min }} for 8 cycles then restart

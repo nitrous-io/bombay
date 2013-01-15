@@ -13,6 +13,5 @@ check process redis with pidfile "/var/run/redis/redis-server.pid "
   stop program = "/etc/init.d/redis-server stop"
   if cpu > 60% for 2 cycles then alert
   if cpu > 70% for 5 cycles then restart
-  if totalmem > {{ memlimit }} MB for 5 cycles then restart
-  if loadavg(5min) greater than {{ load_alert_5min }} for 8 cycles then restart
+  if totalmem > {{ memlimit }} MB for 5 cycles then alert
   if failed host localhost port 65000 then restart
