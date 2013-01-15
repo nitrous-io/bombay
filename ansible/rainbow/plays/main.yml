@@ -35,4 +35,5 @@
 - include: ../../shared/plays/papertrail/install.yml
 - include: ../../shared/plays/monit/install.yml
 - include: ../../shared/plays/diamond/install.yml
+- include: ../../shared/plays/unattended_upgrades/install.yml
 
