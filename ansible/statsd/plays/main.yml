@@ -20,4 +20,5 @@
 
 - include: deploy.yml
 - include: ../../shared/plays/diamond/install.yml
+- include: ../../shared/plays/unattended_upgrades/install.yml
 
