@@ -1,3 +1,6 @@
+# mem limit is 60%
+{% set memlimit = ansible_memtotal_mb * 60 / 100 %}
+
 check process {{ node_app }} with pidfile "/var/run/{{ node_app }}.pid"
   start program = "/sbin/start {{ node_app }}"
   stop program = "/sbin/stop {{ node_app }}"
@@ -5,3 +8,4 @@ check process {{ node_app }} with pidfile "/var/run/{{ node_app }}.pid"
   # loadavg on the other hand, is overall system load
   if cpu > 60% for 2 cycles then alert
   if cpu > 70% for 5 cycles then restart
+  if totalmem > {{ memlimit }} MB for 5 cycles then restart
