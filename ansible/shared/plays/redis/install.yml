@@ -18,7 +18,7 @@
 
     - name: upload the populate aio:available_resources script
       action: copy src=../../../shared/files/initialize_redis.sh dest=/root/initialize_redis.sh owner=root group=root mode=0700
-      only_if: "'${role}' == 'box_host'"
+      only_if: "'${role}' == 'box_host' or '${role}' == 'dev'"
 
     - name: setup redis.conf
       action: template src=../../../shared/templates/redis.conf.j2 dest=/etc/redis/redis.conf owner=redis group=redis mode=0660

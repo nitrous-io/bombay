@@ -5,4 +5,4 @@
 
 - name: initialize redis
   action: shell /root/initialize_redis.sh $redis_port
-  only_if: "'${role}' == 'box_host'"
+  only_if: "'${role}' == 'box_host' or '${role}' == 'dev'"
