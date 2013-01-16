@@ -1,0 +1,31 @@
+---
+instruments:
+  - name: Box Host APSE1 Load
+    source: apse1.actionbox.io
+    metrics:
+      - loadavg.01
+      - loadavg.05
+      - loadavg.15
+      - loadavg.processes_running
+
+  - name: Rainbow APSE1 Load
+    source: apse1.actionbox.io
+    metrics:
+      - loadavg.01
+      - loadavg.05
+      - loadavg.15
+      - loadavg.processes_running
+
+  - name: All Box Hosts Load Average
+    source: "*"
+    metrics:
+      - loadavg.01
+      - loadavg.05
+      - loadavg.15
+      - loadavg.processes_running
+
+dashboards:
+  - name: APSE1
+    instruments:
+      # This should match the names of the instruments above
+      - Box Host APSE1 Load

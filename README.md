@@ -132,3 +132,10 @@ Example
 ```
 DEBIAN_FRONTEND=noninteractive apt-get -y install nagios3 nagios-nrpe-plugin
 ```
+
+# Dashboard
+To build the dashboards, run
+
+```
+LIBRATO_EMAIL=<email> LIBRATO_TOKEN=token ./bin/dashboard setup ./config/dashboard.yml
+```

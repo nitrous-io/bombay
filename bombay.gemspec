@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency  "commander",      "~> 4.1.2"
   gem.add_dependency  "activesupport",  "~> 3.2.8"
   gem.add_dependency  "ipaddress",      "~> 0.8.0"
+  gem.add_dependency  "dashboarder",    git: "git://github.com/action-io/dashboarder.git", ref: "b6e21a9"
 
   gem.add_development_dependency  "rspec",  "~> 2.12.0"
   gem.add_development_dependency  "fakefs", "~> 0.4.2"
