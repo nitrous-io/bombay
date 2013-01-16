@@ -17,6 +17,8 @@ sensitive_vars:
 server_vars:
   pg_user: action
   pg_password: password
+  local_redis_host: 127.0.0.1
+  local_redis_port: 65000
 
 regions:
   - region: ap-southeast-1

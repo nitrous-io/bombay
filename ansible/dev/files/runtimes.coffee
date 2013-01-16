@@ -5,5 +5,6 @@ runtimes =
     rails: 'ruby_container_template'
     nodejs: 'nodejs_container_template'
     django: 'python_container_template'
+    go: 'golang_container_template'
 
 module.exports = runtimes

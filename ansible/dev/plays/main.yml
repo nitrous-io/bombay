@@ -12,9 +12,9 @@
     # Install Dependencies (via apt-get)
     - include: ../tasks/install_deps.yml
 
-- include: setup_stunnel.yml
+- include: ../../shared/plays/stunnel/install.yml
+- include: ../../shared/plays/redis/install.yml
 - include: setup_networking.yml
-- include: setup_redis.yml
 - include: ../../shared/plays/unattended_upgrades/install.yml
 
 - hosts: dev
@@ -84,6 +84,8 @@
     - include: ../../box_host/tasks/install_action_container.yml name=nodejs_container_template version=1351826220 s3_bucket=$s3_bucket
     # python container
     - include: ../../box_host/tasks/install_action_container.yml name=python_container_template version=1352374499 s3_bucket=$s3_bucket
+    # Install golang container
+    - include: ../../box_host/tasks/install_action_container.yml name=golang_container_template version=1353996298 s3_bucket=$s3_bucket
 
     # Install ruby via rvm
     - include: ../../shared/tasks/container/install_ruby_via_rvm.yml user=$username version=$ruby_version
@@ -206,4 +208,4 @@
       action: shell /etc/init.d/postgresql restart
       notify: restart server
     - name: restart server
-      action: shell bash -c "test -f /root/bootstrapped || (touch /root/bootstrapped && reboot)"
+      action: shell bash -c "test -f /root/.bootstrapped || (touch /root/.bootstrapped && reboot)"
