@@ -137,5 +137,9 @@ DEBIAN_FRONTEND=noninteractive apt-get -y install nagios3 nagios-nrpe-plugin
 To build the dashboards, run
 
 ```
-LIBRATO_EMAIL=<email> LIBRATO_TOKEN=token ./bin/dashboard setup ./config/dashboard.yml
+bundle exec bin/bombay dashboard
 ```
+
+The reason we have to use bundle exec is because we need `dashboarder` gem
+provided by Gemfile as we cannot use `git` endpoint in gemspec. Once that's
+resolve, `bundle exec probably can be removed`
