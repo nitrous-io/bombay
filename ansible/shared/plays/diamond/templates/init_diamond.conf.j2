@@ -2,7 +2,7 @@
 #
 # diamond - A system statistics collector for graphite
 #
-# Diamond is a daemon and toolset for gather system statistics 
+# Diamond is a daemon and toolset for gather system statistics
 # and publishing them to graphite.
 
 description "Diamond system statistics collector"
@@ -12,6 +12,10 @@ stop on [!12345]
 
 limit nofile 32768 32768
 kill timeout 5
+
+# Automatically Respawn:
+respawn
+respawn limit 99 5
 
 script
     # Source /etc/diamond if exists. Otherwise defaults.
