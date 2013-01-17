@@ -1,0 +1,112 @@
+---
+metric_collections:
+  load_avg: &load_avg
+    - loadavg.01
+    - loadavg.05
+    - loadavg.15
+    - loadavg.processes_running
+
+instruments:
+  - name: Box Host APSE1 Load
+    source: apse1.actionbox.io
+    metrics:
+      - *load_avg
+
+  - name: Rainbow APSE1 Load
+    source: rainbow-apse1.action.io
+    metrics:
+      - *load_avg
+
+  - name: Coach APSE1 Load
+    source: coach-apse1.action.io
+    metrics:
+      - *load_avg
+
+  - name: Box Host APSE2 Load
+    source: apse2.actionbox.io
+    metrics:
+      - *load_avg
+
+  - name: Rainbow APSE2 Load
+    source: rainbow-apse2.action.io
+    metrics:
+      - *load_avg
+
+  - name: Coach APSE2 Load
+    source: coach-apse2.action.io
+    metrics:
+      - *load_avg
+
+  - name: Box Host USW1 Load
+    source: usw1.actionbox.io
+    metrics:
+      - *load_avg
+
+  - name: Rainbow USW1 Load
+    source: rainbow-usw1.action.io
+    metrics:
+      - *load_avg
+
+  - name: Coach USW1 Load
+    source: coach-usw1.action.io
+    metrics:
+      - *load_avg
+
+  - name: Box Host USE1 Load
+    source: use1.actionbox.io
+    metrics:
+      - *load_avg
+
+  - name: Rainbow USE1 Load
+    source: rainbow-use1.action.io
+    metrics:
+      - *load_avg
+
+  - name: Coach USE1 Load
+    source: coach-use1.action.io
+    metrics:
+      - *load_avg
+
+  - name: Box Host SAE1 Load
+    source: sae1.actionbox.io
+    metrics:
+      - *load_avg
+
+  - name: Rainbow SAE1 Load
+    source: rainbow-sae1.action.io
+    metrics:
+      - *load_avg
+
+  - name: Coach SAE1 Load
+    source: coach-sae1.action.io
+    metrics:
+      - *load_avg
+
+dashboards:
+  - name: APSE1
+    instruments:
+      # This should match the names of the instruments above
+      - Box Host APSE1 Load
+      - Rainbow APSE1 Load
+      - Coach APSE1 Load
+  - name: APSE2
+    instruments:
+      # This should match the names of the instruments above
+      - Box Host APSE2 Load
+      - Rainbow APSE2 Load
+      - Coach APSE2 Load
+  - name: USE1
+    instruments:
+      - Box Host USE1 Load
+      - Rainbow USE1 Load
+      - Coach USE1 Load
+  - name: USW1
+    instruments:
+      - Box Host USW1 Load
+      - Rainbow USW1 Load
+      - Coach USW1 Load
+  - name: SAE1
+    instruments:
+      - Box Host SAE1 Load
+      - Rainbow SAE1 Load
+      - Coach SAE1 Load
