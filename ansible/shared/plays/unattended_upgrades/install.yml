@@ -9,9 +9,10 @@
   tasks:
     - name: Install unattended upgrades
       apt: pkg=unattended-upgrades state=present
+
     # For sending emails of security updates
     - name: Install mailx
-      apt: pkg=mailx state=present
+      apt: pkg=bsd-mailx state=present
 
     - name: copy apt-conf for 20auto-upgrades
       template: src=../../../shared/plays/unattended_upgrades/templates/20auto-upgrades.j2 dest=/etc/apt/apt.conf.d/20auto-upgrades
