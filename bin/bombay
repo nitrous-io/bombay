@@ -6,6 +6,7 @@ $LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
 require 'rubygems'
 require 'commander/import'
 require 'bombay'
+require 'dashboarder'
 
 program :version, Bombay::VERSION
 program :description, 'bombay - anything is possible with bombay'
@@ -53,6 +54,61 @@ command :build do |c|
     when 'container'
       container = Bombay::Container.new(role, playbook)
       options.deploy ? container.deploy! : container.build!
+    end
+  end
+end
+
+command :dashboard do |c|
+  c.syntax = "bombay dashboard"
+  c.summary = "Build librato dashboards"
+  c.description = c.summary
+  c.example 'Usage', c.syntax
+
+  CREDENTIALS_FILE = File.join(Dir.home, '.bombay', 'librato.yml')
+  CONFIG_FILE = File.join(File.expand_path(File.dirname(__FILE__)), "..", "config", "dashboards.yml")
+
+  def load_credentials!
+    if File.exists?(CREDENTIALS_FILE)
+      credentials = YAML.load(File.read(CREDENTIALS_FILE))
+      ENV['LIBRATO_EMAIL'] = credentials[:email]
+      ENV['LIBRATO_KEY'] = credentials[:key]
+    else
+      email, key = nil, nil
+      email = ask "Librato Email: " while email.nil?
+      key = ask "Librato Key: " while key.nil?
+      set_credentials!(email, key)
+    end
+  end
+
+  def set_credentials!(email, key)
+    FileUtils.mkdir_p(File.dirname(CREDENTIALS_FILE))
+    File.open(CREDENTIALS_FILE, 'w') do |f|
+      f.puts(YAML.dump(email: email, key: key))
+    end
+    FileUtils.chmod 0700, File.dirname(CREDENTIALS_FILE)
+    FileUtils.chmod 0600, CREDENTIALS_FILE
+    load_credentials!
+  end
+
+  c.action do |args, options|
+    load_credentials!
+    data = YAML.load File.read(CONFIG_FILE)
+    instruments = data["instruments"]
+    dashboards = data["dashboards"]
+
+    instruments.each do |instrument|
+      name = instrument["name"]
+      metrics = instrument["metrics"].flatten
+      source = instrument["source"]
+      Dashboarder::Instrument.create_or_update! name, metrics, source
+      p "create/update instrument: #{name}"
+    end
+
+    dashboards.each do |dashboard|
+      name = dashboard["name"]
+      instrument_names = dashboard["instruments"]
+      Dashboarder::Dashboard.create_or_update! name, instrument_names
+      p "create/update dashboard: #{name}"
     end
   end
 end
