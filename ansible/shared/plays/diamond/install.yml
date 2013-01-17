@@ -3,7 +3,7 @@
   sudo: True
 
   vars:
-    diamond_version: 2dabf7e1f9fff3af48d9507cddc9a17e4a02857d
+    diamond_version: e9bdf5ab27f3c62a6471560634c0b8aa0a9f6e8a
 
   vars_files:
     - ../../../vars_files/diamond.${env}.yml
@@ -52,7 +52,7 @@
         - psutil
 
     - name: install diamond
-      git: repo=git://github.com/arunthampi/Diamond.git dest=/tmp/Diamond version=$diamond_version
+      git: repo=git://github.com/action-io/Diamond.git dest=/tmp/Diamond version=$diamond_version
 
     - name: build diamond
       action: shell bash -c "cd /tmp/Diamond && make builddeb"
@@ -69,6 +69,9 @@
       notify: restart diamond
 
     # Install Default Collectors
+    - name: install cpu acct collector
+      copy: src=../../../shared/plays/diamond/files/CpuAcctCgroupCollector.conf dest=/etc/diamond/collectors/CpuAcctCgroupCollector.conf mode=0644 owner=root group=root
+      notify: restart diamond
     - name: install cpu collector
       copy: src=../../../shared/plays/diamond/files/CPUCollector.conf dest=/etc/diamond/collectors/CPUCollector.conf mode=0644 owner=root group=root
       notify: restart diamond
