@@ -3,7 +3,7 @@
   sudo: True
 
   vars:
-    diamond_version: e9bdf5ab27f3c62a6471560634c0b8aa0a9f6e8a
+    diamond_version: a9f88bcb882596397d31595888852b67f2856daf
 
   vars_files:
     - ../../../vars_files/diamond.${env}.yml
