@@ -6,81 +6,223 @@ metric_collections:
     - loadavg.15
     - loadavg.processes_running
 
+  memory: &memory
+    - memory.MemFree
+    - memory.MemTotal
+    - memory.SwapFree
+    - memory.SwapTotal
+
+  redis_cpu: &redis_cpu
+    - redis.65000.cpu.parent.sys
+    - redis.65000.cpu.parent.user
+    - redis.65000.process.uptime
+
+  redis_memory: &redis_memory
+    - redis.65000.memory.external_view
+    - redis.65000.memory.internal_view
+    - redis.65000.memory.fragmentation_ratio
+
+  redis_stats: &redis_stats
+    - redis.65000.process.commands_processed
+    - redis.65000.process.connections_received
+    - redis.65000.clients.connected
+    - redis.65000.clients.blocked
+
 instruments:
   - name: Box Host APSE1 Load
     source: apse1.actionbox.io
     metrics:
       - *load_avg
 
+  - name: Box Host APSE1 Memory
+    source: apse1.actionbox.io
+    metrics:
+      - *memory
+
+  - name: Box Host APSE1 Redis CPU
+    source: apse1.actionbox.io
+    metrics:
+      - *redis_cpu
+
+  - name: Box Host APSE1 Redis Memory
+    source: apse1.actionbox.io
+    metrics:
+      - *redis_memory
+
+  - name: Box Host APSE1 Redis Stats
+    source: apse1.actionbox.io
+    metrics:
+      - *redis_stats
+
   - name: Rainbow APSE1 Load
     source: rainbow-apse1.action.io
     metrics:
       - *load_avg
+
+  - name: Rainbow APSE1 Memory
+    source: rainbow-apse1.action.io
+    metrics:
+      - *memory
 
   - name: Coach APSE1 Load
     source: coach-apse1.action.io
     metrics:
       - *load_avg
 
+  - name: Coach APSE1 Memory
+    source: coach-apse1.action.io
+    metrics:
+      - *memory
+
+  - name: Coach APSE1 Redis CPU
+    source: coach-apse1.action.io
+    metrics:
+      - *redis_cpu
+
+  - name: Coach APSE1 Redis Memory
+    source: coach-apse1.action.io
+    metrics:
+      - *redis_memory
+
+  - name: Coach APSE1 Redis Stats
+    source: apse1.actionbox.io
+    metrics:
+      - *redis_stats
+
   - name: Box Host APSE2 Load
     source: apse2.actionbox.io
     metrics:
       - *load_avg
+
+  - name: Box Host APSE2 Memory
+    source: apse2.actionbox.io
+    metrics:
+      - *memory
+
+  - name: Box Host APSE2 Redis CPU
+    source: apse2.actionbox.io
+    metrics:
+      - *redis_cpu
+
+  - name: Box Host APSE2 Redis Memory
+    source: apse2.actionbox.io
+    metrics:
+      - *redis_memory
+
+  - name: Box Host APSE2 Redis Stats
+    source: apse2.actionbox.io
+    metrics:
+      - *redis_stats
 
   - name: Rainbow APSE2 Load
     source: rainbow-apse2.action.io
     metrics:
       - *load_avg
 
+  - name: Rainbow APSE2 Memory
+    source: rainbow-apse2.action.io
+    metrics:
+      - *memory
+
   - name: Coach APSE2 Load
     source: coach-apse2.action.io
     metrics:
       - *load_avg
+
+  - name: Coach APSE2 Memory
+    source: coach-apse2.action.io
+    metrics:
+      - *memory
 
   - name: Box Host USW1 Load
     source: usw1.actionbox.io
     metrics:
       - *load_avg
 
+  - name: Box Host USW1 Memory
+    source: usw1.actionbox.io
+    metrics:
+      - *memory
+
   - name: Rainbow USW1 Load
     source: rainbow-usw1.action.io
     metrics:
       - *load_avg
+
+  - name: Rainbow USW1 Memory
+    source: rainbow-usw1.action.io
+    metrics:
+      - *memory
 
   - name: Coach USW1 Load
     source: coach-usw1.action.io
     metrics:
       - *load_avg
 
+  - name: Coach USW1 Memory
+    source: coach-usw1.action.io
+    metrics:
+      - *memory
+
   - name: Box Host USE1 Load
     source: use1.actionbox.io
     metrics:
       - *load_avg
+
+  - name: Box Host USE1 Memory
+    source: use1.actionbox.io
+    metrics:
+      - *memory
 
   - name: Rainbow USE1 Load
     source: rainbow-use1.action.io
     metrics:
       - *load_avg
 
+  - name: Rainbow USE1 Memory
+    source: rainbow-use1.action.io
+    metrics:
+      - *memory
+
   - name: Coach USE1 Load
     source: coach-use1.action.io
     metrics:
       - *load_avg
+
+  - name: Coach USE1 Memory
+    source: coach-use1.action.io
+    metrics:
+      - *memory
 
   - name: Box Host SAE1 Load
     source: sae1.actionbox.io
     metrics:
       - *load_avg
 
+  - name: Box Host SAE1 Memory
+    source: sae1.actionbox.io
+    metrics:
+      - *memory
+
   - name: Rainbow SAE1 Load
     source: rainbow-sae1.action.io
     metrics:
       - *load_avg
 
+  - name: Rainbow SAE1 Memory
+    source: rainbow-sae1.action.io
+    metrics:
+      - *memory
+
   - name: Coach SAE1 Load
     source: coach-sae1.action.io
     metrics:
       - *load_avg
+
+  - name: Coach SAE1 Memory
+    source: coach-sae1.action.io
+    metrics:
+      - *memory
 
 dashboards:
   - name: APSE1
@@ -89,24 +231,45 @@ dashboards:
       - Box Host APSE1 Load
       - Rainbow APSE1 Load
       - Coach APSE1 Load
+      - Box Host APSE1 Memory
+      - Rainbow APSE1 Memory
+      - Coach APSE1 Memory
+      - Box Host APSE1 Redis CPU
+      - Box Host APSE1 Redis Memory
+      - Box Host APSE1 Redis Stats
+      - Coach APSE1 Redis CPU
+      - Coach APSE1 Redis Memory
+      - Coach APSE1 Redis Stats
   - name: APSE2
     instruments:
       # This should match the names of the instruments above
       - Box Host APSE2 Load
       - Rainbow APSE2 Load
       - Coach APSE2 Load
+      - Box Host APSE2 Memory
+      - Rainbow APSE2 Memory
+      - Coach APSE2 Memory
   - name: USE1
     instruments:
       - Box Host USE1 Load
       - Rainbow USE1 Load
       - Coach USE1 Load
+      - Box Host USE1 Memory
+      - Rainbow USE1 Memory
+      - Coach USE1 Memory
   - name: USW1
     instruments:
       - Box Host USW1 Load
       - Rainbow USW1 Load
       - Coach USW1 Load
+      - Box Host USW1 Memory
+      - Rainbow USW1 Memory
+      - Coach USW1 Memory
   - name: SAE1
     instruments:
       - Box Host SAE1 Load
       - Rainbow SAE1 Load
       - Coach SAE1 Load
+      - Box Host SAE1 Memory
+      - Rainbow SAE1 Memory
+      - Coach SAE1 Memory
