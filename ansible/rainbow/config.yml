@@ -32,8 +32,13 @@ sensitive_vars:
       - name: rainbow_airbrake_key
         prompt: Airbrake API Key used by Rainbow
 
+server_vars:
+  statsd_port: 9125
+
 regions:
   - region: ap-southeast-1
+    server_vars:
+      statsd_host: statsd-apse1.action.io
     environments:
       staging:
         server_vars:
@@ -60,6 +65,8 @@ regions:
             ami: ami-e6d999b4
 
   - region: us-west-1
+    server_vars:
+      statsd_host: statsd-usw1.action.io
     environments:
       staging:
         server_vars:
@@ -87,6 +94,8 @@ regions:
             ami: ami-977b5dd2
 
   - region: us-east-1
+    server_vars:
+      statsd_host: statsd-use1.action.io
     environments:
       production:
         server_vars:
@@ -101,6 +110,8 @@ regions:
             ami: ami-8b4dc4e2
 
   - region: eu-west-1
+    server_vars:
+      statsd_host: statsd-euw1.action.io
     environments:
       production:
         server_vars:
@@ -115,6 +126,8 @@ regions:
             ami: ami-7a202f0e
 
   - region: sa-east-1
+    server_vars:
+      statsd_host: statsd-sae1.action.io
     environments:
       production:
         server_vars:
@@ -129,6 +142,8 @@ regions:
             ami: ami-09508814
 
   - region: ap-southeast-2
+    server_vars:
+      statsd_host: statsd-apse2.action.io
     environments:
       production:
         server_vars:
