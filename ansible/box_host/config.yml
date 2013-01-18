@@ -41,9 +41,12 @@ server_vars:
   redis_mq_port: 65000
   proxee_start_port: 3000
   proxee_end_port: 9000
+  statsd_port: 9125
 
 regions:
   - region: ap-southeast-1
+    server_vars:
+      statsd_host: statsd-apse1.action.io
     environments:
       staging:
         server_vars:
@@ -84,6 +87,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: us-west-1
+    server_vars:
+      statsd_host: statsd-usw1.action.io
     environments:
       production:
         server_vars:
@@ -105,6 +110,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: us-east-1
+    server_vars:
+      statsd_host: statsd-use1.action.io
     environments:
       production:
         server_vars:
@@ -126,6 +133,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: eu-west-1
+    server_vars:
+      statsd_host: statsd-euw1.action.io
     environments:
       production:
         server_vars:
@@ -147,6 +156,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: sa-east-1
+    server_vars:
+      statsd_host: statsd-sae1.action.io
     environments:
       production:
         server_vars:
@@ -168,6 +179,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: ap-southeast-2
+    server_vars:
+      statsd_host: statsd-apse2.action.io
     environments:
       production:
         server_vars:
