@@ -35,11 +35,13 @@ sensitive_vars:
 server_vars:
   local_redis_host: 127.0.0.1
   local_redis_port: 65000
+  statsd_port: 9125
 
 regions:
   - region: ap-southeast-1
+    server_vars:
+      statsd_host: statsd-apse1.action.io
     environments:
-
       staging:
         server_vars:
           coach_webhook_host: https://staging.action.io
@@ -67,6 +69,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: us-west-1
+    server_vars:
+      statsd_host: statsd-usw1.action.io
     environments:
       production:
         server_vars:
@@ -82,6 +86,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: us-east-1
+    server_vars:
+      statsd_host: statsd-use1.action.io
     environments:
       production:
         server_vars:
@@ -97,6 +103,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: eu-west-1
+    server_vars:
+      statsd_host: statsd-euw1.action.io
     environments:
       production:
         server_vars:
@@ -112,6 +120,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: sa-east-1
+    server_vars:
+      statsd_host: statsd-sae1.action.io
     environments:
       production:
         server_vars:
@@ -127,6 +137,8 @@ regions:
                 delete_on_termination: 'false'
 
   - region: ap-southeast-2
+    server_vars:
+      statsd_host: statsd-apse2.action.io
     environments:
       production:
         server_vars:
