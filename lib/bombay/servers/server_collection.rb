@@ -151,6 +151,8 @@ module Bombay
 
             # initialize with the vars which have global scope
             server.vars = Bombay::ServerVariables.new(parsed_yaml['server_vars'])
+            # ...then scoped to the region
+            server.vars.merge!(region_config['server_vars'])
             # ...then scoped to the environment
             server.vars.merge!(env_config['server_vars'])
             # ...and finally specific to the host

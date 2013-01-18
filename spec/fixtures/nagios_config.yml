@@ -20,6 +20,9 @@ server_vars:
 
 regions:
   - region: ap-southeast-1
+    server_vars:
+      region_specific_var_1: var_1
+      region_specific_var_2: var_2
     environments:
       development:
         server_vars:

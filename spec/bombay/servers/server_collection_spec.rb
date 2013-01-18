@@ -248,7 +248,7 @@ describe Bombay::ServerCollection do
           servers[0].region.should == 'ap-southeast-1'
           servers[0].ami.should == 'ami-deadbeef'
           servers[0].environment.should == 'development'
-          servers[0].vars.should == { "nagios_http_port" => 80, "nagios_https_port" => 443, "nagios_user" => "user_development", "nagios_password" => "password_development", "nagios_email" => "nagios-apse-1@nagios.com" }
+          servers[0].vars.should == { "nagios_http_port" => 80, "nagios_https_port" => 443, "nagios_user" => "user_development", "nagios_password" => "password_development", "nagios_email" => "nagios-apse-1@nagios.com", "region_specific_var_1" => "var_1", "region_specific_var_2" => "var_2" }
           block_devices = servers[0].block_devices.to_a
 
           block_devices[0].name.should == '/dev/sdf'
@@ -266,7 +266,7 @@ describe Bombay::ServerCollection do
           servers[1].region.should == 'ap-southeast-1'
           servers[1].ami.should == 'ami-deadbeef'
           servers[1].environment.should == 'development'
-          servers[1].vars.should == { "nagios_http_port" => 80, "nagios_https_port" => 443, "nagios_user" => "user_development", "nagios_password" => "password_development", "nagios_email" => "nagios-apse-2@nagios.com" }
+          servers[1].vars.should == { "nagios_http_port" => 80, "nagios_https_port" => 443, "nagios_user" => "user_development", "nagios_password" => "password_development", "nagios_email" => "nagios-apse-2@nagios.com", "region_specific_var_1" => "var_1", "region_specific_var_2" => "var_2" }
 
           block_devices = servers[1].block_devices.to_a
 
