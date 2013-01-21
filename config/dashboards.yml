@@ -85,7 +85,7 @@ instruments:
       - *redis_memory
 
   - name: Coach APSE1 Redis Stats
-    source: apse1.actionbox.io
+    source: coach-apse1.action.io
     metrics:
       - *redis_stats
 
@@ -134,6 +134,21 @@ instruments:
     metrics:
       - *memory
 
+  - name: Coach APSE2 Redis CPU
+    source: coach-apse2.action.io
+    metrics:
+      - *redis_cpu
+
+  - name: Coach APSE2 Redis Memory
+    source: coach-apse2.action.io
+    metrics:
+      - *redis_memory
+
+  - name: Coach APSE2 Redis Stats
+    source: coach-apse2.actionbox.io
+    metrics:
+      - *redis_stats
+
   - name: Box Host USW1 Load
     source: usw1.actionbox.io
     metrics:
@@ -143,6 +158,21 @@ instruments:
     source: usw1.actionbox.io
     metrics:
       - *memory
+
+  - name: Box Host USW1 Redis CPU
+    source: usw1.actionbox.io
+    metrics:
+      - *redis_cpu
+
+  - name: Box Host USW1 Redis Memory
+    source: usw1.actionbox.io
+    metrics:
+      - *redis_memory
+
+  - name: Box Host USW1 Redis Stats
+    source: usw1.actionbox.io
+    metrics:
+      - *redis_stats
 
   - name: Rainbow USW1 Load
     source: rainbow-usw1.action.io
@@ -164,6 +194,21 @@ instruments:
     metrics:
       - *memory
 
+  - name: Coach USW1 Redis CPU
+    source: coach-usw1.action.io
+    metrics:
+      - *redis_cpu
+
+  - name: Coach USW1 Redis Memory
+    source: coach-usw1.action.io
+    metrics:
+      - *redis_memory
+
+  - name: Coach USW1 Redis Stats
+    source: coach-usw1.action.io
+    metrics:
+      - *redis_stats
+
   - name: Box Host USE1 Load
     source: use1.actionbox.io
     metrics:
@@ -173,6 +218,21 @@ instruments:
     source: use1.actionbox.io
     metrics:
       - *memory
+
+  - name: Box Host USE1 Redis CPU
+    source: use1.actionbox.io
+    metrics:
+      - *redis_cpu
+
+  - name: Box Host USE1 Redis Memory
+    source: use1.actionbox.io
+    metrics:
+      - *redis_memory
+
+  - name: Box Host USE1 Redis Stats
+    source: use1.actionbox.io
+    metrics:
+      - *redis_stats
 
   - name: Rainbow USE1 Load
     source: rainbow-use1.action.io
@@ -194,6 +254,21 @@ instruments:
     metrics:
       - *memory
 
+  - name: Coach USE1 Redis CPU
+    source: coach-use1.action.io
+    metrics:
+      - *redis_cpu
+
+  - name: Coach USE1 Redis Memory
+    source: coach-use1.action.io
+    metrics:
+      - *redis_memory
+
+  - name: Coach USE1 Redis Stats
+    source: coach-use1.action.io
+    metrics:
+      - *redis_stats
+
   - name: Box Host SAE1 Load
     source: sae1.actionbox.io
     metrics:
@@ -203,6 +278,21 @@ instruments:
     source: sae1.actionbox.io
     metrics:
       - *memory
+
+  - name: Box Host SAE1 Redis CPU
+    source: sae1.actionbox.io
+    metrics:
+      - *redis_cpu
+
+  - name: Box Host SAE1 Redis Memory
+    source: sae1.actionbox.io
+    metrics:
+      - *redis_memory
+
+  - name: Box Host SAE1 Redis Stats
+    source: sae1.actionbox.io
+    metrics:
+      - *redis_stats
 
   - name: Rainbow SAE1 Load
     source: rainbow-sae1.action.io
@@ -224,6 +314,21 @@ instruments:
     metrics:
       - *memory
 
+  - name: Coach SAE1 Redis CPU
+    source: coach-sae1.action.io
+    metrics:
+      - *redis_cpu
+
+  - name: Coach SAE1 Redis Memory
+    source: coach-sae1.action.io
+    metrics:
+      - *redis_memory
+
+  - name: Coach SAE1 Redis Stats
+    source: coach-sae1.action.io
+    metrics:
+      - *redis_stats
+
 dashboards:
   - name: APSE1
     instruments:
@@ -234,12 +339,21 @@ dashboards:
       - Box Host APSE1 Memory
       - Rainbow APSE1 Memory
       - Coach APSE1 Memory
+      # These instruments were created by hand
+      - APSE1 Coach
+      - APSE1 Boxer
+      - APSE1 Rainbow
+      - APSE1 Proxee
+
+  - name: APSE1 Redis
+    instruments:
       - Box Host APSE1 Redis CPU
       - Box Host APSE1 Redis Memory
       - Box Host APSE1 Redis Stats
       - Coach APSE1 Redis CPU
       - Coach APSE1 Redis Memory
       - Coach APSE1 Redis Stats
+
   - name: APSE2
     instruments:
       # This should match the names of the instruments above
@@ -249,6 +363,21 @@ dashboards:
       - Box Host APSE2 Memory
       - Rainbow APSE2 Memory
       - Coach APSE2 Memory
+      # These instruments were created by hand
+      - APSE2 Coach
+      - APSE2 Boxer
+      - APSE2 Rainbow
+      - APSE2 Proxee
+
+  - name: APSE2 Redis
+    instruments:
+      - Box Host APSE2 Redis CPU
+      - Box Host APSE2 Redis Memory
+      - Box Host APSE2 Redis Stats
+      - Coach APSE2 Redis CPU
+      - Coach APSE2 Redis Memory
+      - Coach APSE2 Redis Stats
+
   - name: USE1
     instruments:
       - Box Host USE1 Load
@@ -257,6 +386,21 @@ dashboards:
       - Box Host USE1 Memory
       - Rainbow USE1 Memory
       - Coach USE1 Memory
+      # These instruments were created by hand
+      - USE1 Coach
+      - USE1 Boxer
+      - USE1 Rainbow
+      - USE1 Proxee
+
+  - name: USE1 Redis
+    instruments:
+      - Box Host USE1 Redis CPU
+      - Box Host USE1 Redis Memory
+      - Box Host USE1 Redis Stats
+      - Coach USE1 Redis CPU
+      - Coach USE1 Redis Memory
+      - Coach USE1 Redis Stats
+
   - name: USW1
     instruments:
       - Box Host USW1 Load
@@ -265,6 +409,21 @@ dashboards:
       - Box Host USW1 Memory
       - Rainbow USW1 Memory
       - Coach USW1 Memory
+      # These instruments were created by hand
+      - USW1 Coach
+      - USW1 Boxer
+      - USW1 Rainbow
+      - USW1 Proxee
+
+  - name: USW1 Redis
+    instruments:
+      - Box Host USW1 Redis CPU
+      - Box Host USW1 Redis Memory
+      - Box Host USW1 Redis Stats
+      - Coach USW1 Redis CPU
+      - Coach USW1 Redis Memory
+      - Coach USW1 Redis Stats
+
   - name: SAE1
     instruments:
       - Box Host SAE1 Load
@@ -273,3 +432,18 @@ dashboards:
       - Box Host SAE1 Memory
       - Rainbow SAE1 Memory
       - Coach SAE1 Memory
+      # These instruments were created by hand
+      - SAE1 Coach
+      - SAE1 Boxer
+      - SAE1 Rainbow
+      - SAE1 Proxee
+
+  - name: SAE1 Redis
+    instruments:
+      - Box Host SAE1 Redis CPU
+      - Box Host SAE1 Redis Memory
+      - Box Host SAE1 Redis Stats
+      - Coach SAE1 Redis CPU
+      - Coach SAE1 Redis Memory
+      - Coach SAE1 Redis Stats
+
