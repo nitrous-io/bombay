@@ -67,7 +67,7 @@ Optional Variables:
     email: "{{librato_email}}",
     token: "{{librato_token}}"
   },
-  port: 9125,
-  mgmt_port: 9126,
+  port: {{ statsd_port }},
+  mgmt_port: {{ statsd_mgmt_port }},
   backends: ['statsd-librato-backend']
 }

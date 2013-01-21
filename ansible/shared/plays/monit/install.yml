@@ -70,6 +70,7 @@
     - include: ../../../shared/plays/monit/tasks/node-monit.yml node_app=coach
     - include: ../../../shared/plays/monit/tasks/node-monit.yml node_app=proxee
     - include: ../../../shared/plays/monit/tasks/node-monit.yml node_app=boxer
+    - include: ../../../shared/plays/monit/tasks/statsd-monit.yml
 
     # stunnel check
     - name: check if stunnel is installed

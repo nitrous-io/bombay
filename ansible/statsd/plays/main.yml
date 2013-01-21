@@ -19,6 +19,6 @@
     - include: ../../shared/tasks/set_limits.yml
 
 - include: deploy.yml
-- include: ../../shared/plays/diamond/install.yml
 - include: ../../shared/plays/unattended_upgrades/install.yml
+- include: ../../shared/plays/monit/install.yml
 
