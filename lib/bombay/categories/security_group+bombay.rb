@@ -27,9 +27,7 @@ class Fog::Compute::AWS::SecurityGroup < Fog::Model
   # user:group multiple times will fail. This catches that and just print out
   # the exception but will continue
   rescue Fog::Compute::AWS::Error => e
-    if e.to_s.match /InvalidPermission.Duplicate/
-      p "Ignoring #{e}"
-    else
+    unless e.to_s.match /InvalidPermission.Duplicate/
       raise e
     end
   end

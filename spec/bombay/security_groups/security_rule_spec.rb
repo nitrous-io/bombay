@@ -10,6 +10,16 @@ describe Bombay::SecurityRule do
     end
   end
 
+  describe "#belongs_to_another_account?" do
+    it "should true if the source is an IP" do
+      rule_1 = Bombay::SecurityRule.new(ports: '22', protocol: 'tcp', source: 'heroku_account_id:heroku_group_id')
+      rule_1.belongs_to_another_account?.should be_true
+
+      rule_2 = Bombay::SecurityRule.new(ports: '3000-9000', protocol: 'tcp', source: 'bombay')
+      rule_2.belongs_to_another_account?.should be_false
+    end
+  end
+
   describe "#port_range" do
     it "should return the port range as a range" do
       rule_1 = Bombay::SecurityRule.new(ports: '22', protocol: 'tcp', source: '127.0.0.1')
@@ -27,6 +37,19 @@ describe Bombay::SecurityRule do
 
       rule_2 = Bombay::SecurityRule.new(ports: '3000-9000', protocol: 'tcp', source: 'bombay')
       rule_2.is_source_ip?.should be_false
+    end
+  end
+
+  describe "#source" do
+    it "should return a hash with the key as the owner_id and the value as the group_id" do
+      rule_1 = Bombay::SecurityRule.new(ports: '22', protocol: 'tcp', source: 'heroku_account_id:heroku_group_id')
+      rule_1.source.should == { 'heroku_account_id' => 'heroku_group_id' }
+
+      rule_2 = Bombay::SecurityRule.new(ports: '3000-9000', protocol: 'tcp', source: 'bombay')
+      rule_2.source.should == 'bombay'
+
+      rule_3 = Bombay::SecurityRule.new(ports: '3000-9000', protocol: 'tcp', source: '127.0.0.1')
+      rule_3.source.should == '127.0.0.1'
     end
   end
 

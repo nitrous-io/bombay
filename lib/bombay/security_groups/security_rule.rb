@@ -6,6 +6,10 @@ module Bombay
       opts.each { |k,v| self.send("#{k}=", v) if self.respond_to?("#{k}=") }
     end
 
+    def belongs_to_another_account?
+      @source.match(/:/)
+    end
+
     def eql?(rule)
       self.port_range.eql?(rule.port_range) &&
       self.protocol.eql?(rule.protocol) &&
@@ -17,8 +21,17 @@ module Bombay
     end
 
     def is_source_ip?
-      ip = IPAddress.parse(self.source) rescue nil
+      ip = IPAddress.parse(@source) rescue nil
       ip.present?
+    end
+
+    def source
+      if self.belongs_to_another_account?
+        owner_id, group_id = @source.split(':')
+        { owner_id => group_id }
+      else
+        @source
+      end
     end
 
     def port_range

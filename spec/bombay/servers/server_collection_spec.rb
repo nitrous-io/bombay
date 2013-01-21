@@ -41,7 +41,7 @@ describe Bombay::ServerCollection do
         end
 
         it "should return a string which contains the servers and its associated vars" do
-          @server_collection.ansible_hosts.should == "[nagios]\nnagios-server-apse1.action.io nagios_email=\"nagios-apse-1@nagios.com\" nagios_http_port=\"80\" nagios_https_port=\"443\" nagios_password=\"password_development\" nagios_user=\"user_development\"\nnagios-server-apse2.action.io nagios_email=\"nagios-apse-2@nagios.com\" nagios_http_port=\"80\" nagios_https_port=\"443\" nagios_password=\"password_development\" nagios_user=\"user_development\""
+          @server_collection.ansible_hosts.should == "[nagios]\nnagios-server-apse1.action.io nagios_email=\"nagios-apse-1@nagios.com\" nagios_http_port=\"80\" nagios_https_port=\"443\" nagios_password=\"password_development\" nagios_user=\"user_development\" region_specific_var_1=\"var_1\" region_specific_var_2=\"var_2\"\nnagios-server-apse2.action.io nagios_email=\"nagios-apse-2@nagios.com\" nagios_http_port=\"80\" nagios_https_port=\"443\" nagios_password=\"password_development\" nagios_user=\"user_development\" region_specific_var_1=\"var_1\" region_specific_var_2=\"var_2\""
         end
       end
 
@@ -76,7 +76,7 @@ describe Bombay::ServerCollection do
       end
 
       it "should return a string which contains the servers and its associated vars" do
-        @server_collection.ansible_hosts.should == "[nagios]\nnagios-server-apse1.action.io nagios_email=\"nagios-apse-1@nagios.com\" nagios_http_port=\"80\" nagios_https_port=\"443\" nagios_password=\"password_development\" nagios_user=\"user_development\""
+        @server_collection.ansible_hosts.should == "[nagios]\nnagios-server-apse1.action.io nagios_email=\"nagios-apse-1@nagios.com\" nagios_http_port=\"80\" nagios_https_port=\"443\" nagios_password=\"password_development\" nagios_user=\"user_development\" region_specific_var_1=\"var_1\" region_specific_var_2=\"var_2\""
       end
     end
   end
