@@ -52,6 +52,10 @@ module Bombay
         end
 
         create_instance
+      elsif cloud_state == 'running'
+        if self.size != cloud_instance.flavor_id
+          restart self.size
+        end
       end
     end
 
@@ -82,8 +86,6 @@ module Bombay
         say "IP: #{@ip}"
       end
       compute.associate_address(cloud_instance.id, @ip)
-      cloud_instance.reload
-      create_dns_record(cloud_instance.dns_name)
       print(".") until tcp_test_ssh { say("\nDone") }
     end
 
