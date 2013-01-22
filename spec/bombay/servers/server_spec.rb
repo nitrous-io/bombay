@@ -1,5 +1,26 @@
 require 'spec_helper'
 
+shared_context "mock ip" do
+  before do
+    @zone = create_dns_zone("actionbox.io")
+    @elastic_ip = compute(server.region).addresses.create
+    @main_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
+                                        name: 'example.actionbox.io',
+                                        type: 'CNAME')
+    @wildcard_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
+                                            name: '*.example.actionbox.io',
+                                            type: 'CNAME')
+
+    Fog::DNS::AWS::Records.any_instance.stub(:get).and_return(@main_record, @wildcard_record)
+  end
+
+  after do
+    @elastic_ip.destroy if @elastic_ip
+    @main_record.destroy if @main_record
+    @wildcard_record.destroy if @wildcard_record
+  end
+end
+
 describe Bombay::Server do
   let!(:server) do
     Bombay::Server.new(hostname: 'example.actionbox.io',
@@ -206,6 +227,7 @@ describe Bombay::Server do
         end
 
         context 'when server size is changed' do
+          include_context "mock ip"
           let(:cloud_instance) { server.cloud_instance }
 
           before do
@@ -213,23 +235,6 @@ describe Bombay::Server do
             server.stub(:tcp_test_ssh).and_return(true)
             cloud_instance.stub(:wait_for)
             server.size = "m1.medium"
-
-            @zone = create_dns_zone("actionbox.io")
-            @elastic_ip = compute(server.region).addresses.create
-            @main_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
-                                                name: 'example.actionbox.io',
-                                                type: 'CNAME')
-            @wildcard_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
-                                                    name: '*.example.actionbox.io',
-                                                    type: 'CNAME')
-
-            Fog::DNS::AWS::Records.any_instance.stub(:get).and_return(@main_record, @wildcard_record)
-          end
-
-          after do
-            @elastic_ip.destroy if @elastic_ip
-            @main_record.destroy if @main_record
-            @wildcard_record.destroy if @wildcard_record
           end
 
           it 'changes size of the instance' do
@@ -283,23 +288,7 @@ describe Bombay::Server do
       end
 
       context "DNS entry for the server exists" do
-        before do
-          @elastic_ip = compute(server.region).addresses.create
-          @main_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
-                                              name: 'example.actionbox.io',
-                                              type: 'CNAME')
-          @wildcard_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
-                                                  name: '*.example.actionbox.io',
-                                                  type: 'CNAME')
-
-          Fog::DNS::AWS::Records.any_instance.stub(:get).and_return(@main_record, @wildcard_record)
-        end
-
-        after do
-          @elastic_ip.destroy if @elastic_ip
-          @main_record.destroy if @main_record
-          @wildcard_record.destroy if @wildcard_record
-        end
+        include_context "mock ip"
 
         context "Elastic IP associated with the DNS entry does not exist" do
           before do
@@ -345,6 +334,8 @@ describe Bombay::Server do
   end
 
   describe "#restart" do
+    include_context "mock ip"
+
     let(:cloud_instance) { server.cloud_instance }
 
     before do
@@ -354,23 +345,6 @@ describe Bombay::Server do
       create_server(server)
       cloud_instance.stub(:wait_for)
       server.stub(:tcp_test_ssh).and_return(true)
-
-      # prepare some ip for this
-      @zone = create_dns_zone("actionbox.io")
-      @elastic_ip = compute(server.region).addresses.create
-      @main_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
-                                          name: 'example.actionbox.io',
-                                          type: 'CNAME')
-      @wildcard_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
-                                              name: '*.example.actionbox.io',
-                                              type: 'CNAME')
-      Fog::DNS::AWS::Records.any_instance.stub(:get).and_return(@main_record, @wildcard_record)
-    end
-
-    after do
-      @elastic_ip.destroy if @elastic_ip
-      @main_record.destroy if @main_record
-      @wildcard_record.destroy if @wildcard_record
     end
 
     it 'restarts the server' do
