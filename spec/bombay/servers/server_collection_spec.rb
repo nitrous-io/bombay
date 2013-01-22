@@ -290,4 +290,12 @@ describe Bombay::ServerCollection do
       end
     end
   end
+
+  describe '#find_by_hostname' do
+    it 'finds the server by hostname' do
+      server_collection = Bombay::ServerCollection.parse(role)
+      server_collection.find_by_hostname('nagios-server-usw1.action.io').should be_present
+      server_collection.find_by_hostname('invalid-hostname').should_not be_present
+    end
+  end
 end

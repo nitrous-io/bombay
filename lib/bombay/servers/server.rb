@@ -55,7 +55,38 @@ module Bombay
       end
     end
 
+    def restart(flavor_id=nil)
+      cloud_instance.stop
+      cloud_instance.wait_for { print "."; state == 'stopped' }
+      if flavor_id && valid_flavor?(flavor_id)
+        cloud_instance.flavor_id = flavor_id
+        cloud_instance.connection.modify_instance_attribute cloud_instance.id, {
+          'InstanceType.Value' => flavor_id
+        }
+      end
+      cloud_instance.start
+      cloud_instance.wait_for { print "."; ready? }
+      reassign_ip!
+    end
+
     protected
+    def valid_flavor?(flavor_id)
+      cloud_instance.connection.flavors.all.any? { |flavor| flavor.id == flavor_id }
+    end
+
+    def reassign_ip!
+      assign_ip_from_dns!
+      if @ip.nil?
+        say "creating elastic ip and dns record..."
+        create_elastic_ip!
+        say "IP: #{@ip}"
+      end
+      compute.associate_address(cloud_instance.id, @ip)
+      cloud_instance.reload
+      create_dns_record(cloud_instance.dns_name)
+      print(".") until tcp_test_ssh { say("\nDone") }
+    end
+
     def assign_ip_from_dns!
       if (zone = zone_from(self.hostname)).present?
         record = zone.records.get(self.hostname)

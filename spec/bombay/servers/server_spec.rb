@@ -10,7 +10,6 @@ describe Bombay::Server do
                        ami: 'ami-deadbeef')
   end
 
-
   before :all do
     FakeFS.activate!
     setup_aws_credentials!
@@ -101,8 +100,6 @@ describe Bombay::Server do
         @server.ssh_port.should == 65100
       end
     end
-
-
   end
 
   describe "#cloud_instance" do
@@ -297,6 +294,62 @@ describe Bombay::Server do
           end
         end
       end
+    end
+  end
+
+  describe "#restart" do
+    let(:cloud_instance) { server.cloud_instance }
+
+    before do
+      create_security_group_for(server.region, server.role)
+      create_keypair_for(server.region)
+      create_dns_zone("actionbox.io")
+      create_server(server)
+      cloud_instance.stub(:wait_for)
+      server.stub(:tcp_test_ssh).and_return(true)
+
+      # prepare some ip for this
+      @zone = create_dns_zone("actionbox.io")
+      @elastic_ip = compute(server.region).addresses.create
+      @main_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
+                                          name: 'example.actionbox.io',
+                                          type: 'CNAME')
+      @wildcard_record = @zone.records.create(value: ["ec2-#{@elastic_ip.public_ip.gsub(/\./, '-')}.ap-southeast-1.compute.amazonaws.com"],
+                                              name: '*.example.actionbox.io',
+                                              type: 'CNAME')
+      Fog::DNS::AWS::Records.any_instance.stub(:get).and_return(@main_record, @wildcard_record)
+    end
+
+    after do
+      @elastic_ip.destroy if @elastic_ip
+      @main_record.destroy if @main_record
+      @wildcard_record.destroy if @wildcard_record
+    end
+
+    it 'restarts the server' do
+      cloud_instance.should_receive(:stop)
+      cloud_instance.should_receive(:start)
+      server.restart
+    end
+
+    context 'when flavor_id is specified' do
+      it 'changes size of the instance' do
+        cloud_instance.connection.should_receive(:modify_instance_attribute).
+          with(cloud_instance.id, hash_including({ 'InstanceType.Value' => 'm1.medium' }))
+        server.restart 'm1.medium'
+      end
+
+      context 'when the flavor_id is invalid' do
+        it 'does not modify the instance' do
+          cloud_instance.connection.should_not_receive(:modify_instance_attribute)
+          server.restart 'invalid.flavor'
+        end
+      end
+    end
+
+    it "re-assigns the ip associate with the server" do
+      server.restart
+      server.ip.should eq(@elastic_ip.public_ip)
     end
   end
 end
