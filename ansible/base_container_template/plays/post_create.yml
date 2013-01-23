@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: True
+  gather_facts: False
+  vars:
+    container_template: base_container_template
+
+  tasks:
+    # remove action from the sudoers file
+    - include: ../../shared/tasks/remove_user_from_sudoers.yml container_template=$container_template
+

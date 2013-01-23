@@ -1,0 +1,28 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+  vars:
+    user: action
+
+  tasks:
+    # apt-get update
+    - include: ../../shared/tasks/update_apt.yml
+    # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
+    - include: ../../shared/tasks/install_ansible_deps.yml
+    # Configure SSH
+    - include: ../../shared/tasks/container/configure_sshd_config.yml
+    # Remove ubuntu user from the container
+    - include: ../../shared/tasks/container/remove_ubuntu_user.yml
+    # Add MOTD
+    - include: ../../shared/tasks/container/configure_motd.yml
+    # Install all the necessary packages for this container (via apt)
+    - include: ../../shared/tasks/container/install_packages_via_apt.yml
+    # Install all the necessary packages for this container (via dpkg)
+    - include: ../../shared/tasks/container/install_packages_via_deb.yml
+    # Install locales
+    - include: ../../shared/tasks/container/install_locales.yml
+    # Sane Security Limits for the user
+    - include: ../../shared/tasks/container/install_security_limits.yml
+    # Install heroku toolbelt
+    - include: ../../shared/tasks/install_heroku_toolbelt.yml

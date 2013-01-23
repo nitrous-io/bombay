@@ -1,0 +1,7 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: False
+  gather_facts: False
+  tasks:
+    - include: ../../shared/tasks/host/setup_bombay_ssh_keys.yml
