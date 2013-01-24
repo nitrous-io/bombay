@@ -5,7 +5,7 @@ module Bombay
     def initialize(name, playbook_name)
       self.name = name
       self.playbook_name = playbook_name
-      self.lxc_container_path = "/var/lib/lxc/base_container_template"
+      self.lxc_container_path = "/var/lib/lxc/builder_container_delta"
       self.home_path = "#{self.lxc_container_path}/rootfs/home/action"
       raise ConfigFileMissingError if !File.exists?(self.lxc_container_path)
     end
@@ -24,17 +24,15 @@ module Bombay
       packaged_container_name = "#{self.name}_#{version}.tar.gz"
 
       delete_from_container = [
-        "rootfs/home/action/.ssh",
-        "rootfs/home/action/.ansible",
-        "rootfs/home/action/.cache",
-        "rootfs/home/action/.bash_history",
-        "rootfs/var/log/*",
-        "rootfs/var/cache/apt/archives/*"
+        ".ssh",
+        ".ansible",
+        ".cache",
+        ".bash_history",
       ]
-      delete_from_container.each { |p| system "sudo rm -rf #{self.lxc_container_path}/#{p}" }
+      delete_from_container.each { |p| system "sudo rm -rf #{self.home_path}/#{p}" }
 
       system "sudo bash -c 'echo \"#{self.name}: #{version}\" > #{self.home_path}/VERSION'"
-      system "cd /var/lib/lxc && sudo tar cpvzf #{packaged_container_name} #{self.home_path}"
+      system "cd /var/lib/lxc && sudo tar -C #{self.home_path} -cpvzf #{packaged_container_name} ."
       system "s3cmd put /var/lib/lxc/#{packaged_container_name} s3://bombay-apse.action.io/#{packaged_container_name}"
       system "sudo rm -rf /var/lib/lxc/#{packaged_container_name}*"
 
