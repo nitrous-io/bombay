@@ -30,4 +30,5 @@ require "bombay/servers/server"
 require "bombay/servers/server_collection"
 
 require "bombay/container"
+require "bombay/template"
 

@@ -1,6 +1,9 @@
 [localhost]
 127.0.0.1
 
+[builder_container]
+192.168.254.254
+
 [base_container_template]
 192.168.254.254
 

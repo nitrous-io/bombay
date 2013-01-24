@@ -1,5 +1,15 @@
 ---
-- hosts: base_container_template
+- hosts: localhost
+  connection: local
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - include: ../../shared/tasks/host/setup_iptables_for_bridge_interface.yml
+      with_items:
+        - 254
+
+- hosts: builder_container
   sudo: False
   gather_facts: False
   vars:
@@ -18,10 +28,11 @@
       shell: /bin/bash -c "(grep 'LC_CTYPE=UTF-8' /home/${user}/.bashrc) || (echo 'export LC_CTYPE=UTF-8' >> /home/${user}/.bashrc)"
 
     - name: install rvm
-      shell: curl -L https://get.rvm.io | bash -s stable creates=/home/${user}/.rvm chdir=/home/${user}
+      shell: bash -c "curl -L https://get.rvm.io | bash -s stable" creates=/home/${user}/.rvm chdir=/home/${user}
       ignore_errors: True
+
     - name: install ruby-${ruby_version} and set as the default
-      shell: shell su $user -c test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ${ruby_version} --binary && /home/${user}/.rvm/bin/rvm alias create default ruby-${ruby_version} creates=/home/${user}/.rvm/rubies/ruby-${ruby_version}/bin/ruby
+      shell: bash -c "test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ${ruby_version} --binary && /home/${user}/.rvm/bin/rvm alias create default ruby-${ruby_version}" creates=/home/${user}/.rvm/rubies/ruby-${ruby_version}/bin/ruby
 
     - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$user
 
