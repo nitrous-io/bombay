@@ -180,6 +180,10 @@
     - name: install node modules for proxee
       action: shell su $username -c "/home/$username/.nvm/$node_version/bin/npm install" chdir=/home/$username/workspace/proxee
 
+    # Clone action-base 
+    - name: git clone --recursive action-base
+      action: shell su $username -c "git clone --recursive git@github.com:action-io/action-base.git /home/$username/workspace/action-base/" creates=/home/$username/workspace/action-base
+
     # Clone action.io
     - name: git clone --recursive action.io
       action: shell su $username -c "git clone --recursive git@github.com:action-io/action.io.git /home/$username/workspace/action.io/" creates=/home/$username/workspace/action.io
