@@ -1,0 +1,3 @@
+---
+- include: ./check_base.yml
+- include: ./install.yml

@@ -1,0 +1,15 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: True
+  gather_facts: False
+
+  vars:
+    container_template: base_container_template
+    ip: 192.168.254.254
+    gateway: 192.168.254.1
+    user: action
+
+  tasks:
+    - name: make sure base_container_template is running
+      shell: lxc-info -n base_container_template | grep RUNNING
