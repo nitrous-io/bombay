@@ -16,7 +16,7 @@ module Bombay
       ENV['ANSIBLE_CONFIG'] = "#{Bombay::ROOT}/config/ansible.container.cfg"
       system "ansible-playbook #{Bombay::ROOT}/ansible/#{self.name}/plays/#{self.playbook_name}.yml " +
              "-i #{Bombay::ROOT}/config/hosts.containers " +
-             "--private-key=#{Dir.home}/.ansible/bombay -vvv"
+             "--private-key=#{Dir.home}/.ansible/bombay"
     end
 
     def deploy!
