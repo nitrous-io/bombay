@@ -1,0 +1,18 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+  vars:
+    user: action
+
+  tasks:
+    # Install golang ppa
+    - include: ../../shared/tasks/add_repository.yml repo=ppa:gophers/go
+    # add python repository
+    - include: ../../shared/tasks/add_repository.yml repo=ppa:fkrull/deadsnakes
+    # Install golang
+    - name: install golang-stable
+      apt: pkg=golang-stable
+    # Install python2.5 because golang appengine requires it
+    - name: install python2.5
+      apt: pkg=python2.5
