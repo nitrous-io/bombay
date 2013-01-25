@@ -21,7 +21,7 @@ module Bombay
     def deploy!
       raise ConfigFileMissingError if !File.exists?(self.lxc_container_path)
       version = Time.now.to_i
-      packaged_container_name = "#{self.name}_#{version}.tar"
+      packaged_container_name = "#{self.name}_#{version}.tar.gz"
 
       delete_from_container = [
         ".ssh",
@@ -32,7 +32,7 @@ module Bombay
       delete_from_container.each { |p| system "sudo rm -rf #{self.home_path}/#{p}" }
 
       system "sudo bash -c 'echo \"#{self.name}: #{version}\" > #{self.home_path}/VERSION'"
-      system "cd /var/lib/lxc && sudo tar -C #{self.home_path} -cpvf #{packaged_container_name} ."
+      system "cd /var/lib/lxc && sudo tar -C #{self.home_path} -czpvf #{packaged_container_name} ."
       system "s3cmd put /var/lib/lxc/#{packaged_container_name} s3://bombay-apse.action.io/#{packaged_container_name}"
       system "sudo rm -rf /var/lib/lxc/#{packaged_container_name}*"
 
