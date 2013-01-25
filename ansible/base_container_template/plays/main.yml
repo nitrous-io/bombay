@@ -2,4 +2,5 @@
 - include: ./setup_bombay_ssh_keys.yml
 - include: ./create_container.yml
 - include: ./setup_container.yml
+- include: ./install_python.yml
 - include: ./post_create.yml

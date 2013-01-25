@@ -1,0 +1,4 @@
+---
+- include: ../../shared/plays/builder/destroy.yml
+- include: ../../shared/plays/builder/install.yml
+- include: ./install.yml
