@@ -56,7 +56,7 @@ regions:
             size: m1.small
             ami: ami-e6d999b4
             server_vars:
-              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+              boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-1d909139
