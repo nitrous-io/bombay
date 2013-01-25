@@ -7,7 +7,6 @@ module Bombay
       self.playbook_name = playbook_name
       self.lxc_container_path = "/var/lib/lxc/builder_container_delta"
       self.home_path = "#{self.lxc_container_path}/rootfs/home/action"
-      raise ConfigFileMissingError if !File.exists?(self.lxc_container_path)
     end
 
     def build!
@@ -20,6 +19,7 @@ module Bombay
     end
 
     def deploy!
+      raise ConfigFileMissingError if !File.exists?(self.lxc_container_path)
       version = Time.now.to_i
       packaged_container_name = "#{self.name}_#{version}.tar.gz"
 
