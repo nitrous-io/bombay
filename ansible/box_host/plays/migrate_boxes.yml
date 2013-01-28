@@ -1,0 +1,14 @@
+---
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+
+  vars:
+    redis_port: $local_redis_port
+
+  tasks:
+    - name: copy migration script
+      copy: src=../files/migrate_box_home.sh dest=/tmp/migrate_box_home.sh owner=root group=root mode=740
+
+    - name: run migration script
+      shell: bash -c "/tmp/migrate_box_home.sh ${redis_port}"
