@@ -14,7 +14,7 @@
   gather_facts: False
   vars:
     user: action
-    ruby_version: 1.9.3-p194
+    ruby_version: 1.9.3-p374
     node_version: v0.8.11
 
   tasks:
@@ -32,7 +32,7 @@
       ignore_errors: True
 
     - name: install ruby-${ruby_version} and set as the default
-      shell: bash -c "test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ${ruby_version} --binary && /home/${user}/.rvm/bin/rvm alias create default ruby-${ruby_version}" creates=/home/${user}/.rvm/rubies/ruby-${ruby_version}/bin/ruby
+      shell: bash -c "test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ruby-${ruby_version} --binary && /home/${user}/.rvm/bin/rvm alias create default ruby-${ruby_version}" creates=/home/${user}/.rvm/rubies/ruby-${ruby_version}/bin/ruby
 
     - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$user
 
