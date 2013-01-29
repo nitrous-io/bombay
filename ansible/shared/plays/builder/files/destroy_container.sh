@@ -9,6 +9,7 @@ name=${1}
 lxc_root='/var/lib/lxc'
 quoted_lxc_root='\/var\/lib\/lxc\/'
 box_path=${lxc_root}/${name}
+box_delta_path=${lxc_root}/${name}_delta
 
 if [ -d ${box_path} ]; then
   echo 'Stopping the container'
@@ -33,7 +34,8 @@ if [ -d ${box_path} ]; then
   fi
 
   echo 'Deleting all remnants of the container'
-  rm -rf ${box_path}*
+  rm -rf ${box_path}
+  rm -rf ${box_delta_path}
 
   echo 'Flushing IPTables'
   iptables -t nat -F
