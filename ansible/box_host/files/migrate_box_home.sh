@@ -14,6 +14,7 @@ container_template_path=${lxc_root}/${container_template}
 for box in $(redis-cli -p $redis_port HKEYS aio:boxes)
 do
   base_template=`cat /etc/fstab | grep -i ${box} | sed 's/.*\lowerdir=\([a-z_\/]*\).*/\1/'`
+  ip=`redis-cli -p $redis_port HGET aio:boxes ${box} | sed "s|.*ip\":\"\([0-9\.]*\)\".*|\1|g"`
   box_path=${lxc_root}/${box}
   box_delta_path=${box_path}_delta
   container_path=${lxc_root}/${container_template}
@@ -44,7 +45,8 @@ do
     echo "Moved base to base_container_template"
 
     lxc-start -n ${box} -d
-    echo "Started: ${box}"
+    echo "Started: ${box} at ip: ${ip}"
+    `while ! nc -z ${ip} 22 ; do sleep 0.5; done`
     echo "Finished ${box}"
   fi
 done
