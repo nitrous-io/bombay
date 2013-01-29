@@ -8,7 +8,7 @@
 
   tasks:
     - name: copy migration script
-      copy: src=../files/migrate_box_home.sh dest=/tmp/migrate_box_home.sh owner=root group=root mode=740
+      copy: src=../files/migrate_box_home.rb dest=/tmp/migrate_box_home.rb owner=root group=root mode=740
 
     - name: run migration script
-      shell: bash -c "/tmp/migrate_box_home.sh ${redis_port}"
+      shell: bash -c "/tmp/migrate_box_home.rb ${redis_port}"
