@@ -22,7 +22,11 @@ module Bombay
       packaged_container_name = "#{self.name}_#{version}.tar.gz"
 
       delete_from_container = [
-        "rootfs/home/action/*",
+        "rootfs/home/action/.ssh",
+        "rootfs/home/action/.ansible",
+        "rootfs/home/action/.cache",
+        "rootfs/home/action/.bash_history",
+        "rootfs/home/action/.bashrc",
         "rootfs/var/log/*",
         "rootfs/var/cache/apt/archives/*"
       ]
