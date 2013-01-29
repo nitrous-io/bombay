@@ -18,9 +18,7 @@ iface br-lxc-{{ i }} inet static
     address 192.168.{{ i }}.1
     netmask 255.255.255.0
     post-up echo 1 > /proc/sys/net/ipv4/ip_forward
-    post-up /sbin/tc qdisc add dev br-lxc-{{ i }} root tbf rate 5mbit latency 50ms burst 1540
     pre-down echo 0 > /proc/sys/net/ipv4/ip_forward
-    pre-down /sbin/tc qdisc del dev br-lxc-{{ i }} root
 
     bridge_ports none
     bridge_stp on
