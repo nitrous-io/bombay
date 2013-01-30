@@ -42,13 +42,6 @@ all_box_ids.each do |box_id|
     puts "Migrating home dir"
     `rsync -aupzH #{box_path}/rootfs/home/action #{box_delta_path}/rootfs/home`
 
-    if File.exists?("#{box_delta_path}/rootfs/home/action/.rvm")
-      bash_profile = File.read("#{box_delta_path}/rootfs/home/action/.bash_profile")
-      bash_profile_split = bash_profile.split("\n")
-      bash_profile_split << "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`ls -d $HOME/.rvm/rubies/**/lib | tr '\\n' ':'`"
-      File.open("#{box_delta_path}/rootfs/home/action/.bash_profile", 'w') { |f| f.puts(bash_profile_split.join("\n")) }
-    end
-
     puts "Remove /etc/fstab config"
     `sed -i "/#{quoted_lxc_root}#{name}\b/d" /etc/fstab`
 
