@@ -72,7 +72,7 @@ regions:
           redis_mq_host: coach-apse1.action.io
         servers:
           - hostname: apse1.actionbox.io
-            size: m1.small
+            size: m1.medium
             ami: ami-e6d999b4
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
@@ -95,7 +95,7 @@ regions:
           redis_mq_host: coach-usw1.action.io
         servers:
           - hostname: usw1.actionbox.io
-            size: m1.small
+            size: m1.medium
             ami: ami-977b5dd2
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
@@ -118,7 +118,7 @@ regions:
           redis_mq_host: coach-use1.action.io
         servers:
           - hostname: use1.actionbox.io
-            size: m1.small
+            size: m1.medium
             ami: ami-8b4dc4e2
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
@@ -141,7 +141,7 @@ regions:
           redis_mq_host: coach-euw1.action.io
         servers:
           - hostname: euw1.actionbox.io
-            size: m1.small
+            size: m1.medium
             ami: ami-7a202f0e
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
@@ -164,7 +164,7 @@ regions:
           redis_mq_host: coach-sae1.action.io
         servers:
           - hostname: sae1.actionbox.io
-            size: m1.small
+            size: m1.medium
             ami: ami-09508814
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
@@ -187,7 +187,7 @@ regions:
           redis_mq_host: coach-apse2.action.io
         servers:
           - hostname: apse2.actionbox.io
-            size: m1.small
+            size: m1.medium
             ami: ami-b6ff698c
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"

@@ -49,7 +49,7 @@ regions:
           rainbow_database_name: d3q8t99tlthbos
         servers:
           - hostname: rainbow-apse1-staging.action.io
-            size: m1.small
+            size: m1.medium
             ami: ami-e6d999b4
 
       production:
@@ -61,7 +61,7 @@ regions:
           rainbow_database_name: d9ij1rf0084388
         servers:
           - hostname: rainbow-apse1.action.io
-            size: m1.small
+            size: m1.medium
             ami: ami-e6d999b4
 
   - region: us-west-1
@@ -78,7 +78,7 @@ regions:
             rainbow_database_name: d3q8t99tlthbos
         servers:
           - hostname: rainbow-usw1-staging.action.io
-            size: m1.small
+            size: m1.medium
             ami: ami-977b5dd2
 
       production:
@@ -90,7 +90,7 @@ regions:
           rainbow_database_name: d9ij1rf0084388
         servers:
           - hostname: rainbow-usw1.action.io
-            size: m1.small
+            size: m1.medium
             ami: ami-977b5dd2
 
   - region: us-east-1
@@ -106,7 +106,7 @@ regions:
           rainbow_database_name: d9ij1rf0084388
         servers:
           - hostname: rainbow-use1.action.io
-            size: m1.small
+            size: m1.medium
             ami: ami-8b4dc4e2
 
   - region: eu-west-1
@@ -122,7 +122,7 @@ regions:
           rainbow_database_name: d9ij1rf0084388
         servers:
           - hostname: rainbow-euw1.action.io
-            size: m1.small
+            size: m1.medium
             ami: ami-7a202f0e
 
   - region: sa-east-1
@@ -138,7 +138,7 @@ regions:
           rainbow_database_name: d9ij1rf0084388
         servers:
           - hostname: rainbow-sae1.action.io
-            size: m1.small
+            size: m1.medium
             ami: ami-09508814
 
   - region: ap-southeast-2
@@ -154,6 +154,6 @@ regions:
           rainbow_database_name: d9ij1rf0084388
         servers:
           - hostname: rainbow-apse2.action.io
-            size: m1.small
+            size: m1.medium
             ami: ami-b6ff698c
 
