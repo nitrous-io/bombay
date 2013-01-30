@@ -117,6 +117,10 @@ module Bombay
       end
     end
 
+    def find_by_hostname(hostname)
+      server = @servers.find { |s| s.hostname == hostname }
+    end
+
     def size; @servers.size; end
 
     def to_a; @servers; end
