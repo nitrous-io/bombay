@@ -9,7 +9,6 @@
     - ../../vars_files/proxee_airbrake_key.${env}.yml
 
   vars:
-    deploy_sha: 87aec0418d5d39ccd66aa81113c4aa6db7a7dcc1
     deploy_user: app_runner
     app_directory_boxer: /var/apps/boxer
     app_directory_proxee: /var/apps/proxee

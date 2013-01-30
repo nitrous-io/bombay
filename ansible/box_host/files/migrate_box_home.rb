@@ -37,18 +37,25 @@ all_box_ids.each do |box_id|
 
     puts "stop the running box: #{name}"
     `lxc-stop -n #{name}`
-    `lxc-wait -n #{name} -s STOPPED`
+    `while nc -z #{ip} 22 ; do sleep 0.5; done`
+
+    puts "Migrating home dir"
+    `rsync -aupzH #{box_path}/rootfs/home/action #{box_delta_path}/rootfs/home`
+
+    if File.exists?("#{box_delta_path}/rootfs/home/action/.rvm")
+      bash_profile = File.read("#{box_delta_path}/rootfs/home/action/.bash_profile")
+      bash_profile_split = bash_profile.split("\n")
+      bash_profile_split << "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`ls -d $HOME/.rvm/rubies/**/lib | tr '\\n' ':'`"
+      File.open("#{box_delta_path}/rootfs/home/action/.bash_profile", 'w') { |f| f.puts(bash_profile_split.join("\n")) }
+    end
+
+    puts "Remove /etc/fstab config"
+    `sed -i "/#{quoted_lxc_root}#{name}\b/d" /etc/fstab`
 
     if File.read('/proc/mounts').include?(box_path)
       puts "unmount: #{box_path}"
       `umount #{box_path}`
     end
-
-    puts "Migrating home dir"
-    `rsync -auzH #{current_template_path}/rootfs/home/action #{box_delta_path}/rootfs/home`
-
-    puts "Remove /etc/fstab config"
-    `sed -i "/#{quoted_lxc_root}#{name}\b/d" /etc/fstab`
 
     puts "Moving base to base_container_template"
     `mount -n -t overlayfs -o #{mount_options} none #{box_path}`
