@@ -45,7 +45,7 @@ all_box_ids.each do |box_id|
     end
 
     puts "Migrating home dir"
-    `rsync -auzH #{current_template_path}/rootfs/home/action #{box_delta_path}/rootfs/home`
+    `rsync -aupzH #{current_template_path}/rootfs/home/action #{box_delta_path}/rootfs/home`
 
     puts "Remove /etc/fstab config"
     `sed -i "/#{quoted_lxc_root}#{name}\b/d" /etc/fstab`
