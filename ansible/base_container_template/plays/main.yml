@@ -1,0 +1,8 @@
+---
+- include: ../../shared/plays/builder/destroy.yml
+- include: ./setup_bombay_ssh_keys.yml
+- include: ./create_container.yml
+- include: ./setup_container.yml
+- include: ./install_python.yml
+- include: ./install_golang.yml
+- include: ./post_create.yml

@@ -1,17 +1,8 @@
 [localhost]
 127.0.0.1
 
-[ruby_container_template]
+[builder_container]
 192.168.254.254
 
-[nodejs_container_template]
-192.168.254.253
-
-[ruby_container_template_sudo]
-192.168.254.252
-
-[python_container_template]
-192.168.254.251
-
-[golang_container_template]
-192.168.254.249
+[base_container_template]
+192.168.254.254

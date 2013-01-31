@@ -26,6 +26,7 @@ command :build do |c|
   c.summary = "Build containers and/or servers"
   c.description = c.summary
   c.example 'Usage', c.syntax
+  c.option '--deploy'
 
   c.action do |args, options|
     if args.length < 2
@@ -55,6 +56,10 @@ command :build do |c|
     when 'container'
       container = Bombay::Container.new(role, playbook)
       options.deploy ? container.deploy! : container.build!
+
+    when 'template'
+      template = Bombay::Template.new role, playbook
+      options.deploy ? template.deploy! : template.build!
     end
   end
 end

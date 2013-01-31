@@ -2,13 +2,19 @@
 - hosts: box_host
   sudo: True
   gather_facts: False
+
+  vars:
+    s3_bucket: bombay-apse.action.io
+
   tasks:
-    # Install ruby container
-    - include: ../tasks/install_action_container.yml name=ruby_container_template version=1353987451 s3_bucket=$s3_bucket
-    # Install nodejs container
-    - include: ../tasks/install_action_container.yml name=nodejs_container_template version=1353995398 s3_bucket=$s3_bucket
-    # Install python container
-    - include: ../tasks/install_action_container.yml name=python_container_template version=1353988799 s3_bucket=$s3_bucket
-    # Install golang container
-    - include: ../tasks/install_action_container.yml name=golang_container_template version=1353996298 s3_bucket=$s3_bucket
+    # install base container
+    - include: ../tasks/install_action_container.yml name=base_container_template version=1359544921 s3_bucket=$s3_bucket
+    # Install ruby template
+    - include: ../tasks/install_action_template.yml name=ruby_template version=1359617153 s3_bucket=$s3_bucket
+    # Install nodejs template
+    - include: ../tasks/install_action_template.yml name=nodejs_template version=1359616280 s3_bucket=$s3_bucket
+    # Install python template
+    - include: ../tasks/install_action_template.yml name=python_template version=1359618131 s3_bucket=$s3_bucket
+    # Install golang template
+    - include: ../tasks/install_action_template.yml name=golang_template version=1359616618 s3_bucket=$s3_bucket
 

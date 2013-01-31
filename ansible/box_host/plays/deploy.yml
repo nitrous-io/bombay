@@ -50,7 +50,7 @@
       action: template src=../templates/proxee_env.j2 dest=$app_directory_proxee/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
     # Deploy boxer using capistrano technique
     - name: deploy boxer
-      action: shell su $deploy_user -c '/usr/local/bin/cap boxer'
+      action: shell su $deploy_user -c '/usr/local/bin/cap boxer ${deploy_sha}'
     - name: copy over stuff needed by boxer
       action: shell su $deploy_user -c "cp /var/apps/boxer/shared/config/.env /var/apps/boxer/current/ && cp /var/apps/boxer/shared/config/runtimes.coffee /var/apps/boxer/current/config/"
     - name: set root permissions on boxer scripts

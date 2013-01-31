@@ -1,0 +1,36 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+  vars:
+    user: action
+
+  tasks:
+    # add python repository
+    - include: ../../shared/tasks/add_repository.yml repo=ppa:fkrull/deadsnakes
+
+    # Install python binaries
+    - include: ../../shared/tasks/container/install_python.yml
+
+    # Install python core dependencies
+    - name: install python dev dependencies
+      apt: pkg=$item
+      with_items:
+        - python-dev
+        - python2.5-dev
+        - python2.6-dev
+        - python2.7-dev
+        - python3.2-dev
+        - libxml2
+
+    - name: install setuptools
+      apt: pkg=python-setuptools
+
+    - name: install pip
+      easy_install: name=pip
+
+    - name: install virtualenv
+      pip: name=$item
+      with_items:
+        - virtualenv
+        - virtualenvwrapper

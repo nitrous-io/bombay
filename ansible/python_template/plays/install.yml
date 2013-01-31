@@ -1,0 +1,47 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - include: ../../shared/tasks/host/setup_iptables_for_bridge_interface.yml
+      with_items:
+        - 254
+
+- hosts: builder_container
+  sudo: False
+  gather_facts: False
+
+  vars:
+    user: action
+
+  tasks:
+    - name: install python system package
+      command:  /usr/bin/python /usr/local/bin/pip install --user ${item}
+      with_items:
+        - Django==1.3.3
+        - Fabric==1.4.3
+        - Flask==0.9
+        - jinja2==2.6
+        - lxml==2.3
+        - markupsafe==0.15
+        - numpy==1.6.1
+        - PIL==1.1.7
+        - PyAMF==0.6.1
+        - pycrypto==2.6
+        - setuptools==0.6c11
+        - webapp2==2.5.1
+        - webob==1.1.1
+        - PyYAML==3.10
+
+    # make sure to remove .pip remnants from userspace. Ideally this should be
+    # clean when you create a new box
+    - name: Remove .pip from userspace
+      command: rm -rf /home/action/.pip
+      ignore_errors: True # when .pip does not exist
+
+    - include: ../../shared/tasks/container/install_app_engine.yml appengine_container=google_appengine_1.7.3.zip
+
+    - name: add .profile
+      template: src=../templates/profile.j2 dest=/home/$user/.profile

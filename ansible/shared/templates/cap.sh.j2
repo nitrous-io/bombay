@@ -1,7 +1,10 @@
 #!/bin/bash
 
 app=${1}
-deploy_sha=`git ls-remote git@github.com:action-io/${app}.git master | awk '{ print $1 }'`
+deploy_sha=${2} # able to specify a sha that we want to deploy
+if [ -z $deploy_sha ]; then
+  deploy_sha=`git ls-remote git@github.com:action-io/${app}.git master | awk '{ print $1 }'`
+fi
 timestamp=`date +%s`
 latest_release=/var/apps/${app}/releases/${timestamp}
 shared_path=/var/apps/${app}/shared
