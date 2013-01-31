@@ -1,5 +1,6 @@
 - include: pre_flight.yml
 - include: setup_partitions.yml
+- include: ../../shared/plays/sysctl/install.yml
 - include: setup_networking.yml
 
 - hosts: box_host
