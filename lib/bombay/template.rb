@@ -31,7 +31,7 @@ module Bombay
       ]
       delete_from_container.each { |p| system "sudo rm -rf #{self.home_path}/#{p}" }
 
-      system "sudo bash -c 'echo \"#{self.name}: #{version}\" > #{self.home_path}/VERSION'"
+      system "sudo bash -c 'echo \"#{self.name}: #{version}\" > #{self.home_path}/.VERSION'"
       system "cd /var/lib/lxc && sudo tar -C #{self.home_path} -czpvf #{packaged_container_name} ."
       system "s3cmd put /var/lib/lxc/#{packaged_container_name} s3://bombay-apse.action.io/#{packaged_container_name}"
       system "sudo rm -rf /var/lib/lxc/#{packaged_container_name}*"
