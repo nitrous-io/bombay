@@ -75,7 +75,7 @@ regions:
             size: m1.medium
             ami: ami-e6d999b4
             server_vars:
-              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+              boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-1d909139
@@ -98,7 +98,7 @@ regions:
             size: m1.medium
             ami: ami-977b5dd2
             server_vars:
-              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+              boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-566c3c7a
@@ -121,7 +121,7 @@ regions:
             size: m1.medium
             ami: ami-8b4dc4e2
             server_vars:
-              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+              boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-8ab750c5
@@ -144,7 +144,7 @@ regions:
             size: m1.medium
             ami: ami-7a202f0e
             server_vars:
-              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+              boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-4b829262
@@ -167,7 +167,7 @@ regions:
             size: m1.medium
             ami: ami-09508814
             server_vars:
-              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+              boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-698c8e58
@@ -190,7 +190,7 @@ regions:
             size: m1.medium
             ami: ami-b6ff698c
             server_vars:
-              boxer_runtimes: "{ 'rails': 'ruby_container_template', 'nodejs': 'nodejs_container_template', 'django': 'python_container_template', 'go': 'golang_container_template' }"
+              boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-a649df96
