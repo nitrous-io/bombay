@@ -1,0 +1,24 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  vars:
+    download_url: http://phantomjs.googlecode.com/files/phantomjs-1.7.0-linux-x86_64.tar.bz2
+    version: phantomjs-1.7.0-linux-x86_64
+
+  tasks:
+    - name: download phantomjs
+      shell: wget $download_url -O /tmp/phantomjs.tar.bz2
+
+    - name: extract phantomjs
+      shell: tar xjvf /tmp/phantomjs.tar.bz2
+
+    - name: put phantomjs bin into PATH
+      copy: src=/tmp/$version/bin/phantomjs dest=/usr/local/bin mode=0755
+
+    - name: remove tar file
+      shell: rm -rf /tmp/phantomjs.tar.bz2
+
+    - name: remove extracted dir
+      shell: rm -rf /tmp/$version
