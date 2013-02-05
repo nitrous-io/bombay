@@ -1,0 +1,11 @@
+---
+- hosts: box_host
+  sudo: True
+  gather_facts: False
+
+  vars:
+    redis_port: $local_redis_port
+
+  tasks:
+    - name: copy migration home script
+      copy: src=../files/migrate_box_name.rb dest=/root/migrate_box_name.rb owner=root group=root mode=740
