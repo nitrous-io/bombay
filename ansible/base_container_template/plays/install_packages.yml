@@ -1,0 +1,110 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: Absolute essential packages for the container (via apt)
+      apt: pkg=$item state=present
+      with_items:
+      - build-essential
+      - wget
+      - curl
+      - libcurl3
+      - libcurl3-gnutls
+      - libcurl4-openssl-dev
+      - libsqlite3-dev
+      - libpq-dev
+      - postgresql-client-9.1
+      - libmysqlclient-dev
+      - mysql-client
+      - imagemagick
+      - libmagickwand-dev
+      - libmagickcore-dev
+      - libyaml-dev
+      - openssl
+      - libreadline6-dev
+      - update-motd
+      - man-db
+      - ssh
+      - git-core
+      - nano
+      - emacs23-nox
+      - vim-nox
+      - tmux
+      - screen
+      - libxml2-dev
+      - libxml2
+      - libxslt1-dev
+      - libbz2-1.0
+      - libbz2-dev
+      - libncurses5-dev
+      - libncursesw5-dev
+      - libssl0.9.8
+      - automake
+      - autotools-dev
+      - base-files
+      - base-passwd
+      - binutils
+      - bzip2
+      - file
+      - gnupg
+      - libdb5.1
+      - libdb5.1-dev
+      - libevent-1.4-2
+      - libevent-core-1.4-2
+      - libevent-dev
+      - libevent-extra-1.4-2
+      - libglib2.0-dev
+      - libglib2.0-dev
+      - libldap-2.4-2
+      - libldap2-dev
+      - libltdl-dev
+      - libltdl7
+      - liblzma5
+      - liblzma-dev
+      - liblzma-doc
+      - libarchive12
+      - libarchive-dev
+      - zlib1g
+      - zlib1g-dev
+      - xz-utils
+      - whiptail
+      - util-linux
+      - tzdata
+      - tzdata-java
+      - tsconf
+      - strace
+      - libncap-dev
+      - libncap44
+      - libxt6
+      - libxt-dev
+      - libpng12-0
+      - libpng12-dev
+      - libqt4-dev
+      - unzip
+      - unison
+      - ack-grep
+      - traceroute
+      - mercurial
+      - subversion
+      - bzr
+      - psmisc
+
+    - name: symlink ack-grep to ack
+      shell: ln -s /usr/bin/ack-grep /usr/local/bin/ack
+      ignore_errors: True
+
+    # Install the_silver_searcher (ag)
+    - name: Check if package is already installed
+      shell: bash -c "dpkg -s the-silver-searcher"
+      register: deb_package_installed
+      ignore_errors: True
+
+    - name: Download the package
+      get_url: url=https://github.com/downloads/ggreer/the_silver_searcher/the-silver-searcher_0.7.3-3_amd64.deb dest=/tmp/the-silver-searcher_0.7.3-3_amd64.deb
+      only_if: "len('${deb_package_installed.stdout}') == 0"
+
+    - name: Install the package
+      shell: dpkg -i /tmp/the-silver-searcher_0.7.3-3_amd64.deb
+      only_if: "len('${deb_package_installed.stdout}') == 0"

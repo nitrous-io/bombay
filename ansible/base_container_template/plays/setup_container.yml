@@ -16,10 +16,17 @@
     - include: ../../shared/tasks/container/remove_ubuntu_user.yml
     # Add MOTD
     - include: ../../shared/tasks/container/configure_motd.yml
-    # Install all the necessary packages for this container (via apt)
-    - include: ../../shared/tasks/container/install_packages_via_apt.yml
-    # Install all the necessary packages for this container (via dpkg)
-    - include: ../../shared/tasks/container/install_packages_via_deb.yml
+
+# Install essential core packages for all containers
+- include: ./install_packages.yml
+
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+  vars:
+    user: action
+
+  tasks:
     # Install locales
     - include: ../../shared/tasks/container/install_locales.yml
     # Sane Security Limits for the user
