@@ -56,9 +56,9 @@ regions:
         server_vars:
           rainbow_cors_allowed_origin: https://www.action.io
           rainbow_socketio_allowed_origin: https://www.action.io:*
-          rainbow_database_hostname: ec2-23-23-180-243.compute-1.amazonaws.com
-          rainbow_database_port: 5632
-          rainbow_database_name: d9ij1rf0084388
+          rainbow_database_hostname: ec2-107-21-201-229.compute-1.amazonaws.com
+          rainbow_database_port: 6712
+          rainbow_database_name: dfi50s40nqv74m
         servers:
           - hostname: rainbow-apse1.action.io
             size: m1.medium
@@ -85,9 +85,9 @@ regions:
         server_vars:
           rainbow_cors_allowed_origin: https://www.action.io
           rainbow_socketio_allowed_origin: https://www.action.io:*
-          rainbow_database_hostname: ec2-23-23-180-243.compute-1.amazonaws.com
-          rainbow_database_port: 5632
-          rainbow_database_name: d9ij1rf0084388
+          rainbow_database_hostname: ec2-107-21-201-229.compute-1.amazonaws.com
+          rainbow_database_port: 6712
+          rainbow_database_name: dfi50s40nqv74m
         servers:
           - hostname: rainbow-usw1.action.io
             size: m1.medium
@@ -101,9 +101,9 @@ regions:
         server_vars:
           rainbow_cors_allowed_origin: https://www.action.io
           rainbow_socketio_allowed_origin: https://www.action.io:*
-          rainbow_database_hostname: ec2-23-23-180-243.compute-1.amazonaws.com
-          rainbow_database_port: 5632
-          rainbow_database_name: d9ij1rf0084388
+          rainbow_database_hostname: ec2-107-21-201-229.compute-1.amazonaws.com
+          rainbow_database_port: 6712
+          rainbow_database_name: dfi50s40nqv74m
         servers:
           - hostname: rainbow-use1.action.io
             size: m1.medium
@@ -117,9 +117,9 @@ regions:
         server_vars:
           rainbow_cors_allowed_origin: https://www.action.io
           rainbow_socketio_allowed_origin: https://www.action.io:*
-          rainbow_database_hostname: ec2-23-23-180-243.compute-1.amazonaws.com
-          rainbow_database_port: 5632
-          rainbow_database_name: d9ij1rf0084388
+          rainbow_database_hostname: ec2-107-21-201-229.compute-1.amazonaws.com
+          rainbow_database_port: 6712
+          rainbow_database_name: dfi50s40nqv74m
         servers:
           - hostname: rainbow-euw1.action.io
             size: m1.medium
@@ -133,9 +133,9 @@ regions:
         server_vars:
           rainbow_cors_allowed_origin: https://www.action.io
           rainbow_socketio_allowed_origin: https://www.action.io:*
-          rainbow_database_hostname: ec2-23-23-180-243.compute-1.amazonaws.com
-          rainbow_database_port: 5632
-          rainbow_database_name: d9ij1rf0084388
+          rainbow_database_hostname: ec2-107-21-201-229.compute-1.amazonaws.com
+          rainbow_database_port: 6712
+          rainbow_database_name: dfi50s40nqv74m
         servers:
           - hostname: rainbow-sae1.action.io
             size: m1.medium
@@ -149,9 +149,9 @@ regions:
         server_vars:
           rainbow_cors_allowed_origin: https://www.action.io
           rainbow_socketio_allowed_origin: https://www.action.io:*
-          rainbow_database_hostname: ec2-23-23-180-243.compute-1.amazonaws.com
-          rainbow_database_port: 5632
-          rainbow_database_name: d9ij1rf0084388
+          rainbow_database_hostname: ec2-107-21-201-229.compute-1.amazonaws.com
+          rainbow_database_port: 6712
+          rainbow_database_name: dfi50s40nqv74m
         servers:
           - hostname: rainbow-apse2.action.io
             size: m1.medium
