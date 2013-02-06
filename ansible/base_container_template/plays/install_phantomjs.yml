@@ -12,7 +12,7 @@
       shell: wget $download_url -O /tmp/phantomjs.tar.bz2
 
     - name: extract phantomjs
-      shell: tar xjvf /tmp/phantomjs.tar.bz2
+      shell: tar xjvf /tmp/phantomjs.tar.bz2 -C /tmp
 
     - name: put phantomjs bin into PATH
       copy: src=/tmp/$version/bin/phantomjs dest=/usr/local/bin mode=0755
