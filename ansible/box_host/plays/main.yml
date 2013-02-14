@@ -2,6 +2,7 @@
 - include: setup_partitions.yml
 - include: ../../shared/plays/sysctl/install.yml
 - include: setup_networking.yml
+- include: ../../shared/plays/setswap/install.yml
 
 - hosts: box_host
   sudo: True

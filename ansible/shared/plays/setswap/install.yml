@@ -1,0 +1,11 @@
+---
+- hosts: all
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: Install /etc/init/setswap.conf which will set a swap of 8G
+      template: src=../../../shared/plays/setswap/templates/setswap.conf.j2 dest=/etc/init/setswap.conf
+
+    - name: Run setswap
+      command: start setswap creates=/mnt/swap
