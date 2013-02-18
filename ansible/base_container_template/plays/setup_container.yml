@@ -27,6 +27,10 @@
     user: action
 
   tasks:
+    # Install redis-client
+    - include: ../../shared/tasks/install_redis_client_from_source.yml
+    # Install java
+    - include: ../../shared/tasks/install_java.yml
     # Install locales
     - include: ../../shared/tasks/container/install_locales.yml
     # Sane Security Limits for the user

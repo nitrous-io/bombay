@@ -1,0 +1,35 @@
+- name: check if redis-cli exists
+  command: which redis-cli
+  register: redis_client_exists
+  ignore_errors: True
+
+- name: download redis source
+  get_url: url=http://redis.googlecode.com/files/redis-2.6.10.tar.gz dest=/tmp/redis-2.6.10.tar.gz mode=0644
+  only_if: "len('${redis_client_exists.stdout}') == 0"
+
+- name: extract redis source
+  shell: cd /tmp && tar -zxvf redis-2.6.10.tar.gz
+  only_if: "len('${redis_client_exists.stdout}') == 0"
+
+- name: compile redis source
+  shell: cd /tmp/redis-2.6.10 && make
+  only_if: "len('${redis_client_exists.stdout}') == 0"
+
+- name: install redis utility binaries (redis-cli)
+  shell: cp /tmp/redis-2.6.10/src/redis-cli /usr/bin
+  only_if: "len('${redis_client_exists.stdout}') == 0"
+
+- name: install redis utility binaries (redis-benchmark)
+  shell: cp /tmp/redis-2.6.10/src/redis-benchmark /usr/bin
+  only_if: "len('${redis_client_exists.stdout}') == 0"
+
+- name: install redis utility binaries (redis-benchmark)
+  shell: cp /tmp/redis-2.6.10/src/redis-check-aof /usr/bin
+  only_if: "len('${redis_client_exists.stdout}') == 0"
+
+- name: install redis utility binaries (redis-benchmark)
+  shell: cp /tmp/redis-2.6.10/src/redis-check-dump /usr/bin
+  only_if: "len('${redis_client_exists.stdout}') == 0"
+
+- name: cleanup source
+  shell: rm -rf /tmp/redis-2.6.10*

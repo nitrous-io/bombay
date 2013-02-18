@@ -4,6 +4,17 @@
   gather_facts: False
 
   tasks:
+    - name: Install Keys needed to access certain pkg repositories
+      # mongodb
+      shell: apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+
+    - name: Add source lines for all the templates
+      # mongodb
+      template: src=../../shared/templates/container/10gen.list.j2 dest=/etc/apt/sources.list.d/10gen.list
+
+    - name: Run apt-get after everything
+      shell: apt-get update
+
     - name: Absolute essential packages for the container (via apt)
       apt: pkg=$item state=present
       with_items:
@@ -14,10 +25,12 @@
       - libcurl3-gnutls
       - libcurl4-openssl-dev
       - libsqlite3-dev
+      - sqlite3
       - libpq-dev
       - postgresql-client-9.1
       - libmysqlclient-dev
       - mysql-client
+      - mongodb-clients
       - imagemagick
       - libmagickwand-dev
       - libmagickcore-dev

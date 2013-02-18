@@ -15,7 +15,7 @@
       shell: tar xjvf /tmp/phantomjs.tar.bz2 -C /tmp
 
     - name: put phantomjs bin into PATH
-      copy: src=/tmp/$version/bin/phantomjs dest=/usr/local/bin mode=0755
+      shell: cp /tmp/$version/bin/phantomjs /usr/local/bin/phantomjs
 
     - name: remove tar file
       shell: rm -rf /tmp/phantomjs.tar.bz2
