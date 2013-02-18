@@ -7,8 +7,6 @@
     s3_bucket: bombay-apse.action.io
 
   tasks:
-    # install base container
-    - include: ../tasks/install_action_container.yml name=base_container_template version=1360124253 s3_bucket=$s3_bucket
     # Install ruby template
     - include: ../tasks/install_action_template.yml name=ruby_template version=1359617153 s3_bucket=$s3_bucket
     # Install nodejs template
