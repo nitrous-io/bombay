@@ -27,9 +27,9 @@ module Bombay
         "rootfs/home/action/.cache",
         "rootfs/home/action/.bash_history",
         "rootfs/home/action/.bashrc",
-	"rootfs/home/action/*",
+        "rootfs/home/action/*",
         "rootfs/var/log/*",
-        "rootfs/var/cache/apt/archives/*"
+        "rootfs/var/cache/*"
       ]
 
       raise ConfigFileMissingError if !File.exists?(lxc_container_path)
