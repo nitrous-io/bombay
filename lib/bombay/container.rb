@@ -28,6 +28,7 @@ module Bombay
         "rootfs/home/action/.bash_history",
         "rootfs/home/action/.bashrc",
         "rootfs/home/action/*",
+        "rootfs/etc/crontab",
         "rootfs/var/log/*",
         "rootfs/var/cache/*"
       ]
