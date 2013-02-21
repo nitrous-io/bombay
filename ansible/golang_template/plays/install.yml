@@ -18,5 +18,6 @@
 
   tasks:
     - include: ../../shared/tasks/container/install_app_engine.yml appengine_container=go_appengine_sdk_linux_amd64-1.7.3.zip
-    - name: add .profile with appengine in $PATH
-      template: src=../../shared/templates/container/profile_appengine.j2 dest=/home/$user/.profile
+
+    - name: add .profile
+      template: src=../templates/profile.j2 dest=/home/$user/.profile

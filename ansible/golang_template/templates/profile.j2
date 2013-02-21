@@ -21,4 +21,10 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
+# setup workspace for GOPATH
+# http://golang.org/doc/code.html
+export GOPATH=$HOME/workspace
+# path for local python packages
+export PATH=$PATH:$GOPATH/bin
+# path for google appengine
 export PATH=$PATH:$HOME/.google_appengine
