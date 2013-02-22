@@ -98,3 +98,4 @@
    - subversion
    - bzr
    - psmisc
+   - libpam0g-dev
