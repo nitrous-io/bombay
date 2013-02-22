@@ -9,4 +9,4 @@
     copy: src=../../shared/files/container/pam_action.so dest=/lib/action/pam_action.so owner=root group=root mode=644
 
   - name: copy over /etc/pam conf
-    copy: src=../../shared/files/container/pam.d_login dest=/etc/pam.d/login owner=root group=root mode=0644
+    copy: src=../../shared/files/container/pam.d_sshd dest=/etc/pam.d/sshd owner=root group=root mode=0644
