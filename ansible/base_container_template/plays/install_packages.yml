@@ -103,6 +103,9 @@
       - subversion
       - bzr
       - psmisc
+      - libpam0g-dev
+      - zsh
+      - zsh-dev
 
     - name: symlink ack-grep to ack
       shell: ln -s /usr/bin/ack-grep /usr/local/bin/ack
