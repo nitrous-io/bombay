@@ -12,7 +12,7 @@
     # Install nodejs template
     - include: ../tasks/install_action_template.yml name=nodejs_template version=1359616280 s3_bucket=$s3_bucket
     # Install python template
-    - include: ../tasks/install_action_template.yml name=python_template version=1359618131 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_template.yml name=python_template version=1362025115 s3_bucket=$s3_bucket
     # Install golang template
     - include: ../tasks/install_action_template.yml name=golang_template version=1362018598 s3_bucket=$s3_bucket
 
