@@ -19,8 +19,52 @@ server_vars:
   pg_password: password
   local_redis_host: 127.0.0.1
   local_redis_port: 65000
+  stunnel_port: 5001
 
 regions:
+  - region: us-west-1
+    environments:
+      development:
+        servers:
+          - hostname: petes-usw-box.actionbox.io
+            size: m1.small
+            ami: ami-977b5dd2
+            server_vars:
+              username: action
+              github_username: petejkim
+              github_email: raingrove@gmail.com
+            block_devices:
+              - name: /dev/sdf
+                snapshot_id: snap-566c3c7a
+                size: 20
+                delete_on_termination: 'false'
+
+          - hostname: ajs-usw-box.actionbox.io
+            size: m1.small
+            ami: ami-977b5dd2
+            server_vars:
+              username: action
+              github_username: ajhit406
+              github_email: ajsolimine@gmail.com
+            block_devices:
+              - name: /dev/sdf
+                snapshot_id: snap-566c3c7a
+                size: 20
+                delete_on_termination: 'false'
+
+          - hostname: aruns-usw-box.actionbox.io
+            size: m1.small
+            ami: ami-977b5dd2
+            server_vars:
+              username: action
+              github_username: arunthampi
+              github_email: arun.thampi@gmail.com
+            block_devices:
+              - name: /dev/sdf
+                snapshot_id: snap-566c3c7a
+                size: 20
+                delete_on_termination: 'false'
+
   - region: ap-southeast-1
     environments:
       development:

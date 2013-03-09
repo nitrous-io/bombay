@@ -9,7 +9,7 @@
   only_if: "'${container_version.stdout}' != '${version}'"
 
 - name: download container
-  shell: s3cmd get s3://$s3_bucket/${name}_${version}.tar.gz chdir=/tmp creates=/tmp/${name}_${version}.tar.gz
+  shell: s3cmd -c /home/ubuntu/.s3cfg get s3://$s3_bucket/${name}_${version}.tar.gz chdir=/tmp creates=/tmp/${name}_${version}.tar.gz
   only_if: "'${container_version.stdout}' != '${version}'"
 
 - name: unarchive the container

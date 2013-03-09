@@ -1,3 +1,4 @@
 ---
-- include: ../../box_host/plays/install_action_containers.yml
+- include: ../../box_host/plays/install_base_container.yml
+- include: ../../box_host/plays/install_action_templates.yml
 

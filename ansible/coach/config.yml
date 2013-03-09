@@ -36,6 +36,7 @@ server_vars:
   local_redis_host: 127.0.0.1
   local_redis_port: 65000
   statsd_port: 9125
+  stunnel_port: 443
 
 regions:
   - region: ap-southeast-1

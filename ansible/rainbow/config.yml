@@ -34,6 +34,7 @@ sensitive_vars:
 
 server_vars:
   statsd_port: 9125
+  stunnel_port: 443
 
 regions:
   - region: ap-southeast-1
