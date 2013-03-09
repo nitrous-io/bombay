@@ -20,7 +20,7 @@
     # Add lines to security limits.conf
     - include: ../../shared/tasks/add_line_to_limits_conf.yml line=$item
       with_items:
-        - "app_runner           -       nofile         65536"
+        - "app_runner           -       nofile         1048576"
     # Install Node via NVM
     - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
     # Install capp script
