@@ -6,4 +6,17 @@
 - include: ./install_phantomjs.yml
 - include: ./install_python.yml
 - include: ./install_golang.yml
+- include: ./set_etc_environment.yml
+- include: ./set_ruby_19_as_default.yml
+- include: ./install_puppet.yml
+- include: ./install_chef_config.yml
 - include: ./post_create.yml
+
+- hosts: base_container_template
+  sudo: False
+  gather_facts: False
+
+  tasks:
+    - include: ../../shared/tasks/container/install_system_gem.yml gem=bundler
+    - include: ../../shared/tasks/container/install_system_gem.yml gem=rake
+    - include: ../../shared/tasks/container/install_system_gem.yml gem=chef

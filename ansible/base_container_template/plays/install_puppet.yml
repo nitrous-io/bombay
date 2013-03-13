@@ -1,0 +1,11 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: install puppet via apt
+      apt: pkg=puppet state=present
+
+    - name: remove puppetd from the binaries since we don't want it to be there
+      file: path=/usr/sbin/puppetd state=absent

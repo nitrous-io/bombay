@@ -1,0 +1,8 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: update ruby 1.9 as default
+      shell: update-alternatives --set ruby /usr/bin/ruby1.9.1

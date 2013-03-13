@@ -1,0 +1,10 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: install /etc/environment
+      copy: src=../files/environment dest=/etc/environment owner=root group=root mode=0644
+
+

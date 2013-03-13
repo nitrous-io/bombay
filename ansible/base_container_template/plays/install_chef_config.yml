@@ -1,0 +1,12 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: setup /etc/chef
+      shell: mkdir -p /etc/chef
+
+    - name: setup default chef config
+      copy: src=../files/solo.rb dest=/etc/chef/solo.rb owner=root group=root mode=0644
+

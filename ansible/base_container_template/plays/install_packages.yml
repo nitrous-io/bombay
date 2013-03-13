@@ -107,7 +107,7 @@
       - zsh
       - zsh-dev
       - dnsutils
-      - puppet
+      - ruby1.9.1-dev
 
     - name: symlink ack-grep to ack
       shell: ln -s /usr/bin/ack-grep /usr/local/bin/ack

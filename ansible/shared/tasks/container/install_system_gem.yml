@@ -1,0 +1,10 @@
+---
+- name: check for existence of gem
+  shell: bash -c "gem list ${gem} | grep ${gem}"
+  register: gem_exists
+  ignore_errors: True
+
+- name: gem install
+  shell: bash -c "gem install ${gem}"
+  only_if: "len('${gem_exists.stdout}') == 0"
+
