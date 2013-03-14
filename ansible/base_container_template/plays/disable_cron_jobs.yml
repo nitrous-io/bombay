@@ -1,0 +1,18 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: disable everything in cron.hourly
+      shell: rm -f /etc/cron.hourly/*
+
+    - name: disable everything in cron.daily
+      shell: rm -f /etc/cron.daily/*
+
+    - name: disable everything in cron.weekly
+      shell: rm -f /etc/cron.weekly/*
+
+    - name: disable everything in cron.monthly
+      shell: rm -f /etc/cron.monthly/*
+

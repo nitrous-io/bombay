@@ -10,6 +10,8 @@
 - include: ./set_ruby_19_as_default.yml
 - include: ./install_puppet.yml
 - include: ./install_chef_config.yml
+- include: ./disable_cron_jobs.yml
+- include: ./disable_rsyslogd.yml
 - include: ./post_create.yml
 
 - hosts: base_container_template
