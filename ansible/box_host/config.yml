@@ -95,14 +95,14 @@ regions:
           redis_mq_host: coach-usw1.action.io
         servers:
           - hostname: usw1.actionbox.io
-            size: m1.medium
+            size: m1.large
             ami: ami-977b5dd2
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-566c3c7a
-                size: 40
+                size: 100
                 delete_on_termination: 'false'
               - name: /dev/sdg
                 snapshot_id: snap-566c3c7a
@@ -118,14 +118,14 @@ regions:
           redis_mq_host: coach-use1.action.io
         servers:
           - hostname: use1.actionbox.io
-            size: m1.medium
+            size: m1.large
             ami: ami-8b4dc4e2
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-8ab750c5
-                size: 40
+                size: 100
                 delete_on_termination: 'false'
               - name: /dev/sdg
                 snapshot_id: snap-8ab750c5
@@ -141,14 +141,14 @@ regions:
           redis_mq_host: coach-euw1.action.io
         servers:
           - hostname: euw1.actionbox.io
-            size: m1.medium
+            size: m1.large
             ami: ami-7a202f0e
             server_vars:
               boxer_runtimes: "{ 'rails': 'ruby_template', 'nodejs': 'nodejs_template', 'django': 'python_template', 'go': 'golang_template' }"
             block_devices:
               - name: /dev/sdf
                 snapshot_id: snap-4b829262
-                size: 40
+                size: 100
                 delete_on_termination: 'false'
               - name: /dev/sdg
                 snapshot_id: snap-4b829262
