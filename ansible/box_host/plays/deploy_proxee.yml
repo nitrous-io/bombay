@@ -1,0 +1,46 @@
+---
+- hosts: all
+  sudo: True
+  gather_facts: False
+
+  vars_files:
+    - ../../vars_files/github_private_key.yml
+    - ../../vars_files/proxee_airbrake_key.${env}.yml
+
+  vars:
+    deploy_user: app_runner
+    app_directory_proxee: /var/apps/proxee
+    node_version: v0.8.11
+
+  tasks:
+    # Create Deploy User
+    - include: ../../shared/tasks/create_deploy_user.yml
+    # Install sudoers
+    - include: ../../shared/tasks/install_sudoers.yml file=../files/box_host_sudoers
+    # Add lines to security limits.conf
+    - include: ../../shared/tasks/add_line_to_limits_conf.yml line=$item
+      with_items:
+        - "app_runner           -       nofile         1048576"
+    # Install Node via NVM
+    - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$deploy_user
+    # Generate and Upload Public Key to GitHub
+    - include: ../../shared/tasks/register_github_keys.yml
+    # Install Upstart for proxee
+    - include: ../../shared/tasks/install_upstart_for_app.yml app=proxee deploy_user=$deploy_user node_version=$node_version
+    # Install cap script which does the whole capistrano deploy
+    - include: ../../shared/tasks/install_cap.yml
+    # Install a script which does upstart restarts
+    - include: ../../shared/tasks/install_upstart_node.yml
+    # Create Capistrano Layout for $app_directory_proxee}
+    - include: ../../shared/tasks/create_capistrano_app_layout.yml app_directory=$app_directory_proxee deploy_user=$deploy_user
+    # Setup .env for proxee
+    - name: setup env for proxee
+      action: template src=../templates/proxee_env.j2 dest=$app_directory_proxee/shared/config/.env owner=$deploy_user group=$deploy_user mode=0660
+    # Deploy proxee using capistrano technique
+    - name: deploy proxee
+      action: shell su $deploy_user -c '/usr/local/bin/cap proxee'
+    - name: copy over stuff needed by proxee
+      action: shell su $deploy_user -c "cp /var/apps/proxee/shared/config/.env /var/apps/proxee/current/"
+    - name: restart proxee
+      action: shell /usr/local/bin/upstart_node proxee
+
