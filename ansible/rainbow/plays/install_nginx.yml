@@ -1,0 +1,15 @@
+---
+- hosts: rainbow
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    # Setup nginx
+    - name: setup nginx
+      action: copy src=../files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
+      notify: restart nginx
+
+  handlers:
+    - name: restart nginx
+      action: shell /etc/init.d/nginx restart
+

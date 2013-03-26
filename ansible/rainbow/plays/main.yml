@@ -19,19 +19,14 @@
       action: copy src=../../shared/files/pam_common-session dest=/etc/pam.d/common-session owner=root group=root mode=0644
     # Set limits for the user
     - include: ../../shared/tasks/set_limits.yml
-    # Setup nginx
-    - name: setup nginx
-      action: copy src=../files/nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0660
-      notify: restart nginx
     # Setup haproxy
     - include: ../tasks/install_haproxy.yml
 
   handlers:
-    - name: restart nginx
-      action: shell /etc/init.d/nginx restart
     - name: restart haproxy
       action: shell /etc/init.d/haproxy restart
 
+- include: install_nginx.yml
 - include: ../../shared/plays/stunnel/install.yml
 - include: deploy.yml
 - include: ../../shared/plays/papertrail/install.yml
