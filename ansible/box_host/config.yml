@@ -69,7 +69,7 @@ regions:
 
       production:
         server_vars:
-          redis_mq_host: coach-apse1.action.io
+          redis_mq_host: coach-apse1.nitrous.io
         servers:
           - hostname: apse1.actionbox.io
             size: m1.medium
@@ -92,7 +92,7 @@ regions:
     environments:
       production:
         server_vars:
-          redis_mq_host: coach-usw1.action.io
+          redis_mq_host: coach-usw1.nitrous.io
         servers:
           - hostname: usw1.actionbox.io
             size: m1.large
@@ -115,7 +115,7 @@ regions:
     environments:
       production:
         server_vars:
-          redis_mq_host: coach-use1.action.io
+          redis_mq_host: coach-use1.nitrous.io
         servers:
           - hostname: use1.actionbox.io
             size: m1.large
@@ -138,7 +138,7 @@ regions:
     environments:
       production:
         server_vars:
-          redis_mq_host: coach-euw1.action.io
+          redis_mq_host: coach-euw1.nitrous.io
         servers:
           - hostname: euw1.actionbox.io
             size: m1.large
@@ -161,7 +161,7 @@ regions:
     environments:
       production:
         server_vars:
-          redis_mq_host: coach-sae1.action.io
+          redis_mq_host: coach-sae1.nitrous.io
         servers:
           - hostname: sae1.actionbox.io
             size: m1.medium
@@ -184,7 +184,7 @@ regions:
     environments:
       production:
         server_vars:
-          redis_mq_host: coach-apse2.action.io
+          redis_mq_host: coach-apse2.nitrous.io
         servers:
           - hostname: apse2.actionbox.io
             size: m1.medium
