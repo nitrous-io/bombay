@@ -24,4 +24,4 @@
 #    Inc.,
 #    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-printf "Welcome to Action.IO (%s %s %s)\n" "$(uname -o)" "$(uname -r)" "$(uname -m)"
+printf "Welcome to Nitrous.IO (%s %s %s)\n" "$(uname -o)" "$(uname -r)" "$(uname -m)"
