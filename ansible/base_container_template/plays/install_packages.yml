@@ -110,6 +110,8 @@
       - zsh-dev
       - dnsutils
       - ruby1.9.1-dev
+      - gdb
+      - libsndfile1-dev
 
     - name: symlink ack-grep to ack
       shell: ln -s /usr/bin/ack-grep /usr/local/bin/ack
