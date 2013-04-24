@@ -26,22 +26,35 @@ lxc.mount.entry = /sys/kernel/debug /sys/kernel/debug debugfs optional 0 0
 lxc.mount.entry = /sys/kernel/security /var/lib/lxc/#{box_id}/rootfs/sys/kernel/security securityfs optional 0 0
 lxc.mount.entry = /run /var/lib/lxc/#{box_id}/rootfs/run tmpfs noexec,nosuid,size=10%,mode=0755  0 0
   eos
+
   box_json = redis.hget("aio:boxes", box_id)
   box = JSON.parse(box_json)
+
+  ip = box['ip']
   box_path = "#{lxc_root}/#{box_id}"
   config_path = "#{box_path}/config"
 
   # only perform the changes when config file exists
   if File.exists?(config_path)
-    puts "Remove lxc.cap.drop config"
+    puts "stop the running box: #{box_id}"
+    `lxc-stop -n #{box_id}`
+    `while nc -z #{ip} 22 ; do sleep 0.5; done`
+
+    puts "Remove lxc.cap.drop config for #{box_id}"
     `sed -i "/lxc.cap.drop/d" #{config_path}`
     puts "Remove lxc.mount.entry config"
     `sed -i "/lxc.mount.entry/d" #{config_path}`
 
-    puts "append new config for box"
+    puts "append new config for #{box_id}"
     File.open(config_path, 'a') do |file|
       file << config_template
     end
+
+    # start the box
+    `lxc-start -n #{box_id} -d`
+    puts "LXC_STARTED #{box_id}, going to nc #{ip}"
+    `while ! nc -z #{ip} 22 ; do sleep 0.5; done`
+    puts "Finished waiting for #{ip}"
   else
     puts "#{box_id} is not required for migration"
   end
