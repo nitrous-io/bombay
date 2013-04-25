@@ -32,7 +32,7 @@ lxc.mount.entry = /run /var/lib/lxc/#{box_id}/rootfs/run tmpfs noexec,nosuid,siz
 
   ip = box['ip']
   box_path = "#{lxc_root}/#{box_id}"
-  config_path = "#{box_path}/config"
+  config_path = "#{box_path}_delta/config"
 
   # only perform the changes when config file exists
   if File.exists?(config_path)
