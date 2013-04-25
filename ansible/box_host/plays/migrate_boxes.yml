@@ -9,3 +9,6 @@
   tasks:
     - name: copy migration script
       copy: src=../files/migrate_box_home.rb dest=/root/migrate_box_home.rb owner=root group=root mode=740
+
+    - name: copy migration box config script
+      copy: src=../files/migrate_box_config.rb dest=/root/migrate_box_config.rb owner=root group=root mode=740
