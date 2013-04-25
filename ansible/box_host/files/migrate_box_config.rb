@@ -36,10 +36,6 @@ lxc.mount.entry = /run /var/lib/lxc/#{box_id}/rootfs/run tmpfs noexec,nosuid,siz
 
   # only perform the changes when config file exists
   if File.exists?(config_path)
-    puts "stop the running box: #{box_id}"
-    `lxc-stop -n #{box_id}`
-    `while nc -z #{ip} 22 ; do sleep 0.5; done`
-
     puts "Remove lxc.cap.drop config for #{box_id}"
     `sed -i "/lxc.cap.drop/d" #{config_path}`
     puts "Remove lxc.mount.entry config"
@@ -49,12 +45,6 @@ lxc.mount.entry = /run /var/lib/lxc/#{box_id}/rootfs/run tmpfs noexec,nosuid,siz
     File.open(config_path, 'a') do |file|
       file << config_template
     end
-
-    # start the box
-    `lxc-start -n #{box_id} -d`
-    puts "LXC_STARTED #{box_id}, going to nc #{ip}"
-    `while ! nc -z #{ip} 22 ; do sleep 0.5; done`
-    puts "Finished waiting for #{ip}"
   else
     puts "#{box_id} is not required for migration"
   end
