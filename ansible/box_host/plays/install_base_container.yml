@@ -8,5 +8,5 @@
 
   tasks:
     # install base container
-    - include: ../tasks/install_action_container.yml name=base_container_template version=1366707588 s3_bucket=$s3_bucket
+    - include: ../tasks/install_action_container.yml name=base_container_template version=1366862855 s3_bucket=$s3_bucket
 
