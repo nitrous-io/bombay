@@ -1,0 +1,9 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: alias sudo
+      copy: src=../files/alias_sudo.sh dest=/etc/profile.d/alias_sudo.sh owner=root group=root mode=0755
+
