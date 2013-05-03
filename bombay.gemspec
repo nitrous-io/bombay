@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{bombay is the server/container creation tool for action.io}
   gem.homepage      = "https://www.action.io"
 
-  gem.add_dependency  "fog",            "~> 1.8.0"
+  gem.add_dependency  "fog",            "~> 1.10.0"
   gem.add_dependency  "domainatrix",    "~> 0.0.11"
   gem.add_dependency  "commander",      "~> 4.1.2"
   gem.add_dependency  "activesupport",  "~> 3.2.8"
