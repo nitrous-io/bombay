@@ -14,7 +14,7 @@
   gather_facts: False
   vars:
     user: action
-    ruby_version: 1.9.3-p374
+    ruby_version: 1.9.3-p429
     node_version: v0.8.11
 
   tasks:

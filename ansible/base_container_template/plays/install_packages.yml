@@ -20,6 +20,10 @@
     - name: Absolute essential packages for the container (via apt)
       apt: pkg=$item state=present
       with_items:
+      - gawk
+      - libgdbm-dev
+      - bison
+      - libffi-dev
       - build-essential
       - wget
       - curl
