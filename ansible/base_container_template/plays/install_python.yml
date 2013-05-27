@@ -21,6 +21,7 @@
         - python2.6-dev
         - python2.7-dev
         - python3.2-dev
+        - python3.3-dev
         - libxml2
 
     - name: install setuptools
