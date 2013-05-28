@@ -20,20 +20,23 @@
     - name: install python system package
       command:  /usr/bin/python /usr/local/bin/pip install --user ${item}
       with_items:
-        - Django==1.3.3
-        - Fabric==1.4.3
+        - distribute==0.6.43
+        - Django==1.5.1
+        - Fabric==1.6.1
         - Flask==0.9
-        - jinja2==2.6
-        - lxml==2.3
+        - jinja2==2.7
+        - lxml==3.2.1
         - markupsafe==0.15
-        - numpy==1.6.1
+        - numpy==1.7.1
         - PIL==1.1.7
         - PyAMF==0.6.1
         - pycrypto==2.6
         - setuptools==0.6c11
-        - webapp2==2.5.1
-        - webob==1.1.1
+        - webapp2==2.5.2
+        - webob==1.2.3
         - PyYAML==3.10
+        - mysql-python==1.2.4
+        - psycopg2==2.5
 
     # make sure to remove .pip remnants from userspace. Ideally this should be
     # clean when you create a new box
