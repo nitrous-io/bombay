@@ -12,8 +12,6 @@
 - include: ./install_chef_config.yml
 - include: ./disable_cron_jobs.yml
 - include: ./disable_rsyslogd.yml
-- include: ./disable_sudo.yml
-- include: ./post_create.yml
 
 - hosts: base_container_template
   sudo: False
@@ -23,3 +21,13 @@
     - include: ../../shared/tasks/container/install_system_gem.yml gem=bundler
     - include: ../../shared/tasks/container/install_system_gem.yml gem=rake
     - include: ../../shared/tasks/container/install_system_gem.yml gem=chef
+
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - include: ../../shared/tasks/install_parse.yml
+
+- include: ./disable_sudo.yml
+- include: ./post_create.yml

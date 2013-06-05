@@ -1,0 +1,13 @@
+---
+- name: cleanup tmp parse installation files
+  shell: rm -f /tmp/parse.tmp
+
+- name: download parse
+  shell: bash -c "wget https://www.parse.com/downloads/cloud_code/parse -O /tmp/parse.tmp"
+
+- name: install parse
+  shell: mv /tmp/parse.tmp /usr/local/bin/parse
+
+- name: install parse permissions
+  shell: chmod 755 /usr/local/bin/parse
+
