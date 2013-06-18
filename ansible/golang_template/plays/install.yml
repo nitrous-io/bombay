@@ -34,3 +34,5 @@
 
     - name: add .profile
       template: src=../templates/profile.j2 dest=/home/$user/.profile
+
+    - include: ../../shared/tasks/container/add_default_shell_configs.yml

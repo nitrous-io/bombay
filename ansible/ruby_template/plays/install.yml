@@ -39,5 +39,4 @@
     - include: ../tasks/install_gem.yml gem=rails
     - include: ../tasks/install_gem.yml gem=chef
 
-    - name: setup gemrc
-      template: src=../templates/gemrc.j2 dest=/home/$user/.gemrc
+    - include: ../../shared/tasks/container/add_default_shell_configs.yml
