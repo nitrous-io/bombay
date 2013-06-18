@@ -14,8 +14,8 @@
   gather_facts: False
   vars:
     user: action
-    ruby_version: 1.9.3-p429
-    node_version: v0.8.11
+    ruby_version: 2.0.0-p195
+    node_version: v0.10.11
 
   tasks:
     - name: install LC_ALL,LANG,LANGUAGE=en_US in ${user}/.bashrc
