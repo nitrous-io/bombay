@@ -11,14 +11,14 @@
 - name: Rename Node.JS directory to ${version}
   action: command mv node-${version}-linux-x64 ${version} creates=/home/${user}/.nvm/${version} chdir=/home/${user}/.nvm
 
-- name: Check if nvm.sh is present in bash_profile
-  action: shell grep nvm.sh /home/${user}/.bash_profile
-  register: nvm_in_bash_profile
+- name: Check if nvm.sh is present in bashrc
+  action: shell grep nvm.sh /home/${user}/.bashrc
+  register: nvm_in_bashrc
   ignore_errors: True
 
-- name: add nvm.sh in bash_profile
-  action: shell echo "source ~/.nvm/nvm.sh" >> /home/${user}/.bash_profile && chown ${user}:${user} /home/${user}/.bash_profile
-  only_if: "len('${nvm_in_bash_profile.stdout}') == 0"
+- name: add nvm.sh in bashrc
+  action: shell echo "source ~/.nvm/nvm.sh" >> /home/${user}/.bashrc && chown ${user}:${user} /home/${user}/.bashrc
+  only_if: "len('${nvm_in_bashrc.stdout}') == 0"
 
 - name: apply nvm.sh and set default version
   action: shell /bin/bash -c "source /home/${user}/.nvm/nvm.sh && nvm use ${version} && nvm alias default ${version}"

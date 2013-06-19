@@ -21,6 +21,9 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
+# setup GOROOT
+export GOROOT=$HOME/.go
+export PATH=$PATH:$GOROOT/bin
 # setup workspace for GOPATH
 # http://golang.org/doc/code.html
 export GOPATH=$HOME/workspace

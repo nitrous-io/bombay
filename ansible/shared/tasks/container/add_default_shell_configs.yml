@@ -1,0 +1,15 @@
+---
+- name: copy bashrc
+  copy: dest=/home/$user/.bashrc src=../../shared/files/container/home/bashrc mode=0644 owner=$user group=$user
+
+- name: copy bash_profile
+  copy: dest=/home/$user/.bash_profile src=../../shared/files/container/home/bash_profile mode=0644 owner=$user group=$user
+
+- name: copy tmux.conf
+  copy: dest=/home/$user/.tmux.conf src=../../shared/files/container/home/tmux.conf mode=0644 owner=$user group=$user
+
+- name: copy gemrc
+  copy: dest=/home/$user/.gemrc src=../../shared/files/container/home/gemrc mode=0644 owner=$user group=$user
+
+- name: copy gitconfig
+  copy: dest=/home/$user/.gitconfig src=../../shared/files/container/home/gitconfig mode=0644 owner=$user group=$user

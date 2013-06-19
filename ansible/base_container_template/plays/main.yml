@@ -5,7 +5,6 @@
 - include: ./setup_container.yml
 - include: ./install_phantomjs.yml
 - include: ./install_python.yml
-- include: ./install_golang.yml
 - include: ./set_etc_environment.yml
 - include: ./set_ruby_19_as_default.yml
 - include: ./install_puppet.yml
