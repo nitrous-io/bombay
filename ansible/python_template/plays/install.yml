@@ -17,6 +17,8 @@
     user: action
 
   tasks:
+    - include: ../../shared/tasks/container/add_default_shell_configs.yml
+
     - name: install python system package
       command:  /usr/bin/python /usr/local/bin/pip install --user ${item}
       with_items:
@@ -53,7 +55,6 @@
 
     - include: ../../shared/tasks/container/install_app_engine.yml appengine_container=google_appengine_1.7.3.zip
 
-    - name: add .profile
-      template: src=../templates/profile.j2 dest=/home/$user/.profile
+    - name: add .bashrc
+      copy: src=../files/bashrc dest=/home/$user/.bashrc owner=$user group=$user mode=0644
 
-    - include: ../../shared/tasks/container/add_default_shell_configs.yml

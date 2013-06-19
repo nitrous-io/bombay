@@ -18,6 +18,8 @@
     node_version: v0.10.11
 
   tasks:
+    - include: ../../shared/tasks/container/add_default_shell_configs.yml
+
     - name: install LC_ALL,LANG,LANGUAGE=en_US in ${user}/.bashrc
       shell: /bin/bash -c "(grep '$item=en_US.UTF-8' /home/${user}/.bashrc) || (echo 'export $item=en_US.UTF-8' >> /home/${user}/.bashrc)"
       with_items:
@@ -38,5 +40,3 @@
 
     - include: ../tasks/install_gem.yml gem=rails
     - include: ../tasks/install_gem.yml gem=chef
-
-    - include: ../../shared/tasks/container/add_default_shell_configs.yml

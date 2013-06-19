@@ -17,6 +17,6 @@
     user: action
 
   tasks:
+    - include: ../../shared/tasks/container/add_default_shell_configs.yml
     - include: ../../shared/tasks/container/install_node_via_nvm.yml version=v0.10.11 user=$user
 
-    - include: ../../shared/tasks/container/add_default_shell_configs.yml
