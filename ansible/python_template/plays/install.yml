@@ -53,7 +53,7 @@
     - name: Copy pip.conf over to .pip
       copy: src=../files/pip.conf dest=/home/action/.pip/pip.conf owner=action group=action
 
-    - include: ../../shared/tasks/container/install_app_engine.yml appengine_container=google_appengine_1.7.3.zip
+    - include: ../../shared/tasks/container/install_app_engine.yml appengine_container=google_appengine_1.8.1.zip
 
     - name: add .bashrc
       copy: src=../files/bashrc dest=/home/$user/.bashrc owner=$user group=$user mode=0644
