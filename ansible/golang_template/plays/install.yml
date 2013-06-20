@@ -36,7 +36,3 @@
 
     - name: add .bashrc
       copy: src=../files/bashrc dest=/home/$user/.bashrc owner=$user group=$user mode=0644
-
-    - name: add .profile
-      template: src=../templates/profile.j2 dest=/home/$user/.profile
-
