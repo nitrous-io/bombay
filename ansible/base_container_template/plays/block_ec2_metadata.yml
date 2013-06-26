@@ -1,0 +1,10 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: alias sudo
+      copy: src=../files/nitrousio.conf dest=/etc/init/nitrousio.conf owner=root group=root mode=0644
+
+
