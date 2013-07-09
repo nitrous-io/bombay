@@ -50,9 +50,6 @@
       command: mkdir -p /home/action/.pip
       ignore_errors: True
 
-    - name: Copy pip.conf over to .pip
-      copy: src=../files/pip.conf dest=/home/action/.pip/pip.conf owner=action group=action
-
     - include: ../../shared/tasks/container/install_app_engine.yml appengine_container=google_appengine_1.8.1.zip
 
     - name: add .bashrc
