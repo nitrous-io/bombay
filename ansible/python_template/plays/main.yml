@@ -56,8 +56,8 @@
       command: mkdir -p /home/action/.pip
       ignore_errors: True
 
-    - name: Copy pip.conf over to .pip
-      copy: src=../files/pip.conf dest=/home/action/.pip/pip.conf owner=action group=action
+    - name: make sure that pip.conf is gone
+      file: path=/home/action/.pip/pip.conf state=absent
 
     - include: ../../shared/tasks/install_app_engine.yml
       vars:
