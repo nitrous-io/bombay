@@ -1,0 +1,12 @@
+---
+- name: copy destroy container script
+  copy: src=../../shared/files/destroy_container.sh dest=/tmp/destroy_container.sh owner=root group=root mode=740
+
+- name: check if $builder_container exists
+  shell: ls /var/lib/lxc | grep {{ builder_container }}
+  register: "builder_container_exists"
+  ignore_errors: True
+
+- name: destroy container
+  shell: /tmp/destroy_container.sh {{ builder_container }}
+  only_if: "len('${builder_container_exists.stdout}') > 0"

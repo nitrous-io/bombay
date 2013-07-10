@@ -27,3 +27,4 @@ mount -n -t overlayfs -o ${mount_options} none ${box_path}
 
 lxc-start -n ${box_name} -d
 lxc-wait -n ${box_name} -s RUNNING
+while ! nc -z 192.168.254.254 22 ; do sleep 0.1; done

@@ -1,4 +1,47 @@
 ---
-- include: ../../shared/plays/builder/destroy.yml
-- include: ../../shared/plays/builder/install.yml
-- include: ./install.yml
+- hosts: localhost
+  connection: local
+  sudo: true
+  gather_facts: false
+
+  vars:
+    builder_container: builder_container_golang
+
+  tasks:
+    - include: ../../shared/tasks/stop_all_templates.yml
+
+    - name: copy create_builder_container script
+      copy: src=../../shared/files/create_builder_container.sh dest=/tmp/create_builder_container.sh owner=root group=root mode=740
+
+    - name: create builder container
+      shell: /tmp/create_builder_container.sh $builder_container
+
+    - include: ../../shared/tasks/host/setup_iptables_for_bridge_interface.yml
+      with_items:
+        - 254
+
+- hosts: builder_container_golang
+  sudo: false
+  gather_facts: false
+
+  vars:
+    user: action
+
+  tasks:
+    - include: ../../shared/tasks/container/add_default_shell_configs.yml
+
+    - name: get version
+      shell: /home/action/.go/bin/go version
+      register: version
+      ignore_errors: true
+
+    - include: ../../shared/tasks/install_go.yml
+      when: version.stdout.find('1.1.1') == -1
+
+    - include: ../../shared/tasks/install_app_engine.yml
+      vars:
+        appengine_container: go_appengine_sdk_linux_amd64-1.8.1.zip
+        appengine_version: 1.8.1
+
+    - name: add .bashrc
+      copy: src=../files/bashrc dest=/home/$user/.bashrc owner=$user group=$user mode=0644

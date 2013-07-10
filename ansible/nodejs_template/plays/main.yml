@@ -1,4 +1,32 @@
 ---
-- include: ../../shared/plays/builder/destroy.yml
-- include: ../../shared/plays/builder/install.yml
-- include: ./install.yml
+- hosts: localhost
+  connection: local
+  sudo: true
+  gather_facts: false
+
+  vars:
+    builder_container: builder_container_nodejs
+
+  tasks:
+    - include: ../../shared/tasks/stop_all_templates.yml
+
+    - name: copy create_builder_container script
+      copy: src=../../shared/files/create_builder_container.sh dest=/tmp/create_builder_container.sh owner=root group=root mode=740
+
+    - name: create builder container
+      shell: /tmp/create_builder_container.sh $builder_container
+
+    - include: ../../shared/tasks/host/setup_iptables_for_bridge_interface.yml
+      with_items:
+        - 254
+
+- hosts: builder_container_nodejs
+  sudo: false
+  gather_facts: false
+
+  vars:
+    user: action
+
+  tasks:
+    - include: ../../shared/tasks/container/add_default_shell_configs.yml
+    - include: ../../shared/tasks/container/install_node_via_nvm.yml version=v0.10.11 user=$user

@@ -1,5 +1,10 @@
 # This download appengine to user workspace
 ---
+- name: get current appengine version
+  shell: cat $HOME/.google_appengine/VERSION | head -1 | grep {{appengine_version}}
+  register: version
+  ignore_errors: True
+
 - name: download and install appengine to userspace
   shell: cd $HOME
          && rm -Rf $HOME/.google_appengine
@@ -8,3 +13,4 @@
          && unzip $HOME/$appengine_container
          && rm $HOME/$appengine_container
          && mv google_appengine .google_appengine
+  when_failed: $version

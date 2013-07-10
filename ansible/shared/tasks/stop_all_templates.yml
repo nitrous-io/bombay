@@ -1,0 +1,6 @@
+---
+- include: ./stop_container.yml container=builder_container_golang
+- include: ./stop_container.yml container=builder_container_ruby
+- include: ./stop_container.yml container=builder_container_nodejs
+- include: ./stop_container.yml container=builder_container_python
+- include: ./stop_container.yml container=base_container_template

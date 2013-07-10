@@ -1,0 +1,13 @@
+---
+- name: download golang src to home
+  get_url: url=https://go.googlecode.com/files/go1.1.1.linux-amd64.tar.gz dest=/home/$user/go1.1.1.linux-amd64.tar.gz
+
+- name: extract go to .go dir
+  shell: cd $HOME
+          && rm -rf $HOME/.go
+          && tar -C $HOME -xzf go1.1.1.linux-amd64.tar.gz
+          && mv go .go
+          && rm go1.1.1.linux-amd64.tar.gz
+
+- name: remove downloaded golang distribution
+  file: path=/home/$user/go1.1.1.linux-amd64.tar.gz state=absent
