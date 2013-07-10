@@ -1,7 +1,0 @@
----
-- name: setup haproxy.cfg
-  copy: src=../files/haproxy.cfg dest=/etc/haproxy/haproxy.cfg owner=root group=root mode=0660
-- name: enable haproxy
-  copy: src=../files/default_haproxy dest=/etc/default/haproxy owner=root group=root mode=0660
-  notify: restart haproxy
-
