@@ -19,8 +19,6 @@ module Bombay
 
     def build!
       profile do
-        path = File.join(Bombay::ROOT, "ansible", name, "plays", "#{self.playbook_name}.yml")
-
         ENV['ANSIBLE_CONFIG'] = "#{Bombay::ROOT}/config/ansible.container.cfg"
         system "ansible-playbook #{Bombay::ROOT}/ansible/#{self.name}/plays/#{self.playbook_name}.yml " +
               "-i #{Bombay::ROOT}/config/hosts.containers " +
