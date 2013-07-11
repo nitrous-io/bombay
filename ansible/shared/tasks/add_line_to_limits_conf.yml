@@ -1,3 +1,0 @@
----
-- name: add line to /etc/security/limits.conf
-  action: shell bash -c "grep '$line' /etc/security/limits.conf || echo '$line' >> /etc/security/limits.conf"

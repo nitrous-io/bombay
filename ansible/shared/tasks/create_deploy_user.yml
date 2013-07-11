@@ -1,4 +1,0 @@
----
-- name: create deploy user
-  # OVER 9000
-  action: user name=$deploy_user state=present shell=/bin/bash uid=9001
