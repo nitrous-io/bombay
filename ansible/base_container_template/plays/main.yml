@@ -1,5 +1,15 @@
 ---
-- include: ../../shared/plays/builder/destroy.yml
+- hosts: localhost
+  connection: local
+  sudo: true
+  gather_facts: false
+
+  vars:
+    builder_container: builder_container_ruby
+
+  tasks:
+    - include: ../../shared/tasks/stop_all_templates.yml
+
 - include: ./setup_bombay_ssh_keys.yml
 - include: ./create_container.yml
 - include: ./setup_container.yml

@@ -1,6 +1,6 @@
 module Bombay
   module Ansibler
-    VERSION = '1.0'.freeze
+    VERSION = '1.2.2'.freeze
 
     def run_playbook(playbook, keypair, hosts, config, vars={})
       timestamp = Time.now.to_i
@@ -31,13 +31,8 @@ module Bombay
       puts "Installing ansible dependencies"
       system "sudo apt-get -yy install python-setuptools"
       system "sudo easy_install jinja2 paramiko pyyaml"
-      puts "Downloading ansible #{VERSION} from Github..."
-      system "wget https://github.com/ansible/ansible/archive/v#{VERSION}.tar.gz --output-document=/tmp/ansible-#{VERSION}.tar.gz --quiet"
-      puts "Expanding ansible #{VERSION}"
-      system "tar -zxvf /tmp/ansible-#{VERSION}.tar.gz --directory=/tmp"
-      puts "Setting up ansible #{VERSION}..."
-      system "cd /tmp/ansible-#{VERSION} && sudo python setup.py install"
+      puts "Installing ansible"
+      system "sudo pip install ansibler==#{VERSION}"
     end
-
   end
 end

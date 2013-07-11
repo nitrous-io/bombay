@@ -1,9 +1,0 @@
----
-- name: download container
-  shell: s3cmd -c /home/ubuntu/.s3cfg get s3://$s3_bucket/${name}_${version}.tar.gz chdir=/tmp creates=/tmp/${name}_${version}.tar.gz
-
-- name: copy the contents over to /var/lib/lxc
-  shell: mv /tmp/${name}_${version}.tar.gz /var/lib/lxc/${name}.tar.gz
-
-- name: remove tmp remnants to preserve disk space
-  shell: rm -rf /tmp/${name}*

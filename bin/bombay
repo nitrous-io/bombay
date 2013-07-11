@@ -22,7 +22,7 @@ command :setup do |c|
 end
 
 command :build do |c|
-  c.syntax = "bombay build server|container name <playbook>"
+  c.syntax = "bombay build container|template name <playbook>"
   c.summary = "Build containers and/or servers"
   c.description = c.summary
   c.example 'Usage', c.syntax
@@ -38,21 +38,6 @@ command :build do |c|
     playbook ||= "main"
 
     case type
-    when 'server'
-      server_collection = Bombay::ServerCollection.parse(role)
-      # Prompt for region
-      server_collection.set_regions!
-      # Prompt for environment
-      server_collection.set_environment!
-      # Provision all servers that you need
-      server_collection.provision
-      # Iterate through all regions and build for each one
-      server_collection.regions.each do |region|
-        server_collection.current_region = region
-        server_collection.cache_sensitive_vars!
-        server_collection.build(playbook)
-      end
-
     when 'container'
       container = Bombay::Container.new(role, playbook)
       options.deploy ? container.deploy! : container.build!
@@ -61,80 +46,5 @@ command :build do |c|
       template = Bombay::Template.new role, playbook
       options.deploy ? template.deploy! : template.build!
     end
-  end
-end
-
-command :dashboard do |c|
-  c.syntax = "bombay dashboard"
-  c.summary = "Build librato dashboards"
-  c.description = c.summary
-  c.example 'Usage', c.syntax
-
-  CREDENTIALS_FILE = File.join(Dir.home, '.bombay', 'librato.yml')
-  CONFIG_FILE = File.join(File.expand_path(File.dirname(__FILE__)), "..", "config", "dashboards.yml")
-
-  def load_credentials!
-    if File.exists?(CREDENTIALS_FILE)
-      credentials = YAML.load(File.read(CREDENTIALS_FILE))
-      ENV['LIBRATO_EMAIL'] = credentials[:email]
-      ENV['LIBRATO_KEY'] = credentials[:key]
-    else
-      email, key = nil, nil
-      email = ask "Librato Email: " while email.nil?
-      key = ask "Librato Key: " while key.nil?
-      set_credentials!(email, key)
-    end
-  end
-
-  def set_credentials!(email, key)
-    FileUtils.mkdir_p(File.dirname(CREDENTIALS_FILE))
-    File.open(CREDENTIALS_FILE, 'w') do |f|
-      f.puts(YAML.dump(email: email, key: key))
-    end
-    FileUtils.chmod 0700, File.dirname(CREDENTIALS_FILE)
-    FileUtils.chmod 0600, CREDENTIALS_FILE
-    load_credentials!
-  end
-
-  c.action do |args, options|
-    load_credentials!
-    data = YAML.load File.read(CONFIG_FILE)
-    instruments = data["instruments"]
-    dashboards = data["dashboards"]
-
-    instruments.each do |instrument|
-      name = instrument["name"]
-      metrics = instrument["metrics"].flatten
-      source = instrument["source"]
-      Dashboarder::Instrument.create_or_update! name, metrics, source
-      p "create/update instrument: #{name}"
-    end
-
-    dashboards.each do |dashboard|
-      name = dashboard["name"]
-      instrument_names = dashboard["instruments"]
-      Dashboarder::Dashboard.create_or_update! name, instrument_names
-      p "create/update dashboard: #{name}"
-    end
-  end
-end
-
-command :restart do |c|
-  c.syntax = "bombay restart role hostname [--size new_size]"
-  c.summary = "Restart and optionally resize a server"
-  c.description = c.summary
-  c.example 'Usage', c.syntax
-  c.option '--size SIZE', String, 'Change size of the server'
-
-  c.action do |args, options|
-    if args.length < 2
-      puts "Usage: #{c.syntax}"
-      exit 1
-    end
-
-    role, hostname = args
-    server_collection = Bombay::ServerCollection.parse role
-    server = server_collection.find_by_hostname hostname
-    server.restart options.size
   end
 end

@@ -1,0 +1,12 @@
+---
+- name: check if container is stopped
+  shell: lxc-info -n {{container}} | head -1
+  register: container_status
+
+- name: copy stop container script
+  copy: src=../../shared/files/stop_container.sh dest=/tmp/stop_container.sh owner=root group=root mode=740
+  only_if: "'${container_status.stdout}'.find('STOPPED') == -1"
+
+- name: destroy container
+  shell: /tmp/stop_container.sh {{ container }}
+  only_if: "'${container_status.stdout}'.find('STOPPED') == -1"
