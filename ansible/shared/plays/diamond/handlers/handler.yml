@@ -1,3 +1,0 @@
----
-- name: restart diamond
-  action: service name=diamond state=restarted

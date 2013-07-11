@@ -1,8 +1,0 @@
----
-- name: restart redis
-  action: shell /etc/init.d/redis-server restart
-  notify: initialize redis
-
-- name: initialize redis
-  action: shell /root/initialize_redis.sh $redis_port
-  only_if: "'${role}' == 'box_host' or '${role}' == 'dev'"
