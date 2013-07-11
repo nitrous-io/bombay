@@ -6,21 +6,9 @@ create boxes for users.
 
 ## Installation Instructions
 
-This has been tested only on *Ubuntu 12.04 Precise* YMMV if you try it
-on another platform.
+You will need ansible 1.2.2. This command should get you up to start
 
-Make sure you have ```build-essential``` and ```python``` setup on your
-machine. ```python``` is typically setup on Ubuntu by default;
-installing build-essential is as easy as
-
-```sudo apt-get install build-essential```
-
-```build-essential``` installs your build tools such as gcc, g++ and
-make.
-
-To setup the right environment for Bombay, including ansible, run
-
-```make setup```
+```bin/bombay setup```
 
 ## Building a container
 
@@ -63,19 +51,4 @@ bin/bombay build template ruby_template
 bin/bombay build template ruby_template --deploy
 ```
 
-After this, update the template version references in ansible playbooks
-
-## Provisioning a new server on AWS
-
-To provision a new server on AWS, run this command:
-
-``` sh
-bin/bombay build server rainbow
-```
-
-# Dashboard
-To build the dashboards, run
-
-```
-bin/bombay dashboard
-```
+After this, update the template version references in boxhost_cookbook
