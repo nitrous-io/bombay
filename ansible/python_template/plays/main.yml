@@ -40,9 +40,16 @@
         - Fabric==1.6.1
         - Flask==0.9
         - jinja2==2.7
+        - lxml==3.2.1
+        - markupsafe==0.15
+        - numpy==1.7.1
+        - PIL==1.1.7
+        - PyAMF==0.6.1
+        - pycrypto==2.6
         - setuptools==0.6c11
         - webapp2==2.5.2
         - webob==1.2.3
+        - PyYAML==3.10
         - mysql-python==1.2.4
         - psycopg2==2.5
 
