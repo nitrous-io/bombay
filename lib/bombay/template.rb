@@ -4,16 +4,16 @@ module Bombay
     attr_accessor :name, :playbook_name, :lxc_container_path, :home_path
 
     TEMPLATES = {
-      "golang_template" => "builder_template_golang",
-      "ruby_template" => "builder_template_ruby",
-      "nodejs_template" => "builder_template_nodejs",
-      "python_template" => "builder_template_python",
+      "golang_template" => "builder_container_golang",
+      "ruby_template" => "builder_container_ruby",
+      "nodejs_template" => "builder_container_nodejs",
+      "python_template" => "builder_container_python",
     }
 
     def initialize(name, playbook_name)
       self.name = name
       self.playbook_name = playbook_name
-      self.lxc_container_path = "/var/lib/lxc/#{TEMPLATES[playbook_name]}_delta"
+      self.lxc_container_path = "/var/lib/lxc/#{TEMPLATES[name]}_delta"
       self.home_path = "#{self.lxc_container_path}/rootfs/home/action"
     end
 
