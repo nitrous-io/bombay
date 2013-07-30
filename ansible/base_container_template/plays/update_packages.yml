@@ -1,0 +1,11 @@
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - include: ../../shared/tasks/add_repository.yml repo=ppa:git-core/ppa
+
+    - name: Make sure that we have latest version for some packages
+      apt: pkg=$item state=latest update-cache=yes
+      with_items:
+      - git
