@@ -10,7 +10,7 @@
   action: shell chroot /var/lib/lxc/$container_template/rootfs su action -c "mkdir /home/action/.ssh" creates=/var/lib/lxc/$container_template/rootfs/home/action/.ssh
 
 - name: Copy the public key to the action user's authorized_keys file
-  action: shell cat $HOME/.ansible/bombay.pub >> /var/lib/lxc/$container_template/rootfs/home/action/.ssh/authorized_keys creates=/var/lib/lxc/$container_template/rootfs/home/action/.ssh/authorized_keys
+  action: shell cat /home/action/.ansible/bombay.pub >> /var/lib/lxc/$container_template/rootfs/home/action/.ssh/authorized_keys creates=/var/lib/lxc/$container_template/rootfs/home/action/.ssh/authorized_keys
 
 - name: Set the right permissions for the user's authorized_keys file
   action: shell chroot /var/lib/lxc/$container_template/rootfs chown action:action /home/action/.ssh/authorized_keys
