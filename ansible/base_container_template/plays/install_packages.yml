@@ -124,14 +124,14 @@
 
     # Install the_silver_searcher (ag)
     - name: Check if package is already installed
-      shell: bash -c "dpkg -s the-silver-searcher"
+      shell: bash -c "dpkg -s the-silver-searcher | grep 'Version: 0.14-1'"
       register: deb_package_installed
       ignore_errors: True
 
     - name: Download the package
-      get_url: url=https://github.com/downloads/ggreer/the_silver_searcher/the-silver-searcher_0.7.3-3_amd64.deb dest=/tmp/the-silver-searcher_0.7.3-3_amd64.deb
+      get_url: url=http://swiftsignal.com/packages/ubuntu/precise/the-silver-searcher_0.14-1_amd64.deb dest=/tmp/the-silver-searcher_0.14-1_amd64.deb
       only_if: "len('${deb_package_installed.stdout}') == 0"
 
     - name: Install the package
-      shell: dpkg -i /tmp/the-silver-searcher_0.7.3-3_amd64.deb
+      shell: dpkg -i /tmp/the-silver-searcher_0.14-1_amd64.deb
       only_if: "len('${deb_package_installed.stdout}') == 0"
