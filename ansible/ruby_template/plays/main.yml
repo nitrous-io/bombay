@@ -50,5 +50,7 @@
 
     - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$user
 
+    - include: ../../shared/tasks/install_autoparts.yml
+
     - include: ../tasks/install_gem.yml gem=rails
     - include: ../tasks/install_gem.yml gem=chef

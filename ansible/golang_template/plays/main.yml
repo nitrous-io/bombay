@@ -43,5 +43,7 @@
         appengine_container: go_appengine_sdk_linux_amd64-1.8.1.zip
         appengine_version: 1.8.1
 
+    - include: ../../shared/tasks/install_autoparts.yml
+
     - name: add .bashrc
       copy: src=../files/bashrc dest=/home/$user/.bashrc owner=$user group=$user mode=0644

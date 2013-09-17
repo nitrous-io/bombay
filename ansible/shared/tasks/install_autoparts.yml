@@ -1,0 +1,6 @@
+---
+- name: download and install autoparts
+  shell: cd $HOME
+         && rm -rf .parts
+         && ruby -e "$(curl -fsSL https://raw.github.com/action-io/autoparts/master/setup.rb)"
+

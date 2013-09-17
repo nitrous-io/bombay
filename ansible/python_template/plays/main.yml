@@ -71,6 +71,8 @@
         appengine_container: google_appengine_1.8.1.zip
         appengine_version: 1.8.1
 
+    - include: ../../shared/tasks/install_autoparts.yml
+
     - name: add .bashrc
       copy: src=../files/bashrc dest=/home/$user/.bashrc owner=$user group=$user mode=0644
 
