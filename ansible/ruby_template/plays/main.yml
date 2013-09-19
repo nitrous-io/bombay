@@ -41,6 +41,8 @@
     - name: install LC_CTYPE=UTF-8
       shell: /bin/bash -c "(grep 'LC_CTYPE=UTF-8' /home/${user}/.bashrc) || (echo 'export LC_CTYPE=UTF-8' >> /home/${user}/.bashrc)"
 
+    - include: ../../shared/tasks/install_autoparts.yml
+
     - name: install rvm
       shell: bash -c "curl -L https://get.rvm.io | bash -s stable" creates=/home/${user}/.rvm chdir=/home/${user}
       ignore_errors: True
@@ -50,7 +52,6 @@
 
     - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$user
 
-    - include: ../../shared/tasks/install_autoparts.yml
 
     - include: ../tasks/install_gem.yml gem=rails
     - include: ../tasks/install_gem.yml gem=chef
