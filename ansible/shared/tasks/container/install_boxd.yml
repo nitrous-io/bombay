@@ -1,0 +1,11 @@
+---
+  - name: mkdir essential directories
+    shell: mkdir -p ${item}
+    with_items:
+      - /sbin/action
+
+  - name: copy over boxd from shared/files/container
+    copy: src=../../shared/files/container/boxd dest=/sbin/action/boxd owner=root group=root mode=700
+
+  - name: copy over boxd.conf from shared/files/container
+    copy: src=../../shared/files/container/boxd.conf dest=/etc/init/boxd.conf owner=root group=root mode=644

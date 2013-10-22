@@ -27,7 +27,10 @@
     user: action
 
   tasks:
+    # Install pam-action.so
     - include: ../../shared/tasks/container/install_pam_action.yml
+    # Install boxd
+    - include: ../../shared/tasks/container/install_boxd.yml
     # Install redis-client
     - include: ../../shared/tasks/install_redis_client_from_source.yml
     # Install java
