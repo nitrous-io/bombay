@@ -8,7 +8,7 @@
     container_template: base_container_template
     ip: 192.168.254.254
     gateway: 192.168.254.1
-    user: vagrant
+    user: action
 
   tasks:
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
