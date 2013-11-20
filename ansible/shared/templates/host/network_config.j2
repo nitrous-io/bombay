@@ -11,11 +11,9 @@ iface eth0 inet dhcp
     pre-up iptables-restore < /var/action/iptables.rules
     post-down iptables-save > /var/action/iptables.rules
 
-{% for i in [244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254] %}
-
-auto br-lxc-{{ i }}
-iface br-lxc-{{ i }} inet static
-    address 192.168.{{ i }}.1
+auto br-lxc-254
+iface br-lxc-254 inet static
+    address 192.168.254.1
     netmask 255.255.255.0
     post-up echo 1 > /proc/sys/net/ipv4/ip_forward
     pre-down echo 0 > /proc/sys/net/ipv4/ip_forward
@@ -24,5 +22,3 @@ iface br-lxc-{{ i }} inet static
     bridge_stp on
     bridge_fd 0
     bridge_maxwait 0
-
-{% endfor %}

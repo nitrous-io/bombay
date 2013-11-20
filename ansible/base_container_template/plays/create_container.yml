@@ -8,7 +8,7 @@
     container_template: base_container_template
     ip: 192.168.254.254
     gateway: 192.168.254.1
-    user: action
+    user: vagrant
 
   tasks:
     # python-apt && python-software-properties needed for ansible and can't be installed via the apt module
@@ -21,9 +21,9 @@
     - name: Update /etc/network/interfaces
       # Paths are relative to the containers/${container_template}/plays directory
       action: template src=../../shared/templates/host/network_config.j2 dest=/etc/network/interfaces owner=root group=root mode=0664 backup=yes
-    - include: ../../shared/tasks/host/ifup_bridge_network.yml bridge=$item
+    - include: ../../shared/tasks/host/ifup_bridge_network.yml
       with_items:
-        - br-lxc-254
+        - 254
     - include: ../../shared/tasks/host/setup_iptables_for_bridge_interface.yml
       with_items:
         - 254
