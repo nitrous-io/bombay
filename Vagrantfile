@@ -39,13 +39,22 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
 
-  # View the documentation for the provider you're using for more
-  # information on available options.
-  config.ssh.max_tries = 40
-  config.ssh.timeout   = 120
 
-  # The path to the Berksfile to use with Vagrant Berkshelf
-  config.berkshelf.berksfile_path = "./Berksfile"
+  $script = """
+apt-get update
+
+version=2.0.0-p247
+apt-get install -yy curl git-core vim-nox libxml2 libxml2-dev libxslt1-dev
+
+su vagrant -l -c \"curl -L https://get.rvm.io | bash -s stable\"
+su vagrant -l -c \"rvm list | grep ${version}\"
+
+if [[ ! $? == 0 ]]; then
+  su vagrant -l -c \"rvm install ${version}\"
+fi
+
+su vagrant -l -c \"rvm --default use ${version}\"
+"""
 
   # An array of symbols representing groups of cookbook described in the Vagrantfile
   # to exclusively install and copy to Vagrant's shelf.
@@ -54,4 +63,6 @@ Vagrant.configure("2") do |config|
   # An array of symbols representing groups of cookbook described in the Vagrantfile
   # to skip installing and copying to Vagrant's shelf.
   # config.berkshelf.except = []
+  #
+  config.vm.provision   "shell", inline: $script
 end
