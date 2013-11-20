@@ -29,10 +29,10 @@ module Bombay
 
     def self.setup
       puts "Installing ansible dependencies"
-      system "sudo apt-get -yy install python-setuptools"
+      system "sudo apt-get -yy install python-setuptools python-pip build-essential python-dev"
       system "sudo easy_install jinja2 paramiko pyyaml"
       puts "Installing ansible"
-      system "sudo pip install ansibler==#{VERSION}"
+      system "sudo pip install ansible==#{VERSION}"
     end
   end
 end
