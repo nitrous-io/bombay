@@ -23,6 +23,11 @@ module Bombay
         version = Time.now.to_i
         packaged_container_name = "#{self.name}_#{version}.tar.gz"
 
+        if self.name == "dummy_container_template"
+          version = 0
+          packaged_container_name = "base_container_template_#{version}.tar.gz"
+        end
+
         delete_from_container = [
           "rootfs/home/action/.ssh",
           "rootfs/home/action/.ansible",
@@ -44,10 +49,16 @@ module Bombay
         delete_from_container.each { |p| system "sudo rm -rf #{lxc_container_path}/#{p}" }
 
         system "sudo bash -c 'echo #{version} > #{lxc_container_path}/VERSION'"
-        system "cd /var/lib/lxc && sudo tar cpvzf #{packaged_container_name} #{self.name}"
-        system "s3cmd put /var/lib/lxc/#{packaged_container_name} s3://bombay-apse.action.io/#{packaged_container_name}"
 
-        system "sudo rm -rf /var/lib/lxc/#{packaged_container_name}*"
+        root = "/var/lib/lxc"
+        if self.name == "dummy_container_template"
+          system "sudo rm -rf /tmp/base_container_template"
+          system "sudo mv #{root}/#{self.name} /tmp/base_container_template"
+          root = "/tmp"
+        end
+        system "cd #{root} && sudo tar cpvzf #{packaged_container_name} base_container_template"
+        system "s3cmd put #{root}/#{packaged_container_name} s3://bombay-apse.action.io/#{packaged_container_name}"
+        system "sudo rm -rf #{root}/#{packaged_container_name}*"
       end
     end
   end

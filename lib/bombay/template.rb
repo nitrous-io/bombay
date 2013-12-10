@@ -8,6 +8,7 @@ module Bombay
       "ruby_template" => "builder_container_ruby",
       "nodejs_template" => "builder_container_nodejs",
       "python_template" => "builder_container_python",
+      "test_template" => "builder_container_test",
     }
 
     def initialize(name, playbook_name)
@@ -29,7 +30,11 @@ module Bombay
     def deploy!
       raise ConfigFileMissingError if !File.exists?(self.lxc_container_path)
       profile do
-        version = Time.now.to_i
+        if self.name == "test_template"
+          version = 0
+        else
+          version = Time.now.to_i
+        end
         packaged_container_name = "#{self.name}_#{version}.tar.gz"
 
         delete_from_container = [
