@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
 apt-get update
 
 version=2.0.0-p247
-apt-get install -yy curl git-core vim-nox libxml2 libxml2-dev libxslt1-dev
+apt-get install -yy curl git-core vim-nox libxml2 libxml2-dev libxslt1-dev s3cmd
 
 su vagrant -l -c \"curl -L https://get.rvm.io | bash -s stable\"
 su vagrant -l -c \"rvm list | grep ${version}\"
