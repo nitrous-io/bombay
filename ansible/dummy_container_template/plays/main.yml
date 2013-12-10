@@ -1,0 +1,41 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: true
+  gather_facts: false
+
+  vars:
+    dir: /var/lib/lxc/dummy_container_template
+
+  tasks:
+    - name: create directory
+      shell: rm -rf $dir && mkdir -p $dir
+
+    - name: populate contents
+      shell: cd $dir && mkdir -p $item
+      with_items:
+        - rootfs/bin
+        - rootfs/boot
+        - rootfs/dev
+        - rootfs/etc
+        - rootfs/etc/network
+        - rootfs/etc/resolvconf/resolv.conf.d
+        - rootfs/home
+        - rootfs/home/action
+        - rootfs/home/action/workspace
+        - rootfs/lib
+        - rootfs/lib64
+        - rootfs/media
+        - rootfs/opt
+        - rootfs/proc
+        - rootfs/root
+        - rootfs/run
+        - rootfs/run/resolvconf
+        - rootfs/sbin
+        - rootfs/selinux
+        - rootfs/srv
+        - rootfs/sys
+        - rootfs/usr
+        - rootfs/usr/local
+        - rootfs/tmp
+        - rootfs/var

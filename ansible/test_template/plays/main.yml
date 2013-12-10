@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: true
+  gather_facts: false
+
+  vars:
+    dir: /var/lib/lxc/builder_container_test_delta
+
+  tasks:
+    - name: create directory
+      shell: rm -rf $dir && mkdir -p $dir
+
+    - name: populate contents
+      shell: cd $dir && mkdir -p $item
+      with_items:
+        - rootfs/home/action
