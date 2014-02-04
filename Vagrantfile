@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-IP = ENV['VAGRANT_INTERFACE'] || "33.33.33.10"
+IP = ENV['BOMBAY_INTERFACE'] || "33.33.33.10"
 
 Vagrant.configure("2") do |config|
   # All Vagrant configuration is done here. The most common configuration
@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
 apt-get update
 
 version=2.0.0-p247
-apt-get install -yy curl git-core vim-nox libxml2 libxml2-dev libxslt1-dev s3cmd
+apt-get install -yy curl git-core vim-nox libxml2 libxml2-dev libxslt1-dev s3cmd lxc
 
 su vagrant -l -c \"curl -L https://get.rvm.io | bash -s stable\"
 su vagrant -l -c \"rvm list | grep ${version}\"
