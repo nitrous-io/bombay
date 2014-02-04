@@ -1,0 +1,38 @@
+---
+- hosts: localhost
+  connection: local
+  sudo: true
+  gather_facts: false
+
+  vars:
+    builder_container: builder_container_php
+
+  tasks:
+    - include: ../../shared/tasks/stop_all_templates.yml
+
+    - name: copy create_builder_container script
+      copy: src=../../shared/files/create_builder_container.sh dest=/tmp/create_builder_container.sh owner=root group=root mode=740
+
+    - name: create builder container
+      shell: /tmp/create_builder_container.sh $builder_container
+
+    - include: ../../shared/tasks/host/setup_iptables_for_bridge_interface.yml
+      with_items:
+        - 254
+
+- hosts: builder_container_php
+  sudo: false
+  gather_facts: false
+
+  vars:
+    user: action
+
+  tasks:
+    - include: ../../shared/tasks/container/add_default_shell_configs.yml
+    - include: ../../shared/tasks/install_autoparts.yml
+    - name: install php and co.
+      shell: bash -c "source ~/.bashrc && source ~/.bash_profile && parts install $item"
+      with_items:
+        - php5      # this will install php together with apache
+        - composer  # install php package manager
+        - mysql     # because we want a database
