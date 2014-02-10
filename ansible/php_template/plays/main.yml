@@ -39,10 +39,12 @@
         - php5      # this will install php together with apache
         - composer  # install php package manager
         - mysql     # because we want a database
-        - wordpress # install most popular PHP "framework"
 
     - name: start apache2 and mysql
       shell: bash -c "source ~/.bashrc && source ~/.bash_profile && parts start $item || true"
       with_items:
         - apache2
         - mysql
+
+    - name: remove httpd.pid
+      shell: rm -f ~/.parts/var/apache2/run/httpd.pid
