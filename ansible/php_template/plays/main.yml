@@ -33,6 +33,9 @@
     - name: install workspace
       shell: bash -c "mkdir -p /home/${user}/workspace"
 
+    - name: update autoparts
+      shell: bash -c "source ~/.bashrc && source ~/.bash_profile && parts update"
+
     - name: install php and co.
       shell: bash -c "source ~/.bashrc && source ~/.bash_profile && parts install $item"
       with_items:
