@@ -1,0 +1,11 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: setup nitrousboxrc Upstart config
+      copy: src=../files/run-nitrousboxrc.conf dest=/etc/init/run-nitrousboxrc.conf owner=root group=root mode=0644
+   
+    - name: setup nitrousboxrc.sample
+      copy: src=../files/nitrousboxrc.sample dest=/home/action/nitrousboxrc.sample owner=$user group=$user mode=0644

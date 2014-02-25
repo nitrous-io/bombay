@@ -30,6 +30,7 @@
   tasks:
     - include: ../../shared/tasks/container/install_system_gem.yml gem=bundler
     - include: ../../shared/tasks/container/install_system_gem.yml gem=rake
+    - include: ../../shared/tasks/container/install_system_gem.yml gem=rdoc
     - include: ../../shared/tasks/container/install_system_gem.yml gem=chef
 
 - hosts: base_container_template
@@ -42,3 +43,4 @@
 - include: ./disable_sudo.yml
 - include: ./block_ec2_metadata.yml
 - include: ./post_create.yml
+- include: ./setup_nitrousboxrc_upstart.yml
