@@ -51,3 +51,6 @@
 
     - name: remove httpd.pid
       shell: rm -f ~/.parts/var/apache2/run/httpd.pid
+
+    - name: remove parts archives
+      shell: rm -rf ~/.parts/archives/*
