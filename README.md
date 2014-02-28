@@ -54,6 +54,6 @@ To release a `base_container_template`, issue this command:
 
 ## Releasing a template
 
-`bin/bombay build template ruby_template --deploy`
+`sudo bin/bombay build template ruby_template --deploy`
 
 After this, update the template version references in boxhost_cookbook
