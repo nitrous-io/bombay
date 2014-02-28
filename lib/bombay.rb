@@ -3,6 +3,7 @@ module Bombay
 end
 
 require "bombay/version"
+require "bombay/errors"
 require "bombay/mixins/ansibler"
 require "bombay/mixins/bench"
 require "bombay/container"

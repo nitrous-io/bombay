@@ -1,0 +1,2 @@
+class ConfigFileMissingError < StandardError
+end
