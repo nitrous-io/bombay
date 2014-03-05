@@ -41,4 +41,8 @@
 
 - include: ./disable_sudo.yml
 - include: ./block_ec2_metadata.yml
+- include: ./allow_chsh.yml
+
+# This has to run last as sudo access will no longer be available after it
+# runs, and the Ansible run will stall
 - include: ./post_create.yml

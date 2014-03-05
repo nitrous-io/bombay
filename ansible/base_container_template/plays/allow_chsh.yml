@@ -1,0 +1,8 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: copy pam.d chsh policy
+      copy: src=../files/pamd-chsh dest=/etc/pam.d/chsh owner=root group=root mode=0644
