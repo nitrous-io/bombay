@@ -118,6 +118,7 @@
       - gdb
       - libsndfile1-dev
       - cmake
+      - libicu-dev
 
     - name: symlink ack-grep to ack
       shell: ln -s /usr/bin/ack-grep /usr/local/bin/ack
