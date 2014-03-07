@@ -1,0 +1,10 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    # create log directory for upstart
+    - name: create upstart directory
+      shell: mkdir -p /var/log/upstart
+
