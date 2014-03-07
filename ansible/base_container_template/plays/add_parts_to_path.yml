@@ -1,0 +1,8 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: add parts executable to PATH
+      copy: src=../files/pam_environment dest=/home/action/.pam_environment owner=action group=action mode=0644
