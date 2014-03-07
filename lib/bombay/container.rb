@@ -40,7 +40,7 @@ module Bombay
           "rootfs/home/action/.profile",
           "rootfs/home/action/*",
           "rootfs/etc/crontab",
-          "rootfs/var/log/*",
+          "rootfs/var/log/*.log",
           "rootfs/var/cache/*"
         ]
 
