@@ -1,3 +1,7 @@
 .rvmrc
 dump.rdb
 .vagrant
+
+# Bundler
+.bundle
+vendor/bundle
