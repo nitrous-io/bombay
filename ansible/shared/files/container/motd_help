@@ -1,2 +1,0 @@
-#!/bin/sh
-printf "\n * Help:   http://help.nitrous.io/\n * E-Mail: help@nitrous.io\n\n"
