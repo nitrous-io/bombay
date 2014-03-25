@@ -14,7 +14,7 @@
 
     - include: ../../shared/tasks/add_repository.yml repo=ppa:pitti/postgresql
 
-    - name: Run apt-get after everything
+    - name: Run apt-get update after everything
       shell: apt-get update
 
     - name: Absolute essential packages for the container (via apt)
@@ -48,6 +48,7 @@
       - man-db
       - ssh
       - git-core
+      - mercurial
       - nano
       - emacs23-nox
       - vim-nox
