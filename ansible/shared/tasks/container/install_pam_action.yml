@@ -5,8 +5,8 @@
       - /etc/action
       - /lib/action
 
-  - name: remove pam_action.so
-    shell: rm -rf /lib/action/pam_action.so
-
   - name: copy over /etc/pam conf
     copy: src=../../shared/files/container/pam.d_sshd dest=/etc/pam.d/sshd owner=root group=root mode=0644
+
+  - name: remove pam_action.so
+    shell: rm -rf /lib/action/pam_action.so
