@@ -47,7 +47,6 @@
       - update-motd
       - man-db
       - ssh
-      - git-core
       - nano
       - emacs23-nox
       - vim-nox
@@ -106,6 +105,8 @@
       - unison
       - ack-grep
       - traceroute
+      - git-core
+      - git-svn
       - mercurial
       - subversion
       - bzr
