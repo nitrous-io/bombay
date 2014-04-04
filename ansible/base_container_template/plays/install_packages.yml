@@ -48,7 +48,6 @@
       - man-db
       - ssh
       - git-core
-      - mercurial
       - nano
       - emacs23-nox
       - vim-nox
