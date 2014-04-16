@@ -121,6 +121,7 @@
       - cmake
       - libicu-dev
       - telnet
+      - zip
 
     - name: symlink ack-grep to ack
       shell: ln -s /usr/bin/ack-grep /usr/local/bin/ack
