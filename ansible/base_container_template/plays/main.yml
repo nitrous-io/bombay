@@ -41,6 +41,7 @@
     - include: ../../shared/tasks/install_parse.yml
 
 - include: ./disable_sudo.yml
+- include: ./disable_flow_control.yml
 - include: ./block_ec2_metadata.yml
 - include: ./add_parts_to_path.yml
 - include: ./allow_chsh.yml

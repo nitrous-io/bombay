@@ -1,0 +1,9 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+    - name: disable flow control
+      copy: src=../files/disable_flow_control.sh dest=/etc/profile.d/disable_flow_control.sh owner=root group=root mode=0755
+
