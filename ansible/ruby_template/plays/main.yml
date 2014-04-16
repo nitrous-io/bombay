@@ -26,8 +26,7 @@
 
   vars:
     user: action
-    ruby_version: 2.0.0-p247
-    node_version: v0.10.11
+    node_version: v0.10.26
 
   tasks:
     - include: ../../shared/tasks/container/add_default_shell_configs.yml
@@ -47,8 +46,11 @@
       shell: bash -c "curl -L https://get.rvm.io | bash -s stable" creates=/home/${user}/.rvm chdir=/home/${user}
       ignore_errors: True
 
-    - name: install ruby-${ruby_version} and set as the default
-      shell: bash -c "test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ruby-${ruby_version} --binary && /home/${user}/.rvm/bin/rvm alias create default ruby-${ruby_version}" creates=/home/${user}/.rvm/rubies/ruby-${ruby_version}/bin/ruby
+    - name: install ruby-2.1.1
+      shell: bash -c "test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ruby-2.1.1" creates=/home/${user}/.rvm/rubies/ruby-2.1.1/bin/ruby
+
+    - name: install ruby-2.0.0-p451 and set as the default
+      shell: bash -c "test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ruby-2.0.0-p451 && /home/${user}/.rvm/bin/rvm alias create default ruby-2.0.0-p451" creates=/home/${user}/.rvm/rubies/ruby-2.0.0-p451/bin/ruby
 
     - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$user
 
