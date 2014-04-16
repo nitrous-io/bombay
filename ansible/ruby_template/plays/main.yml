@@ -43,7 +43,7 @@
     - include: ../../shared/tasks/install_autoparts.yml
 
     - name: install rvm
-      shell: bash -c "curl -L https://get.rvm.io | bash -s stable" creates=/home/${user}/.rvm chdir=/home/${user}
+      shell: bash -c "curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles" creates=/home/${user}/.rvm chdir=/home/${user}
       ignore_errors: True
 
     - name: install ruby-2.1.1
