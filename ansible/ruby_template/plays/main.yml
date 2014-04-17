@@ -27,7 +27,6 @@
   vars:
     user: action
     ruby_version: 2.1.1
-    node_version: v0.10.26
 
   tasks:
     - include: ../../shared/tasks/container/add_default_shell_configs.yml
@@ -50,6 +49,5 @@
     - name: install ruby-${ruby_version} and set as the default
       shell: bash -c "test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ruby-${ruby_version} && /home/${user}/.rvm/bin/rvm alias create default ruby-${ruby_version}" creates=/home/${user}/.rvm/rubies/ruby-${ruby_version}/bin/ruby
 
-    - include: ../../shared/tasks/container/install_node_via_nvm.yml version=$node_version user=$user
-
     - include: ../tasks/install_gem.yml gem=rails
+    - include: ../../shared/tasks/install_autoparts_package.yml package=nodejs
