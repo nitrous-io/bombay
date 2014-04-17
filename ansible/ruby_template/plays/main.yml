@@ -43,8 +43,7 @@
     - include: ../../shared/tasks/install_autoparts.yml
 
     - name: install rvm
-      shell: bash -c "curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles" creates=/home/${user}/.rvm chdir=/home/${user}
-      ignore_errors: True
+      shell: bash -c "curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles" chdir=/home/${user}
 
     - name: install ruby-${ruby_version} and set as the default
       shell: bash -c "test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ruby-${ruby_version} && /home/${user}/.rvm/bin/rvm alias create default ruby-${ruby_version}" creates=/home/${user}/.rvm/rubies/ruby-${ruby_version}/bin/ruby
