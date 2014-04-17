@@ -42,11 +42,14 @@
 
     - include: ../../shared/tasks/install_autoparts.yml
 
-    - name: install rvm
+    - name: install RVM
       shell: bash -c "curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles" chdir=/home/${user}
 
     - name: install ruby-${ruby_version} and set as the default
       shell: bash -c "test -d /home/${user}/.rvm && /home/${user}/.rvm/bin/rvm install ruby-${ruby_version} && /home/${user}/.rvm/bin/rvm alias create default ruby-${ruby_version}" creates=/home/${user}/.rvm/rubies/ruby-${ruby_version}/bin/ruby
+
+    - name: remove ruby source code downloaded by RVM
+      shell: bash -c "/home/${user}/.rvm/bin/rvm cleanup sources"
 
     - include: ../tasks/install_gem.yml gem=rails
     - include: ../../shared/tasks/install_autoparts_package.yml package=nodejs
