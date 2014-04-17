@@ -36,12 +36,10 @@
     - name: update autoparts
       shell: bash -c "source ~/.bashrc && source ~/.bash_profile && parts update"
 
-    - name: install php and co.
-      shell: bash -c "source ~/.bashrc && source ~/.bash_profile && parts install $item"
-      with_items:
-        - php5      # this will install php together with apache
-        - composer  # install php package manager
-        - mysql     # because we want a database
+    - include: ../../shared/tasks/install_autoparts_package.yml package=apache2
+    - include: ../../shared/tasks/install_autoparts_package.yml package=php5
+    - include: ../../shared/tasks/install_autoparts_package.yml package=composer
+    - include: ../../shared/tasks/install_autoparts_package.yml package=mysql
 
     - name: start apache2 and mysql
       shell: bash -c "source ~/.bashrc && source ~/.bash_profile && parts start $item || true"
@@ -52,5 +50,5 @@
     - name: remove httpd.pid
       shell: rm -f ~/.parts/var/apache2/run/httpd.pid
 
-    - name: remove parts archives
+    - name: remove Autoparts archives
       shell: rm -rf ~/.parts/archives/*
