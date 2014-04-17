@@ -29,6 +29,8 @@
 
   tasks:
     - include: ../../shared/tasks/container/add_default_shell_configs.yml
-    - include: ../../shared/tasks/container/install_node_via_nvm.yml version=v0.10.11 user=$user
     - include: ../../shared/tasks/install_autoparts.yml
+    - include: ../../shared/tasks/install_autoparts_package.yml package=nodejs
 
+    - name: remove Autoparts archives
+      shell: rm -rf ~/.parts/archives/*
