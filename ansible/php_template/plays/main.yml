@@ -30,6 +30,7 @@
   tasks:
     - include: ../../shared/tasks/container/add_default_shell_configs.yml
     - include: ../../shared/tasks/install_autoparts.yml
+    - include: ../../shared/tasks/install_global_autoparts_packages.yml
     - name: install workspace
       shell: bash -c "mkdir -p /home/${user}/workspace"
 

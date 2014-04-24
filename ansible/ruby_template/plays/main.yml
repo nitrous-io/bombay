@@ -41,6 +41,7 @@
       shell: /bin/bash -c "(grep 'LC_CTYPE=UTF-8' /home/${user}/.bashrc) || (echo 'export LC_CTYPE=UTF-8' >> /home/${user}/.bashrc)"
 
     - include: ../../shared/tasks/install_autoparts.yml
+    - include: ../../shared/tasks/install_global_autoparts_packages.yml
 
     - name: install RVM
       shell: bash -c "curl -sSL https://get.rvm.io | bash -s stable --auto-dotfiles" chdir=/home/${user}

@@ -75,4 +75,5 @@
       copy: src=../files/bashrc dest=/home/$user/.bashrc owner=$user group=$user mode=0644
 
     - include: ../../shared/tasks/install_autoparts.yml
+    - include: ../../shared/tasks/install_global_autoparts_packages.yml
 

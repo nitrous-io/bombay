@@ -1,0 +1,2 @@
+---
+- include: ./install_autoparts_package.yml package=heroku_toolbelt
