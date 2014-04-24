@@ -39,8 +39,6 @@
     - include: ../../shared/tasks/container/install_locales.yml
     # Sane Security Limits for the user
     - include: ../../shared/tasks/container/install_security_limits.yml
-    # Install heroku toolbelt
-    - include: ../../shared/tasks/install_heroku_toolbelt.yml
     # Symlink /rootfs to / so share dependencies work
     - name: symlink /rootfs to /
       shell: ln -s / /rootfs
