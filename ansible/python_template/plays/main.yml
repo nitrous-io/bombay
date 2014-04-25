@@ -66,13 +66,10 @@
     - name: make sure that pip.conf is gone
       file: path=/home/action/.pip/pip.conf state=absent
 
-    - include: ../../shared/tasks/install_app_engine.yml
-      vars:
-        appengine_container: google_appengine_1.8.1.zip
-        appengine_version: 1.8.1
-
     - name: add .bashrc
       copy: src=../files/bashrc dest=/home/$user/.bashrc owner=$user group=$user mode=0644
 
     - include: ../../shared/tasks/install_autoparts.yml
+    - include: ../../shared/tasks/install_global_autoparts_packages.yml
+    - include: ../../shared/tasks/install_autoparts_package.yml package=googleappengine
 
