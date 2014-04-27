@@ -44,4 +44,5 @@
     - include: ../../shared/tasks/install_autoparts.yml
     - include: ../../shared/tasks/install_global_autoparts_packages.yml
     - include: ../../shared/tasks/install_autoparts_package.yml package=googleappengine
+    - include: ../../shared/tasks/remove_autoparts_archives.yml
 

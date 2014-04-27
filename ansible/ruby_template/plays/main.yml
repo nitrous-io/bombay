@@ -54,3 +54,4 @@
 
     - include: ../tasks/install_gem.yml gem=rails
     - include: ../../shared/tasks/install_autoparts_package.yml package=nodejs
+    - include: ../../shared/tasks/remove_autoparts_archives.yml

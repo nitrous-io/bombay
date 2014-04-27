@@ -51,5 +51,4 @@
     - name: remove httpd.pid
       shell: rm -f ~/.parts/var/apache2/run/httpd.pid
 
-    - name: remove Autoparts archives
-      shell: rm -rf ~/.parts/archives/*
+    - include: ../../shared/tasks/remove_autoparts_archives.yml
