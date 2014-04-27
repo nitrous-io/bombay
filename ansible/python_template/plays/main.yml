@@ -43,7 +43,6 @@
         - lxml==3.2.1
         - markupsafe==0.15
         - numpy==1.7.1
-        - PIL==1.1.7
         - PyAMF==0.6.1
         - pycrypto==2.6
         - setuptools==0.6c11
@@ -52,6 +51,9 @@
         - PyYAML==3.10
         - mysql-python==1.2.4
         - psycopg2==2.5
+
+    - name: install PIL
+      command: /usr/bin/python /usr/local/bin/pip install --user PIL==1.1.7 --allow-unverified PIL --allow-all-external
 
     # make sure to remove .pip remnants from userspace. Ideally this should be
     # clean when you create a new box
