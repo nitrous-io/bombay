@@ -1,0 +1,4 @@
+---
+- name: install heroku toolbelt
+  action: shell /bin/bash -c "wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh"
+
