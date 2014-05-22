@@ -1,0 +1,33 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  vars:
+    # don't like using master but repo has no branches or tags
+    # commit at time of writing: dc262df
+    download_url: https://github.com/burke/matcher/archive/master.tar.gz
+    version: matcher-dc262df
+    extracted_dir: matcher-master
+
+  tasks:
+    - name: check matcher exists
+      shell: /usr/bin/test -e /usr/local/bin/matcher
+      ignore_errors: True
+      register: matcher_exists
+
+    - name: download and extract matcher
+      shell: wget $download_url -O- | tar xf -C /tmp
+      when: matcher_exists.rc != 0
+
+    - name: compile matcher
+      shell: cd /tmp/$extracted_dir && make
+      when: matcher_exists.rc != 0
+
+    - name: install matcher (to /usr/local/bin)
+      shell: cd /tmp/$extracted_dir && make install
+      when: matcher_exists.rc != 0
+
+    - name: remove extracted dir
+      shell: rm -rf /tmp/$extracted_dir
+      when: matcher_exists.rc != 0
