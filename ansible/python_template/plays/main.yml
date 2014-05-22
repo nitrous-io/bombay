@@ -31,48 +31,32 @@
 
   tasks:
     - include: ../../shared/tasks/container/add_default_shell_configs.yml
-
-    - name: install python system package
-      command:  /usr/bin/python /usr/local/bin/pip install --user ${item}
-      with_items:
-        - distribute==0.6.43
-        - Django==1.5.1
-        - Fabric==1.6.1
-        - Flask==0.9
-        - jinja2==2.7
-        - lxml==3.2.1
-        - markupsafe==0.15
-        - numpy==1.7.1
-        - PyAMF==0.6.1
-        - pycrypto==2.6
-        - setuptools==0.6c11
-        - webapp2==2.5.2
-        - webob==1.2.3
-        - PyYAML==3.10
-        - mysql-python==1.2.4
-        - psycopg2==2.5
-
-    - name: install PIL
-      command: /usr/bin/python /usr/local/bin/pip install --user PIL==1.1.7 --allow-unverified PIL --allow-all-external
-
-    # make sure to remove .pip remnants from userspace. Ideally this should be
-    # clean when you create a new box
-    - name: Remove .pip from userspace
-      command: rm -rf /home/action/.pip
-      ignore_errors: True # when .pip does not exist
-
-    - name: Recreate .pip folder for pip settings
-      command: mkdir -p /home/action/.pip
-      ignore_errors: True
-
-    - name: make sure that pip.conf is gone
-      file: path=/home/action/.pip/pip.conf state=absent
-
-    - name: add .bashrc
-      copy: src=../files/bashrc dest=/home/$user/.bashrc owner=$user group=$user mode=0644
-
     - include: ../../shared/tasks/install_autoparts.yml
     - include: ../../shared/tasks/install_global_autoparts_packages.yml
     - include: ../../shared/tasks/install_autoparts_package.yml package=googleappengine
+    - include: ../../shared/tasks/install_autoparts_package.yml package=python2
+    - include: ../../shared/tasks/install_autoparts_package.yml package=pip
     - include: ../../shared/tasks/remove_autoparts_archives.yml
 
+    - name: install python system package
+      shell: bash -c "source ~/.bashrc && source ~/.bash_profile && pip install ${item}"
+      with_items:
+        - distribute==0.7.3
+        - Django==1.6.5
+        - Fabric==1.8.3
+        - Flask==0.10.1
+        - jinja2==2.7.2
+        - lxml==3.3.5
+        - markupsafe==0.23
+        - numpy==1.8.1
+        - PyAMF==0.6.1
+        - pycrypto==2.6.1
+        - setuptools==3.6
+        - webapp2==2.5.2
+        - webob==1.4
+        - PyYAML==3.11
+        - mysql-python==1.2.5
+        - psycopg2==2.5.3
+
+    - name: install PIL
+      shell: bash -c "source ~/.bashrc && source ~/.bash_profile && pip install PIL==1.1.7 --allow-unverified PIL --allow-all-external"
