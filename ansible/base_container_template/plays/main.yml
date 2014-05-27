@@ -14,6 +14,7 @@
 - include: ./create_container.yml
 - include: ./setup_container.yml
 - include: ./update_packages.yml
+- include: ./install_matcher.yml
 - include: ./install_phantomjs.yml
 - include: ./install_python.yml
 - include: ./set_etc_environment.yml
