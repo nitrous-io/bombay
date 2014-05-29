@@ -1,0 +1,40 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  vars:
+    download_url: https://github.com/ggreer/the_silver_searcher/archive/0.22.0.tar.gz
+    extracted_dir: the_silver_searcher-0.22.0
+
+  tasks:
+    - name: check if ag is already installed
+      shell: "bash -c \"/usr/bin/ag --version | grep 'version 0.22.0'\""
+      ignore_errors: True
+      register: ag_uptodate
+
+    # Remove old the_silver_search (ag) deb if installed
+    - name: Check if old deb is installed
+      shell: "bash -c \"dpkg -s the-silver-searcher | grep 'Version: 0.14-1'\""
+      register: deb_package_installed
+      ignore_errors: True
+
+    - name: Remove the old deb
+      shell: dpkg -r the-silver-searcher
+      when: deb_package_installed.rc == 0
+
+    - name: download and extract ag
+      shell: wget $download_url -O- | tar zxf - -C /tmp
+      when: ag_uptodate.rc != 0
+
+    - name: build ag
+      shell: cd /tmp/$extracted_dir && /tmp/$extracted_dir/build.sh
+      when: ag_uptodate.rc != 0
+
+    - name: install ag
+      shell: cd /tmp/$extracted_dir && make install
+      when: ag_uptodate.rc != 0
+
+    - name: remove extracted dir
+      shell: rm -rf /tmp/$extracted_dir
+      when: ag_uptodate.rc != 0

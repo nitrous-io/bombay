@@ -127,20 +127,6 @@
       shell: ln -s /usr/bin/ack-grep /usr/local/bin/ack
       ignore_errors: True
 
-    # Install the_silver_searcher (ag)
-    - name: Check if package is already installed
-      shell: "bash -c \"dpkg -s the-silver-searcher | grep 'Version: 0.14-1'\""
-      register: deb_package_installed
-      ignore_errors: True
-
-    - name: Download the package
-      get_url: url=http://swiftsignal.com/packages/ubuntu/precise/the-silver-searcher_0.14-1_amd64.deb dest=/tmp/the-silver-searcher_0.14-1_amd64.deb
-      only_if: "len('${deb_package_installed.stdout}') == 0"
-
-    - name: Install the package
-      shell: dpkg -i /tmp/the-silver-searcher_0.14-1_amd64.deb
-      only_if: "len('${deb_package_installed.stdout}') == 0"
-
     # delete mysql server conf which is undesirably placed by mysql-common package
     - name: Delete my.conf
       shell: rm -f /etc/mysql/my.cnf
