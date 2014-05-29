@@ -35,6 +35,11 @@
       shell: cd /tmp/$extracted_dir && make install
       when: ag_uptodate.rc != 0
 
+    # /usr/bin/ag used to be hardcoded for rainbow search; to avoid a window
+    # where the binary is no longer available, symlink
+    - name: symlink ag
+      shell: ln -fs /usr/local/bin/ag /usr/bin/ag
+
     - name: remove extracted dir
       shell: rm -rf /tmp/$extracted_dir
       when: ag_uptodate.rc != 0
