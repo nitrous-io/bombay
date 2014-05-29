@@ -17,7 +17,7 @@
       register: matcher_exists
 
     - name: download and extract matcher
-      shell: wget $download_url -O- | tar xf -C /tmp
+      shell: wget $download_url -O- | tar zxf - -C /tmp
       when: matcher_exists.rc != 0
 
     - name: compile matcher
