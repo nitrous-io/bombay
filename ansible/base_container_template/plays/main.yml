@@ -24,6 +24,7 @@
 - include: ./install_chef_config.yml
 - include: ./disable_cron_jobs.yml
 - include: ./disable_rsyslogd.yml
+- include: ./disable_motd.yml
 - include: ./setup_upstart.yml
 
 - hosts: base_container_template

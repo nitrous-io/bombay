@@ -44,7 +44,6 @@
       - libyaml-dev
       - openssl
       - libreadline6-dev
-      - update-motd
       - man-db
       - ssh
       - nano

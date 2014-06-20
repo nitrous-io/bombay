@@ -14,8 +14,6 @@
     - include: ../../shared/tasks/container/configure_sshd_config.yml
     # Remove ubuntu user from the container
     - include: ../../shared/tasks/container/remove_ubuntu_user.yml
-    # Add MOTD
-    - include: ../../shared/tasks/container/configure_motd.yml
 
 # Install essential core packages for all containers
 - include: ./install_packages.yml

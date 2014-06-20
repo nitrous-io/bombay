@@ -1,0 +1,10 @@
+---
+- hosts: base_container_template
+  sudo: True
+  gather_facts: False
+
+  tasks:
+  - name: uninstall update-motd
+    apt: pkg=update-motd state=absent purge=yes
+  - name: remove /etc/update-motd.d
+    file: path=/etc/update-motd.d state=absent
