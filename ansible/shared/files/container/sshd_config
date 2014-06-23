@@ -19,6 +19,9 @@ UsePrivilegeSeparation yes
 KeyRegenerationInterval 3600
 ServerKeyBits 768
 
+# Sessions
+MaxSessions 500
+
 # Logging
 SyslogFacility AUTH
 LogLevel INFO
