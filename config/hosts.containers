@@ -16,5 +16,8 @@
 [builder_container_php]
 192.168.254.254
 
+[builder_container_meteor]
+192.168.254.254
+
 [base_container_template]
 192.168.254.254
