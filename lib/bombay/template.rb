@@ -10,6 +10,7 @@ module Bombay
       "python_template" => "builder_container_python",
       "test_template" => "builder_container_test",
       "php_template" => "builder_container_php",
+      "meteor_template" => "builder_container_meteor",
     }
 
     def initialize(name, playbook_name)
