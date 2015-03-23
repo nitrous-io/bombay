@@ -18,7 +18,7 @@
       shell: apt-get update
 
     - name: Absolute essential packages for the container (via apt)
-      apt: pkg=$item state=present
+      apt: pkg=$item state=latest
       with_items:
       - iptables
       - gawk
@@ -127,9 +127,6 @@
     - name: symlink ack-grep to ack
       shell: ln -s /usr/bin/ack-grep /usr/local/bin/ack
       ignore_errors: True
-
-    - name: explicitly upgrade openssl
-      shell: apt-get install openssl=1.0.1-4ubuntu5.25
 
     # delete mysql server conf which is undesirably placed by mysql-common package
     - name: Delete my.conf
