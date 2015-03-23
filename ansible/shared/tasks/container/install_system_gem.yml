@@ -5,5 +5,5 @@
   ignore_errors: True
 
 - name: gem install
-  shell: bash -c "gem install ${gem} --no-ri --no-rdoc"
+  shell: bash -c "gem install ${gem} --version ${version} --no-ri --no-rdoc"
   only_if: "len('${gem_exists.stdout}') == 0"
