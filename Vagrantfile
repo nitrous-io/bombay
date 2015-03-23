@@ -39,6 +39,7 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
 
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'" # avoids 'stdin: is not a tty' error.
 
   $script = """
 apt-get update
@@ -46,7 +47,8 @@ apt-get update
 version=2.0.0-p247
 apt-get install -yy curl git-core vim-nox libxml2 libxml2-dev libxslt1-dev s3cmd lxc
 
-su vagrant -l -c \"curl -L https://get.rvm.io | bash -s stable\"
+su vagrant -l -c \"gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3\"
+su vagrant -l -c \"curl -qL https://get.rvm.io | bash -s stable\"
 su vagrant -l -c \"rvm list | grep ${version}\"
 
 if [[ ! $? == 0 ]]; then
