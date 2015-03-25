@@ -18,7 +18,7 @@
       shell: apt-get update
 
     - name: Absolute essential packages for the container (via apt)
-      apt: pkg=$item state=present
+      apt: pkg=$item state=latest
       with_items:
       - iptables
       - gawk
@@ -58,7 +58,9 @@
       - libbz2-dev
       - libncurses5-dev
       - libncursesw5-dev
-      - libssl0.9.8
+      - libssl1.0.0
+      - libssl-dev
+      - libssl-doc
       - automake
       - autotools-dev
       - base-files
